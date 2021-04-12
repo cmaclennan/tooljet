@@ -126,7 +126,7 @@ export function Table({ id, width, height, component, onComponentClick, currentS
 		}, 200)
 	  
 		return (
-		  <div className="ms-2 d-inline-block">
+		  <div class="ms-2 d-inline-block">
 			Search:{' '}
 			<input
 			  value={value || ""}
@@ -145,12 +145,12 @@ export function Table({ id, width, height, component, onComponentClick, currentS
 
 
       return (
-		<div className="card" style={{width: `${width + 16}px`, height: `${height+3}px`}} onClick={() => onComponentClick(id, component) }>
-		<div className="card-body border-bottom py-3 jet-data-table-header">
-		  <div className="d-flex">
-			<div className="text-muted">
+		<div class="card" style={{width: `${width + 16}px`, height: `${height+3}px`}} onClick={() => onComponentClick(id, component) }>
+		<div class="card-body border-bottom py-3 jet-data-table-header">
+		  <div class="d-flex">
+			<div class="text-muted">
 			  Show
-			  <div className="mx-2 d-inline-block">
+			  <div class="mx-2 d-inline-block">
 				<select
 					value={pageSize}
 					className="form-control form-control-sm"
@@ -167,7 +167,7 @@ export function Table({ id, width, height, component, onComponentClick, currentS
 			  </div>
 			  entries
 			</div>
-			<div className="ms-auto text-muted">
+			<div class="ms-auto text-muted">
 			  
 				{/* <input
 					className="form-control form-control-sm"
@@ -183,11 +183,11 @@ export function Table({ id, width, height, component, onComponentClick, currentS
 			</div>
 		  </div>
 		</div>
-		<div className="table-responsive jet-data-table">
-		<table {...getTableProps()} className="table table-vcenter table-nowrap table-bordered" style={computedStyles}>
+		<div class="table-responsive jet-data-table">
+		<table {...getTableProps()} class="table table-vcenter table-nowrap table-bordered" style={computedStyles}>
 			<thead>
 				{headerGroups.map(headerGroup => (
-				<tr {...headerGroup.getHeaderGroupProps()} tabIndex="0">
+				<tr {...headerGroup.getHeaderGroupProps()} tabindex="0">
 					{headerGroup.headers.map(column => (
 					<th 
 						{...column.getHeaderProps(column.getSortByToggleProps())}
@@ -225,7 +225,7 @@ export function Table({ id, width, height, component, onComponentClick, currentS
                 </div>
             }
 		</div>
-		<div className="card-footer d-flex align-items-center jet-table-footer">
+		<div class="card-footer d-flex align-items-center jet-table-footer">
 			<div className="pagination row">
 				<div className="pagination-buttons col">
 					<button className="btn btn-sm btn-light" onClick={() => gotoPage(0)} disabled={!canPreviousPage}>

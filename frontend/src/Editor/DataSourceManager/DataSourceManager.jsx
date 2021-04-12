@@ -68,20 +68,6 @@ class DataSourceManager extends React.Component {
             this.props.dataSourcesChanged();
         });
     }
-    
-    testDataSource = () => {
-        let _self = this;
-
-        const  { appId, options, selectedDataSource, name } = this.state;
-        const kind = selectedDataSource.kind;
-
-        datasourceService.test(appId, name, kind, options).then((data) => {
-            toast.success('Datasource Connection Tested, Successfully!', { hideProgressBar: true, position: "top-center", });
-        },(error) => {
-            toast.error('Datasource Connection Error', { hideProgressBar: true, position: "top-center", });
-
-        });
-    }
    
     render() {
         const { showModal, selectedDataSource, options } = this.state;
@@ -183,7 +169,6 @@ class DataSourceManager extends React.Component {
                                     <Postgresql
                                         optionchanged={this.optionchanged}
                                         createDataSource={this.createDataSource}
-                                        testDataSource={this.testDataSource}
                                         options={options}
                                         hideModal={this.hideModal}
                                     />
