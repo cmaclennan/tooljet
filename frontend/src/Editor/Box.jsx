@@ -17,6 +17,7 @@ import { Chart } from './Components/Chart';
 import { Map } from './Components/Map/Map';
 import { ToggleSwitch } from './Components/Toggle'
 import { RadioButton } from './Components/RadioButton'
+import { StarRating } from './Components/StarRating'
 import { renderTooltip } from '../_helpers/appUtils';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 
@@ -38,7 +39,8 @@ const AllComponents = {
   Chart,
   Map,
   ToggleSwitch,
-  RadioButton
+  RadioButton,
+  StarRating
 };
 
 export const Box = function Box({

@@ -857,4 +857,41 @@ defaultMarkers: { value: `[{
       }
     }
   },
+  {
+    name: 'StarRating',
+    displayName: 'Rating',
+    description: 'Add star rating',
+    component: 'StarRating',
+    defaultSize: {
+      width: 300,
+      height: 300
+    },
+    others: {
+      showOnDesktop: { type: 'toggle', displayName: 'Show on desktop? '},
+      showOnMobile: { type: 'toggle', displayName: 'Show on mobile?'},
+    },
+    properties: {},
+    events: {
+      onDetect: { displayName: 'On detect'},
+    },
+    styles: {
+
+    },
+    exposedVariables: {
+      lastDetectedValue: ''
+    },
+    definition: {
+      others: {
+        showOnDesktop: { value: true },
+        showOnMobile: { value : true },
+      },
+      properties: {},
+      events: {
+        onDetect: {
+        }
+      },
+      styles: {
+      }
+    }
+  },
 ];
