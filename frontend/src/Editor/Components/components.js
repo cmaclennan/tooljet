@@ -860,37 +860,50 @@ defaultMarkers: { value: `[{
   {
     name: 'StarRating',
     displayName: 'Rating',
-    description: 'Add star rating',
+    description: 'Star rating',
     component: 'StarRating',
     defaultSize: {
-      width: 300,
-      height: 300
+      width: 200,
+      height: 75
     },
     others: {
       showOnDesktop: { type: 'toggle', displayName: 'Show on desktop? '},
       showOnMobile: { type: 'toggle', displayName: 'Show on mobile?'},
     },
-    properties: {},
+    properties: {
+      label: { type: 'code', displayName: 'Label' },
+      // value: { type: 'code', displayName: 'Default value' },
+      // values: { type: 'code', displayName: 'Option values' },
+      // display_values: { type: 'code', displayName: 'Option labels' }
+    },
     events: {
-      onDetect: { displayName: 'On detect'},
+      onChange: { displayName: 'On Change'},
     },
     styles: {
-
+      textColor: { type: 'color', displayName: 'Star Color' }
     },
-    exposedVariables: {
-      lastDetectedValue: ''
-    },
+    exposedVariables: {},
     definition: {
       others: {
         showOnDesktop: { value: true },
-        showOnMobile: { value : true },
+        showOnMobile: { value : false }
       },
-      properties: {},
+      properties: {
+        label: { value: 'Select your rating' },
+        // value: { value: '' },
+        // values: { value: '{{[true,false]}}' },
+        // display_values: { value: '{{["yes", "no"]}}' },
+        visible: { value: true }
+      },
       events: {
-        onDetect: {
-        }
+        onChange: { 
+          options: {
+
+          }
+        },
       },
       styles: {
+        textColor: { value: '#000' }
       }
     }
   },
