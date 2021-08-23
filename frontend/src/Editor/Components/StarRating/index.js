@@ -4,9 +4,10 @@ import { useTrail } from 'react-spring';
 import Star from './star'
 
 export const StarRating = function StarRating({component, onComponentOptionChanged, onEvent}) {
+  console.log('222', component.definition.properties.rating)
   const label = component.definition.properties.label.value;
   const rating = +component.definition.properties.rating.value ?? 5;
-  const allowHalfStar = +component.definition.properties.allowHalfStar.value ?? false;
+  const allowHalfStar = component.definition.properties.allowHalfStar.value ?? false;
   const textColorProperty = component.definition.styles.textColor;
   const textColor = textColorProperty ? textColorProperty.value : '#000';
 
@@ -20,7 +21,7 @@ export const StarRating = function StarRating({component, onComponentOptionChang
       transform: "scale(0.8)" 
     },
     opacity: 1,
-    transform: "scale(1)",
+    transform: "scale(1.2)",
     color: textColor
   });
 
@@ -28,7 +29,7 @@ export const StarRating = function StarRating({component, onComponentOptionChang
   const [hoverIndex, setHoverIndex] = React.useState(null);
 
   function handleClick() {
-    onComponentOptionChanged(component, 'value', currentRating);
+    onComponentOptionChanged(component, 'rating', 1);
     onEvent('onChange', { component });
   }
 

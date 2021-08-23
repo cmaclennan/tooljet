@@ -33,6 +33,9 @@ export function onComponentOptionChanged(_ref, component, option_name, value) {
   const components = _ref.state.currentState.components;
   let componentData = components[componentName];
   componentData = componentData || { };
+  console.log('option_name', option_name)
+  console.log('im', componentData[option_name])
+  console.log('2im', componentData)
   componentData[option_name] = value;
 
   return setStateAsync(_ref, {
