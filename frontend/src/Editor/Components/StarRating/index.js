@@ -29,7 +29,7 @@ export const StarRating = function StarRating({component, onComponentOptionChang
   const [hoverIndex, setHoverIndex] = React.useState(null);
 
   function handleClick() {
-    onComponentOptionChanged(component, 'rating', 1);
+    onComponentOptionChanged(component, 'rating', '1');
     onEvent('onChange', { component });
   }
 
