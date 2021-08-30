@@ -15,6 +15,7 @@ services:
       - WEBPACKER_DEV_SERVER_HOST=0.0.0.0
       - NODE_ENV=development
     command: ['npm', 'start']
+    platform: linux/amd64
 
   server:
     build:
