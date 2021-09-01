@@ -4,6 +4,8 @@
     z-index: 1;
     
     .rdtPicker {
+        position: fixed !important;
+
         thead {
             display: table-header-group;
             vertical-align: middle;
