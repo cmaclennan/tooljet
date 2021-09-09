@@ -117,8 +117,9 @@ class HomePage extends React.Component {
 
   render() {
     const {
-      apps, isLoading, creatingApp, meta, currentFolder, showAppDeletionConfirmation, isDeletingApp
+      apps, isLoading, currentUser, creatingApp, meta, currentFolder, showAppDeletionConfirmation, isDeletingApp
     } = this.state;
+    console.log(`%c ::: currentUser | ${JSON.stringify(currentUser)} :::`,'color:orange');
     return (
       <div className="wrapper home-page">
 
@@ -214,7 +215,7 @@ class HomePage extends React.Component {
                                     placement="top"
                                     overlay={(props) => renderTooltip({props, text: 'Open in app builder'})}
                                   >
-                                    <span className="badge bg-green-lt">
+                                    <span style={{display: `${currentUser.isViewer && 'none' }`}}  className="badge bg-green-lt">
                                     Edit
                                     </span>
                                   </OverlayTrigger>
