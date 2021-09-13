@@ -739,7 +739,7 @@ class Editor extends React.Component {
                         </div>
                       ) : (
                         <div className="query-list">
-                          <div>{dataQueries.map((query) => this.renderDataQuery(query))}</div>
+                          <div>{dataQueries.sort((a, b) => a.name.localeCompare(b.name)).map((query) => this.renderDataQuery(query))}</div>
                           {dataQueries.length === 0 && (
                             <div className="mt-5">
                               <center>
