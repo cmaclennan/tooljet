@@ -58,7 +58,13 @@ export const SubContainer = ({
   const [isResizing, setIsResizing] = useState(false);
 
   useEffect(() => {
-    setBoxes(allComponents);
+    const prevBoxes = JSON.stringify(boxes);
+    const currentBoxes = JSON.stringify(allComponents);
+
+    if (prevBoxes !== currentBoxes) {
+      setBoxes(() => JSON.parse(currentBoxes));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allComponents]);
 
   const moveBox = useCallback(
@@ -198,8 +204,8 @@ export const SubContainer = ({
               [item.currentLayout]: {
                 top: top,
                 left: left,
-                width: componentMeta.defaultSize.width,
-                height: componentMeta.defaultSize.height,
+                width: componentMeta.defaultSize?.width ?? 200,
+                height: componentMeta.defaultSize?.height ?? 200,
               },
             },
           },

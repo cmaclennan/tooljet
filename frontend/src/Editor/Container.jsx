@@ -45,9 +45,9 @@ export const Container = ({
   const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
 
-  useEffect(() => {
-    setBoxes(components);
-  }, [components]);
+  // useEffect(() => {
+  //   setBoxes(components);
+  // }, [components]);
 
   const moveBox = useCallback(
     (id, layouts) => {

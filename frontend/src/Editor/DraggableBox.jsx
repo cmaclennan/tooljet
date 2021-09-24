@@ -227,6 +227,7 @@ export const DraggableBox = function DraggableBox({
                 onComponentOptionsChanged={onComponentOptionsChanged}
                 onComponentClick={onComponentClick}
                 currentState={currentState}
+                currentLayout={currentLayout}
                 containerProps={containerProps}
                 darkMode={darkMode}
                 removeComponent={removeComponent}
