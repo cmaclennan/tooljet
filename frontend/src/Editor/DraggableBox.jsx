@@ -148,8 +148,12 @@ export const DraggableBox = function DraggableBox({
 
   useEffect(() => {
     console.log(layoutData);
-    setCurrentLayoutOptions(layoutData);
-  }, [layoutData.height, layoutData.width, layoutData.left, layoutData.top, currentLayout]);
+    const prevLayout = JSON.stringify(currentLayoutOptions);
+    const currentLayout = JSON.stringify(layoutData);
+    if (prevLayout !== currentLayout) {
+      setCurrentLayoutOptions(() => JSON.parse(currentLayout));
+    }
+  }, [layoutData.height, layoutData.width, layoutData.left, layoutData.top]);
 
   function scaleWidth(width, scaleValue) {
     let newWidth = width * scaleValue;
