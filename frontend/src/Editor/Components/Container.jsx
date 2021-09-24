@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { SubCustomDragLayer } from '../SubCustomDragLayer';
 import { SubContainer } from '../SubContainer';
 import { resolveReferences, resolveWidgetFieldValue } from '@/_helpers/utils';
@@ -12,6 +12,13 @@ export const Container = function Container({
   currentState,
   removeComponent,
 }) {
+  const [currentLayout, setCurrentLayout] = useState(() => {
+    if (containerProps.currentLayout !== undefined) {
+      return 'desktop';
+    } else {
+      return containerProps.currentLayout;
+    }
+  });
   const backgroundColor = component.definition.styles.backgroundColor.value;
   const widgetVisibility = component.definition.styles?.visibility?.value ?? true;
   const disabledState = component.definition.styles?.disabledState?.value ?? false;
@@ -36,6 +43,14 @@ export const Container = function Container({
 
   const parentRef = useRef(null);
 
+  React.useEffect(() => {
+    const _currentLayout = currentLayout;
+    if (containerProps.currentLayout !== undefined && containerProps.currentLayout !== _currentLayout) {
+      setCurrentLayout(containerProps.currentLayout);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [containerProps.currentLayout]);
+
   return (
     <div
       data-disabled={parsedDisabledState}
@@ -45,7 +60,7 @@ export const Container = function Container({
       style={computedStyles}
     >
       <SubContainer parent={id} {...containerProps} parentRef={parentRef} removeComponent={removeComponent} />
-      <SubCustomDragLayer parent={id} parentRef={parentRef} currentLayout={containerProps.currentLayout} />
+      <SubCustomDragLayer parent={id} parentRef={parentRef} currentLayout={currentLayout} />
     </div>
   );
 };
