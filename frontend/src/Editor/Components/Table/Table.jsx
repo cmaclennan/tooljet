@@ -767,6 +767,7 @@ export function Table({
                           ) {
                             console.log('componentState.changeSet', componentState.changeSet);
                             cellProps.style.backgroundColor = '#ffffde';
+                            cellProps.style['--tblr-table-accent-bg'] = '#ffffde';
                           }
                         }
                       }
@@ -781,7 +782,6 @@ export function Table({
                             'has-dropdown': cell.column.columnType === 'dropdown',
                             'has-multiselect': cell.column.columnType === 'multiselect',
                             'has-datepicker': cell.column.columnType === 'datepicker',
-                            ''
                           })}
                           {...cellProps}
                         >
