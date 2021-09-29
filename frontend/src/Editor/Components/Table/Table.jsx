@@ -781,10 +781,11 @@ export function Table({
                             'has-dropdown': cell.column.columnType === 'dropdown',
                             'has-multiselect': cell.column.columnType === 'multiselect',
                             'has-datepicker': cell.column.columnType === 'datepicker',
+                            ''
                           })}
                           {...cellProps}
                         >
-                          {cell.render('Cell')}
+                          <div className="td-container">{cell.render('Cell')}</div>
                         </td>
                       );
                     })}
