@@ -1,17 +1,14 @@
-import { BehaviorSubject } from 'rxjs';
 import { history, handleResponse } from '@/_helpers';
 import config from 'config';
-
-const currentUserSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('currentUser')));
 
 export const authenticationService = {
   login,
   logout,
   signup,
   updateCurrentUserDetails,
-  currentUser: currentUserSubject.asObservable(),
+  currentUser: JSON.parse(localStorage.getItem('currentUser')),
   get currentUserValue() {
-    return currentUserSubject.value;
+    return this.currentUser;
   },
 };
 
@@ -27,8 +24,6 @@ function login(email, password) {
     .then((user) => {
       // store user details and jwt token in local storage to keep user logged in between page refreshes
       localStorage.setItem('currentUser', JSON.stringify(user));
-      currentUserSubject.next(user);
-
       return user;
     });
 }
@@ -37,7 +32,6 @@ function updateCurrentUserDetails(details) {
   const currentUserDetails = JSON.parse(localStorage.getItem('currentUser'));
   const updatedUserDetails = Object.assign({}, currentUserDetails, details);
   localStorage.setItem('currentUser', JSON.stringify(updatedUserDetails));
-  currentUserSubject.next(updatedUserDetails);
 }
 
 function signup(email) {
@@ -57,6 +51,5 @@ function signup(email) {
 function logout() {
   // remove user from local storage to log user out
   localStorage.removeItem('currentUser');
-  currentUserSubject.next(null);
   history.push(`/login?redirectTo=${window.location.pathname}`);
 }
