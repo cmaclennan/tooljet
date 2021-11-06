@@ -1,0 +1,23 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: tooljet-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    certmanager.k8s.io/acme-challenge-type: http01
+    certmanager.k8s.io/cluster-issuer: letsencrypt
+spec:
+  tls:
+    - hosts:
+        - stagingbe.tooljet.io
+      secretName: tls-cert
+  rules:
+    - host: stagingbe.tooljet.io
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: tooljet-service
+              servicePort: 3000
