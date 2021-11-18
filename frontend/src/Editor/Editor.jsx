@@ -809,6 +809,7 @@ class Editor extends React.Component {
                           this.setState({ selectedComponent: { id, component } });
                           this.switchSidebarTab(1);
                         }}
+                        toggleComments={this.toggleComments}
                       />
                       <CustomDragLayer
                         snapToGrid={true}

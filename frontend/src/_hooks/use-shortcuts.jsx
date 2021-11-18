@@ -9,13 +9,18 @@ const useShortcuts = (keys, callback, deps) => {
   const targetKeys = new Set(keys.map((key) => key.toLowerCase()));
   const pressedKeys = new Set();
   function onKeyPressed(event) {
+    event.preventDefault();
     pressedKeys.add(event.key.toLowerCase());
+    // console.log(pressedKeys);
+    console.log(pressedKeys);
+
     if (setsEqual(pressedKeys, targetKeys)) {
       memoizedCallback();
     }
   }
   function onKeyUp(event) {
     pressedKeys.delete(event.key.toLowerCase());
+    console.log(pressedKeys);
   }
   function onWindowBlur() {
     pressedKeys.clear();

@@ -28,7 +28,7 @@ function CommentFooter({ users, editComment = '', editCommentId, handleSubmit })
     setOpen(false);
   };
 
-  useShortcuts(['Meta', 'Enter'], () => handleClick(), [comment]);
+  // useShortcuts(['Meta', 'Enter'], () => handleClick(), [comment]);
 
   return (
     <>
