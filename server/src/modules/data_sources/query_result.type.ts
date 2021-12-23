@@ -1,5 +1,5 @@
-export type QueryResult = {
+export interface QueryResult {
   status: 'ok' | 'failed' | 'needs_oauth';
   errorMessage?: string;
   data: Array<object> | object;
-};
+}
