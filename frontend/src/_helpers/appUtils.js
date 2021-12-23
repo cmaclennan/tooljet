@@ -532,66 +532,33 @@ export function runQuery(_ref, queryId, queryName, confirmed = undefined, mode) 
 
           if (data.status === 'failed') {
             console.error(data.message);
-            // console.log('__test__', query.kind);
-            if (query.kind === 'restapi') {
-              return _self.setState(
-                {
-                  currentState: {
+            return _self.setState(
+              {
+                currentState: {
                     ..._self.state.currentState,
                     queries: {
                       ..._self.state.currentState.queries,
-                      [queryName]: {
+                      [queryName]: _.assign({
                         ..._self.state.currentState.queries[queryName],
                         isLoading: false,
-                        request: data.data.requestObject,
-                        response: data.data.responseObject,
-                      },
+                      }, query.kind === 'restapi' ? {request: data.data.requestObject,response: data.data.responseObject} : {}),
                     },
-                    errors: {
-                      ..._self.state.currentState.errors,
-                      [queryName]: {
-                        type: 'query',
-                        kind: query.kind,
-                        data: data,
-                        options: options,
-                      },
+                  errors: {
+                    ..._self.state.currentState.errors,
+                    [queryName]: {
+                      type: 'query',
+                      kind: query.kind,
+                      data: data,
+                      options: options,
                     },
                   },
                 },
-                () => {
-                  resolve();
-                  onEvent(_self, 'onDataQueryFailure', { definition: { events: dataQuery.options.events } });
-                }
-              );
-            } else {
-              return _self.setState(
-                {
-                  currentState: {
-                    ..._self.state.currentState,
-                    queries: {
-                      ..._self.state.currentState.queries,
-                      [queryName]: {
-                        ..._self.state.currentState.queries[queryName],
-                        isLoading: false,
-                      },
-                    },
-                    errors: {
-                      ..._self.state.currentState.errors,
-                      [queryName]: {
-                        type: 'query',
-                        kind: query.kind,
-                        data: data,
-                        options: options,
-                      },
-                    },
-                  },
-                },
-                () => {
-                  resolve();
-                  onEvent(_self, 'onDataQueryFailure', { definition: { events: dataQuery.options.events } });
-                }
-              );
-            }
+              },
+              () => {
+                resolve();
+                onEvent(_self, 'onDataQueryFailure', { definition: { events: dataQuery.options.events } });
+              }
+            );
           }
 
           let rawData = data.data;

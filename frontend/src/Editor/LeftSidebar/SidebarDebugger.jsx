@@ -42,18 +42,14 @@ export const LeftSidebarDebugger = ({ darkMode, errors }) => {
           response: '',
           request: '',
         };
-        // console.log('__test__', JSON.parse(value.data.data.responseObject.response_body));
+
         switch (value.type) {
           case 'query':
-            if (value.kind === 'restapi') {
-              variableNames.options = 'substitutedVariables';
-              variableNames.response = 'response';
+            variableNames.options = 'substitutedVariables';
+            variableNames.response = 'response';
+            if(value.kind === 'restapi') {
               variableNames.request = 'request';
-            } else {
-              variableNames.options = 'substitutedVariables';
-              variableNames.response = 'response';
             }
-
             break;
 
           case 'transformations':
