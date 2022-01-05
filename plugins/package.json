@@ -13,7 +13,7 @@
     "prebuild:pkgs": "npm run clean:pkgs && npm run create:client && npm run create:server",
     "build:pkgs": "lerna run build --stream",
     "clean:pkgs": "lerna run clean --parallel",
-    "bootstrap": "lerna clean -y && lerna bootstrap --hoist"
+    "bootstrap": "lerna clean -y && lerna bootstrap --hoist --concurrency=2"
   },
   "devDependencies": {
     "common": "./packages/common",
