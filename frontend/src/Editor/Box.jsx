@@ -128,7 +128,7 @@ export const Box = function Box({
       trigger={!inCanvas ? ['hover', 'focus'] : null}
       overlay={(props) => renderTooltip({ props, text: `${component.description}` })}
     >
-      <ErrorBoundary showFallback={mode === 'edit'}>
+      <ErrorBoundary showFallback={mode === 'edit'} properties={resolvedProperties}>
         <div style={{ ...styles, backgroundColor }} role={preview ? 'BoxPreview' : 'Box'}>
           {inCanvas ? (
             <ComponentToRender
