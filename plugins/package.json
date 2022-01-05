@@ -11,7 +11,7 @@
     "create:client": "node create-client-entry",
     "create:server": "node create-server-entry",
     "prebuild:pkgs": "npm run clean:pkgs && npm run create:client && npm run create:server",
-    "build:pkgs": "lerna run build --stream",
+    "build:pkgs": "lerna run build --stream --scope=common --include-filtered-dependencies",
     "clean:pkgs": "lerna run clean --parallel",
     "bootstrap": "lerna clean -y && lerna bootstrap --hoist"
   },
