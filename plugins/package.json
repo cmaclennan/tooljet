@@ -15,9 +15,6 @@
     "clean:packages": "lerna run clean --parallel",
     "bootstrap": "lerna clean -y && lerna bootstrap --hoist"
   },
-  "dependencies": {
-    "common": "./packages/common"
-  },
   "devDependencies": {
     "lerna": "^4.0.0",
     "jest": "^27.4.5",
