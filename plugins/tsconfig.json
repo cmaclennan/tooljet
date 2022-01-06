@@ -7,7 +7,7 @@
     "sourceMap": true,
 
     "strict": false,
-
+    "allowJs": true,
     "skipLibCheck": true,
     "outDir": "./dist",
     "esModuleInterop": true,
