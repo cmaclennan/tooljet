@@ -5,6 +5,7 @@ import { authenticationService, tooljetService } from '@/_services';
 import { PrivateRoute } from '@/_components';
 import { HomePage } from '@/HomePage';
 import { LoginPage } from '@/LoginPage';
+import { OktaSSOLoginPage } from '@/LoginPage/Okta';
 import { SignupPage } from '@/SignupPage';
 import { InvitationPage } from '@/InvitationPage';
 import { Authorize } from '@/Oauth2';
@@ -114,6 +115,7 @@ class App extends React.Component {
               darkMode={darkMode}
             />
             <Route path="/login" component={LoginPage} />
+            <Route path="/auth/okta" component={OktaSSOLoginPage} />
             <Route path="/sso/:origin" component={Oauth} />
             <Route path="/signup" component={SignupPage} />
             <Route path="/forgot-password" component={ForgotPassword} />

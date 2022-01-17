@@ -8,6 +8,7 @@ import { UsersService } from '@services/users.service';
 import { GoogleOAuthService } from './google_oauth.service';
 import { decamelizeKeys } from 'humps';
 import { GitOAuthService } from './git_oauth.service';
+import { OktaOAuthService } from './okta_oauth.service';
 
 @Injectable()
 export class OauthService {
@@ -18,6 +19,7 @@ export class OauthService {
     private readonly organizationUsersService: OrganizationUsersService,
     private readonly googleOAuthService: GoogleOAuthService,
     private readonly gitOAuthService: GitOAuthService,
+    private readonly oktaOAuthService: OktaOAuthService,
     private readonly configService: ConfigService
   ) {
     this.ssoSignUpDisabled =
@@ -39,17 +41,18 @@ export class OauthService {
     return true;
   }
 
-  async #findOrCreateUser({ userSSOId, firstName, lastName, email }): Promise<User> {
+  async #findOrCreateUser({ userSSOId, firstName, lastName, email, sso }): Promise<User> {
     const organization = await this.organizationService.findFirst();
-    const [user, newUserCreated] = await this.usersService.findOrCreateBySSOIdOrEmail(
-      userSSOId,
-      { firstName, lastName, email },
+    const [user, newUserCreated] = await this.usersService.findOrCreateByEmail(
+      { firstName, lastName, email, ssoId: userSSOId, sso },
       organization
     );
 
     if (newUserCreated) {
       const organizationUser = await this.organizationUsersService.create(user, organization);
       await this.organizationUsersService.activate(organizationUser);
+    } else if (userSSOId) {
+      await this.usersService.updateSSODetails(user, { userSSOId, sso });
     }
     return user;
   }
@@ -63,7 +66,7 @@ export class OauthService {
   }
 
   async #generateLoginResultPayload(user: User): Promise<any> {
-    const JWTPayload = { username: user.id, sub: user.email, ssoId: user.ssoId };
+    const JWTPayload = { username: user.id, sub: user.email, ssoId: user.ssoId, sso: user.sso };
     return decamelizeKeys({
       id: user.id,
       auth_token: this.jwtService.sign(JWTPayload),
@@ -79,15 +82,19 @@ export class OauthService {
   async signIn(ssoResponse: SSOResponse): Promise<any> {
     const { token, origin } = ssoResponse;
 
-    let userSSOId: string, firstName: string, lastName: string, email: string, domain: string;
+    let userSSOId: string, firstName: string, lastName: string, email: string, domain: string, sso: string;
     switch (origin) {
       case 'google':
-        ({ userSSOId, firstName, lastName, email, domain } = await this.googleOAuthService.signIn(token));
+        ({ userSSOId, firstName, lastName, email, domain, sso } = await this.googleOAuthService.signIn(token));
         if (!this.#isValidDoamin(domain)) throw new UnauthorizedException(`You cannot sign in using a ${domain} id`);
         break;
 
       case 'git':
-        ({ userSSOId, firstName, lastName, email } = await this.gitOAuthService.signIn(token));
+        ({ userSSOId, firstName, lastName, email, sso } = await this.gitOAuthService.signIn(token));
+        break;
+
+      case 'okta':
+        ({ userSSOId, firstName, lastName, email, sso } = await this.oktaOAuthService.signIn(token));
         break;
 
       default:
@@ -99,7 +106,11 @@ export class OauthService {
     }
     const user: User = await (this.ssoSignUpDisabled
       ? this.#findAndActivateUser(email)
-      : this.#findOrCreateUser({ userSSOId, firstName, lastName, email }));
+      : this.#findOrCreateUser({ userSSOId, firstName, lastName, email, sso }));
+
+    if (!user) {
+      throw new UnauthorizedException(`Email id ${email} is not registered`);
+    }
 
     return await this.#generateLoginResultPayload(user);
   }
@@ -107,5 +118,7 @@ export class OauthService {
 
 interface SSOResponse {
   token: string;
-  origin: 'google' | 'git';
+  origin: 'google' | 'git' | 'okta';
+  state?: string;
+  redirectUri?: string;
 }

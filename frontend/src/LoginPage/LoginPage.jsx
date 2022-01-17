@@ -6,6 +6,7 @@ import queryString from 'query-string';
 import GoogleSSOLoginButton from '@ee/components/LoginPage/GoogleSSOLoginButton';
 import GitSSOLoginButton from '@ee/components/LoginPage/GitSSOLoginButton';
 import { validateEmail } from '../_helpers/utils';
+import OktaSSOLoginButton from '@ee/components/LoginPage/Okta/OktaSSOLoginButton';
 
 class LoginPage extends React.Component {
   constructor(props) {
@@ -155,9 +156,8 @@ class LoginPage extends React.Component {
                     authFailureHandler={this.authFailureHandler}
                   />
                 )}
-                {window.public_config?.SSO_GIT_OAUTH2_CLIENT_ID && (
-                  <GitSSOLoginButton clientId={window.public_config.SSO_GIT_OAUTH2_CLIENT_ID} />
-                )}
+                {window.public_config?.SSO_GIT_OAUTH2_CLIENT_ID && <GitSSOLoginButton />}
+                {window.public_config?.SSO_OKTA_OAUTH2_CLIENT_ID && <OktaSSOLoginButton />}
               </div>
             </div>
           </form>

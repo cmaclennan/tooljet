@@ -1,5 +1,15 @@
 {
   "git": {
-    "tokenParam": "code"
+    "name": "Github",
+    "params": {
+      "token": "code"
+    }
+  },
+  "okta": {
+    "name": "Okta",
+    "params": {
+      "token": "code",
+      "state": "state"
+    }
   }
 }
