@@ -31,7 +31,7 @@ export class OauthService {
   private readonly ssoSignUpDisabled: boolean;
   private readonly restrictedDomain: string;
 
-  #isValidDoamin(domain: string): boolean {
+  #isValidDomain(domain: string): boolean {
     if (!domain) {
       return false;
     }
@@ -43,7 +43,7 @@ export class OauthService {
 
   async #findOrCreateUser({ userSSOId, firstName, lastName, email, sso }): Promise<User> {
     const organization = await this.organizationService.findFirst();
-    const [user, newUserCreated] = await this.usersService.findOrCreateByEmail(
+    const { user, newUserCreated } = await this.usersService.findOrCreateByEmail(
       { firstName, lastName, email, ssoId: userSSOId, sso },
       organization
     );
@@ -86,7 +86,7 @@ export class OauthService {
     switch (origin) {
       case 'google':
         ({ userSSOId, firstName, lastName, email, domain, sso } = await this.googleOAuthService.signIn(token));
-        if (!this.#isValidDoamin(domain)) throw new UnauthorizedException(`You cannot sign in using a ${domain} id`);
+        if (!this.#isValidDomain(domain)) throw new UnauthorizedException(`You cannot sign in using a ${domain} id`);
         break;
 
       case 'git':

@@ -98,22 +98,22 @@ export class UsersService {
     });
   }
 
-  async findOrCreateByEmail(userParams: any, organization: Organization): Promise<[User, boolean]> {
+  async findOrCreateByEmail(
+    userParams: any,
+    organization: Organization
+  ): Promise<{ user: User; newUserCreated: boolean }> {
     let user: User;
     let newUserCreated = false;
-    try {
-      user = await this.findByEmail(userParams.email);
-    } catch (e) {
-      console.log(e);
-    }
 
-    if (user === undefined) {
+    user = await this.findByEmail(userParams.email);
+
+    if (!user) {
       const groups = ['all_users'];
       user = await this.create({ ...userParams }, organization, groups);
       newUserCreated = true;
     }
 
-    return [user, newUserCreated];
+    return { user, newUserCreated };
   }
 
   async setupAccountFromInvitationToken(params: any) {
