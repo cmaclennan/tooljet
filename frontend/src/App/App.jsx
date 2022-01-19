@@ -5,7 +5,7 @@ import { authenticationService, tooljetService } from '@/_services';
 import { PrivateRoute } from '@/_components';
 import { HomePage } from '@/HomePage';
 import { LoginPage } from '@/LoginPage';
-import { OktaSSOLoginPage } from '@/LoginPage/Okta';
+import OktaSSOLoginPage from '@ee/components/LoginPage/okta/OktaSSOLoginPage';
 import { SignupPage } from '@/SignupPage';
 import { InvitationPage } from '@/InvitationPage';
 import { Authorize } from '@/Oauth2';

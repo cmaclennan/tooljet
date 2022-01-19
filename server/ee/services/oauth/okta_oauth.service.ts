@@ -23,16 +23,19 @@ export class OktaOAuthService {
       headers: { Authorization: `Bearer ${access_token}` },
     }).json();
 
+    console.log('====>>>', response);
+
+
     const { name, email } = response;
 
     const words = name?.split(' ');
     const firstName = words?.[0] || '';
     const lastName = words?.length > 1 ? words[words.length - 1] : '';
 
-    return { userSSOId: access_token, firstName, lastName, email, sso: 'google' };
+    return { userSSOId: access_token, firstName, lastName, email, sso: 'okta' };
   }
 
-  async signIn(code: string): Promise<any> {
+  async signIn(code: string): Promise<UserResponse> {
     const authUrl = `https://${this.domain}/oauth2/default/v1/token`;
     const response: any = await got(authUrl, {
       method: 'post',
@@ -43,6 +46,8 @@ export class OktaOAuthService {
         code,
       },
     }).json();
+    console.log('====>>>', response);
+    
 
     return await this.#getUserDetails(response);
   }

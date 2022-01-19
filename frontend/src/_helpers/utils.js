@@ -293,3 +293,8 @@ export const isJson = (str) => {
   }
   return true;
 };
+
+export function buildURL(url, query) {
+  const search = toQuery(query);
+  return `${url}?${search}`;
+}
