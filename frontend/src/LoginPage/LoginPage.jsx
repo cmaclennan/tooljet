@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom';
 import queryString from 'query-string';
 import GoogleSSOLoginButton from '@ee/components/LoginPage/GoogleSSOLoginButton';
 import GitSSOLoginButton from '@ee/components/LoginPage/GitSSOLoginButton';
+import OktaSSOLoginButton from '@ee/components/LoginPage/Okta/OktaSSOLoginButton';
 import { validateEmail } from '../_helpers/utils';
-import OktaSSOLoginButton from '@ee/components/LoginPage/okta/OktaSSOLoginButton';
 
 class LoginPage extends React.Component {
   constructor(props) {
@@ -66,7 +66,10 @@ class LoginPage extends React.Component {
     this.setState({ isLoading: false });
   };
 
-  authFailureHandler = () => {
+  authFailureHandler = (error) => {
+    if (error?.error === 'idpiframe_initialization_failed') {
+      return this.setState({ isLoading: false });
+    }
     toast.error('Invalid email or password', {
       id: 'toast-login-auth-error',
       position: 'top-center',
