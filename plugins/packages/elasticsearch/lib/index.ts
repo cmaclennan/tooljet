@@ -1,28 +1,44 @@
-import { ConnectionTestResult, QueryService, QueryResult } from 'common';
-
-import { getDocument, updateDocument } from './operations';
-import { indexDocument, search } from './operations';
-const { Client } = require('@elastic/elasticsearch');
+import { ConnectionTestResult, QueryService, QueryResult } from "common";
+import { getDocument, updateDocument } from "./operations";
+import { indexDocument, search } from "./operations";
+import { Client } from "@elastic/elasticsearch";
 
 export default class ElasticsearchService implements QueryService {
-  async run(sourceOptions: any, queryOptions: any, dataSourceId: string): Promise<QueryResult> {
+  async run(
+    sourceOptions: any,
+    queryOptions: any,
+    dataSourceId: string
+  ): Promise<QueryResult> {
     const client = await this.getConnection(sourceOptions);
     let result = {};
     const operation = queryOptions.operation;
 
     try {
       switch (operation) {
-        case 'search':
+        case "search":
           result = await search(client, queryOptions.index, queryOptions.query);
           break;
-        case 'index_document':
-          result = await indexDocument(client, queryOptions.index, queryOptions.body);
+        case "index_document":
+          result = await indexDocument(
+            client,
+            queryOptions.index,
+            queryOptions.body
+          );
           break;
-        case 'get':
-          result = await getDocument(client, queryOptions.index, queryOptions.id);
+        case "get":
+          result = await getDocument(
+            client,
+            queryOptions.index,
+            queryOptions.id
+          );
           break;
-        case 'update':
-          result = await updateDocument(client, queryOptions.index, queryOptions.id, queryOptions.body);
+        case "update":
+          result = await updateDocument(
+            client,
+            queryOptions.index,
+            queryOptions.id,
+            queryOptions.body
+          );
           break;
       }
     } catch (err) {
@@ -30,7 +46,7 @@ export default class ElasticsearchService implements QueryService {
     }
 
     return {
-      status: 'ok',
+      status: "ok",
       data: result,
     };
   }
@@ -40,7 +56,7 @@ export default class ElasticsearchService implements QueryService {
     await client.info();
 
     return {
-      status: 'ok',
+      status: "ok",
     };
   }
 
@@ -51,14 +67,14 @@ export default class ElasticsearchService implements QueryService {
     const username = sourceOptions.username;
     const password = sourceOptions.password;
 
-    let url = '';
+    let url = "";
 
-    if (username === '' || password === '') {
-      url = `${scheme}://${username}:${password}@${host}:${port}`;
-    } else {
+    if (!!username || !!password) {
       url = `${scheme}://${host}:${port}`;
+    } else {
+      url = `${scheme}://${username}:${password}@${host}:${port}`;
     }
 
-    return new Client({ node: url });
+    return new Client({ node: url, requestTimeout: 6000 });
   }
 }
