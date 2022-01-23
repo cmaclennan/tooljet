@@ -92,7 +92,7 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "path": "^0.12.7",
     "prettier": "^2.3.2",
-    "webpack-dev-server": "^3.11.2"
+    "webpack-dev-server": "^4.7.3"
   },
   "scripts": {
     "start": "webpack serve --port 8082 --host 0.0.0.0",
