@@ -6,7 +6,7 @@ import ReactTooltip from 'react-tooltip';
 import { allSources } from './QueryEditors';
 import { Transformation } from './Transformation';
 import ReactJson from 'react-json-view';
-import { previewQuery } from '@/_helpers/appUtils';
+import { previewQuery, getSvgIcon } from '@/_helpers/appUtils';
 import { EventManager } from '../Inspector/EventManager';
 import { CodeHinter } from '../CodeBuilder/CodeHinter';
 import { DataSourceTypes } from '../DataSourceManager/SourceComponents';
@@ -209,7 +209,7 @@ let QueryManager = class QueryManager extends React.Component {
   };
 
   renderDataSourceOption = (props, option, snapshot, className) => {
-    const icon = option.kind ? `/assets/images/icons/editor/datasources/${option.kind.toLowerCase() + '.svg'}` : null;
+    // const icon = option.kind ? `/assets/images/icons/editor/datasources/${option.kind.toLowerCase() + '.svg'}` : null;
     // borken icon
     return (
       <button
@@ -219,17 +219,7 @@ let QueryManager = class QueryManager extends React.Component {
       >
         <div>
           <span>
-            {icon && (
-              <img
-                src={icon}
-                style={{
-                  margin: 'auto',
-                  marginRight: '3px',
-                }}
-                height="25"
-                width="25"
-              ></img>
-            )}
+            {getSvgIcon(option.kind.toLowerCase(), 25, 25)}
             {option.name}
           </span>
         </div>
