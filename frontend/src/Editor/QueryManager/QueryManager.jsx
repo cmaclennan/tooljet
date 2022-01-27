@@ -210,6 +210,7 @@ let QueryManager = class QueryManager extends React.Component {
 
   renderDataSourceOption = (props, option, snapshot, className) => {
     const icon = option.kind ? `/assets/images/icons/editor/datasources/${option.kind.toLowerCase() + '.svg'}` : null;
+    // borken icon
     return (
       <button
         {...props}
