@@ -89,7 +89,7 @@ export class AppsController {
 
     // serialize
     return {
-      current_version_id: app['current_version_id'],
+      current_version_id: app['currentVersionId'],
       data_queries: app.dataQueries,
       definition: app.editingVersion?.definition,
       is_public: app.isPublic,

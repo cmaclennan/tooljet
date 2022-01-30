@@ -277,11 +277,13 @@ class Editor extends React.Component {
   };
 
   runQueries = (queries) => {
-    queries.forEach((query) => {
-      if (query.options.runOnPageLoad) {
-        runQuery(this, query.id, query.name);
-      }
-    });
+    queries
+      .filter((query) => query.app_version_id === (this.state?.editingVersion?.id ?? query.id))
+      .forEach((query) => {
+        if (query.options.runOnPageLoad) {
+          runQuery(this, query.id, query.name);
+        }
+      });
   };
 
   fetchApps = (page) => {

@@ -112,11 +112,13 @@ class Viewer extends React.Component {
   };
 
   runQueries = (data_queries) => {
-    data_queries.forEach((query) => {
-      if (query.options.runOnPageLoad) {
-        runQuery(this, query.id, query.name);
-      }
-    });
+    data_queries
+      .filter((query) => query.appVersionId === (this.state?.app?.current_version_id ?? query.id))
+      .forEach((query) => {
+        if (query.options.runOnPageLoad) {
+          runQuery(this, query.id, query.name);
+        }
+      });
   };
 
   loadApplicationBySlug = (slug) => {
