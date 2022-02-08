@@ -29,9 +29,10 @@ const Mentions = ({ users, value, setValue, placeholder, darkMode }) => {
           list: {
             backgroundColor: 'white',
             boxShadow: '0px 2px 12px rgba(41, 45, 55, 0.156863)',
-            borderRadius: '4',
+            borderRadius: '4px',
+            width: '300px',
             marginTop: '-20px',
-            height: '22px',
+            height: 'auto',
             fontSize: '14px',
             color: '#282D37',
           },
@@ -40,6 +41,7 @@ const Mentions = ({ users, value, setValue, placeholder, darkMode }) => {
 
             '&focused': {
               background: '#EEF3F9',
+              borderRadius: '4px',
             },
           },
         },
