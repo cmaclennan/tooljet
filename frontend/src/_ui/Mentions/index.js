@@ -30,14 +30,15 @@ const Mentions = ({ users, value, setValue, placeholder, darkMode }) => {
             backgroundColor: 'white',
             boxShadow: '0px 2px 12px rgba(41, 45, 55, 0.156863)',
             borderRadius: '4px',
-            width: '300px',
+            width: '285px',
             marginTop: '-20px',
             height: 'auto',
+            minHeight: '40px',
             fontSize: '14px',
             color: '#282D37',
           },
           item: {
-            padding: '10px 16px',
+            padding: '10px 36px',
 
             '&focused': {
               background: '#EEF3F9',
