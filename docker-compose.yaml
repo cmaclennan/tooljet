@@ -9,6 +9,7 @@ services:
     platform: linux/x86_64
     volumes:
       - plugins_vol:/app/plugins
+      - /app/plugins/node_modules/
     command: npm run --prefix plugins start
 
   client:
