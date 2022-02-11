@@ -1,0 +1,37 @@
+
+{
+  "$schema": "https://raw.githubusercontent.com/ToolJet/ToolJet/develop/plugins/schemas/manifest.schema.json",
+  "title": "NocoDB datasource",
+  "description": "A schema defining NocoDB datasource",
+  "type": "database",
+  "source": {
+    "name": "NocoDB",
+    "kind": "nocodb",
+    "exposedVariables": {
+      "isLoading": false,
+      "data": {},
+      "rawData": {}
+    },
+    "options": {
+      "api_key": {
+        "type": "string",
+        "encrypted": true
+      }
+    }
+  },
+  "defaults": {
+    "api_key": {
+      "value": ""
+    }
+  },
+  "properties": {  "api_key": {
+    "label": "API key",
+    "key": "api_key",
+    "type": "password",
+    "description": "Api key for nocoDB",
+    "helpText": "For generating API key, Go to NocoDB Project, click the rightmost button and click Copy auth token."
+  }},
+  "required": [
+    "api_key"
+  ]
+}
