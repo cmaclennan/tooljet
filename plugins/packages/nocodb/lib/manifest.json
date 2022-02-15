@@ -12,9 +12,26 @@
       "data": {},
       "rawData": {}
     },
-    "options": {}
+    "options": {
+      "api_key": {
+        "type": "string",
+        "encrypted": true
+      }
+    }
   },
-  "defaults": {},
-  "properties": {},
-  "required": []
+  "defaults": {
+    "api_key": {
+      "value": ""
+    }
+  },
+  "properties": {  "api_key": {
+    "label": "API key",
+    "key": "api_key",
+    "type": "password",
+    "description": "Api key for nocoDB",
+    "helpText": "For generating API key, Go to NocoDB Project, click the rightmost button and click Copy auth token."
+  }},
+  "required": [
+    "api_key"
+  ]
 }
