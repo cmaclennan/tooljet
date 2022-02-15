@@ -17,6 +17,7 @@
   "dependencies": {
     "@tooljet-plugins/airtable": "file:packages/airtable",
     "@tooljet-plugins/bigquery": "file:packages/bigquery",
+    "@tooljet-plugins/cloudfunctions": "file:packages/cloudfunctions",
     "@tooljet-plugins/common": "file:packages/common",
     "@tooljet-plugins/dynamodb": "file:packages/dynamodb",
     "@tooljet-plugins/elasticsearch": "file:packages/elasticsearch",
