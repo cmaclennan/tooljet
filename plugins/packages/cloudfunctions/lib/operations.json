@@ -1,9 +1,46 @@
-
 {
   "$schema": "https://raw.githubusercontent.com/ToolJet/ToolJet/develop/plugins/schemas/operations.schema.json",
   "title": "Cloud functions datasource",
   "description": "A schema defining Cloud functions datasource",
   "type": "cloud-storage",
   "defaults": {},
-  "properties": {}
+  "properties": {
+    "operation": {
+      "label": "Operation",
+      "key": "operation",
+      "type": "dropdown-component-flip",
+      "description": "Single select dropdown for operation",
+      "list": [
+        {
+          "value": "http_triggers",
+          "name": "Http triggers"
+        },
+        {
+          "value": "pubsub_trigger",
+          "name": "PubSub trigger"
+        }
+        
+      ]
+    },
+    "http_triggers": {
+      "body": {
+        "label": "Data",
+        "key": "body",
+        "type": "codehinter",
+        "description": "Enter data",
+        "height": "150px",
+        "placeholder": "[{ \"fields\": {} }]"
+      }
+    },
+    "pubsub_trigger": {
+      "body": {
+        "label": "Data",
+        "key": "body",
+        "type": "codehinter",
+        "description": "Enter data",
+        "height": "150px",
+        "placeholder": "[{ \"fields\": {} }]"
+      }
+    }
+  }
 }

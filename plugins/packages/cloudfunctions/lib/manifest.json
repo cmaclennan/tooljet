@@ -1,4 +1,3 @@
-
 {
   "$schema": "https://raw.githubusercontent.com/ToolJet/ToolJet/develop/plugins/schemas/manifest.schema.json",
   "title": "Cloud functions datasource",
@@ -12,9 +11,26 @@
       "data": {},
       "rawData": {}
     },
-    "options": {}
+    "options": {
+      "api_key": {
+        "type": "string",
+        "encrypted": true
+      }
+    }
   },
-  "defaults": {},
-  "properties": {},
-  "required": []
+  "defaults": {
+    "api_key": {
+      "value": ""
+    }
+  },
+  "properties": {
+    "api_key": {
+      "label": "API key",
+      "key": "api_key",
+      "type": "password",
+      "description": "Api key for cloud functions",
+      "helpText": "For generating API key, install gcloud cli and use command 'gcloud auth print-identity-token' </a>"
+    }
+  },
+  "required": ["api_key"]
 }
