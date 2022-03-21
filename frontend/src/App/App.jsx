@@ -12,6 +12,7 @@ import { Authorize as Oauth } from '@/Oauth';
 import { Editor, Viewer } from '@/Editor';
 import '@/_styles/theme.scss';
 import 'emoji-mart/css/emoji-mart.css';
+import 'react-datepicker/dist/react-datepicker.css';
 import { ManageGroupPermissions } from '@/ManageGroupPermissions';
 import { ManageOrgUsers } from '@/ManageOrgUsers';
 import { ManageGroupPermissionResources } from '@/ManageGroupPermissionResources';
