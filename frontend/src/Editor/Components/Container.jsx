@@ -2,11 +2,19 @@ import React, { useRef } from 'react';
 import { SubCustomDragLayer } from '../SubCustomDragLayer';
 import { SubContainer } from '../SubContainer';
 
-export const Container = function Container({ id, component, width, height, containerProps, removeComponent, styles }) {
+export const Container = function Container({
+  id,
+  component,
+  width,
+  height,
+  containerProps,
+  removeComponent,
+  styles,
+  darkMode,
+}) {
   const { backgroundColor, visibility, disabledState, borderRadius } = styles;
 
   const computedStyles = {
-    backgroundColor,
     height,
     display: visibility ? 'flex' : 'none',
     borderRadius: borderRadius ? parseFloat(borderRadius) : 0,
@@ -17,10 +25,10 @@ export const Container = function Container({ id, component, width, height, cont
   return (
     <div
       data-disabled={disabledState}
-      className="jet-container"
+      className={darkMode ? 'bg-dark jet-container' : 'jet-container'}
       id={id}
       ref={parentRef}
-      style={computedStyles}
+      style={darkMode ? computedStyles : { ...computedStyles, backgroundColor }}
       onClick={(e) => {
         if (e.target.className === 'real-canvas') containerProps.onComponentClick(id, component);
       }} //Hack, should find a better solution - to prevent losing z index when comtainer element is clicked
