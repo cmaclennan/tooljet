@@ -13,6 +13,7 @@ export const Listview = function Listview({
   styles,
   currentState,
   fireEvent,
+  darkMode,
 }) {
   const fallbackProperties = { height: 100, showBorder: false, data: [] };
   const fallbackStyles = { visibility: true, disabledState: false };
@@ -21,7 +22,6 @@ export const Listview = function Listview({
   const { backgroundColor, visibility, disabledState } = { ...fallbackStyles, ...styles };
 
   const computedStyles = {
-    backgroundColor,
     height,
     display: visibility ? 'flex' : 'none',
   };
@@ -35,11 +35,11 @@ export const Listview = function Listview({
   return (
     <div
       data-disabled={disabledState}
-      className="jet-listview"
+      className={darkMode ? 'bg-dark jet-listview' : 'jet-listview'}
       id={id}
       ref={parentRef}
       onClick={() => containerProps.onComponentClick(id, component)}
-      style={computedStyles}
+      style={darkMode ? computedStyles : { ...computedStyles, backgroundColor }}
     >
       <div className="rows w-100">
         {(_.isArray(data) ? data : []).map((listItem, index) => (
