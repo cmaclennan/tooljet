@@ -31,7 +31,11 @@
     "properties": {
       "type": "object",
       "additionalProperties": false,
-      "properties": {}
+      "patternProperties": {
+        "[A-Za-z0-9]": {
+          "$ref": "arg"
+        }
+      }
     }
   },
   "definitions": {
