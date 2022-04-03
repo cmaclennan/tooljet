@@ -34,14 +34,13 @@ import { Pagination } from './Components/Pagination';
 import { Tags } from './Components/Tags';
 import { Spinner } from './Components/Spinner';
 import { CircularProgressBar } from './Components/CirularProgressbar';
-import { renderTooltip } from '../_helpers/appUtils';
+import { renderTooltip } from '@/_helpers/appUtils';
 import { RangeSlider } from './Components/RangeSlider';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import '@/_styles/custom.scss';
 import { resolveProperties, resolveStyles } from './component-properties-resolution';
 import { validateProperties } from './component-properties-validation';
 import { validateWidget, resolveReferences } from '@/_helpers/utils';
-import ErrorBoundary from './ErrorBoundary';
 
 const AllComponents = {
   Button,
