@@ -137,8 +137,8 @@ export const Box = function Box({
         throw Error;
       }
       setRenderStartTime(currentTime);
-      validateProperties(resolvedProperties, component.properties);
     }
+    validateProperties(resolvedProperties, component.properties);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify({ resolvedProperties, resolvedStyles })]);
 

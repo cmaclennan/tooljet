@@ -307,7 +307,10 @@ export const componentTypes = [
       showOnMobile: { type: 'toggle', displayName: 'Show on mobile' },
     },
     properties: {
-      value: { type: 'code', displayName: 'Default value' },
+      value: {
+        type: 'code',
+        displayName: 'Default value',
+      },
       placeholder: { type: 'code', displayName: 'Placeholder' },
     },
     validation: {
@@ -1309,7 +1312,17 @@ export const componentTypes = [
     properties: {
       dateFormat: { type: 'code', displayName: 'Date format' },
       defaultDate: { type: 'code', displayName: 'Default date' },
-      events: { type: 'code', displayName: 'Events' },
+      events: {
+        type: 'code',
+        displayName: 'Events',
+        validation: {
+          type: 'array',
+          element: {
+            type: 'object',
+            object: { id: { type: 'string' }, age: { type: 'number' } },
+          },
+        },
+      },
       resources: { type: 'code', displayName: 'Resources' },
       defaultView: { type: 'code', displayName: 'Default view' },
       startTime: { type: 'code', displayName: 'Start time on week and day view' },
