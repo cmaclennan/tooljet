@@ -1,4 +1,4 @@
-import { is, assert, object, number, string, array, any } from 'superstruct';
+import { object, number, string, array, any, defaulted, create, assert } from 'superstruct';
 import _ from 'lodash';
 
 const generateSchemaFromValidationDefinition = (definition) => {
@@ -36,23 +36,29 @@ const generateSchemaFromValidationDefinition = (definition) => {
 };
 
 const validate = (value, schema) => {
-  const valid = is(value, schema);
+  let valid = true;
   const errors = [];
-  if (!valid) {
-    try {
-      assert(value, schema);
-    } catch (structError) {
-      errors.push(structError.message);
-    }
+
+  try {
+    assert(value, schema);
+  } catch (structError) {
+    valid = false;
+    errors.push(structError.message);
   }
+
   return [valid, errors];
 };
 
 export const validateProperties = (resolvedProperties, propertyDefinitions) => {
-  return Object.entries(resolvedProperties).map(([propertyName, value]) => {
-    const validationDefinition = propertyDefinitions[propertyName]?.validation ?? {};
-    const schema = generateSchemaFromValidationDefinition(validationDefinition);
-    const [valid, errors] = validate(value, schema);
-    return { propertyName, valid, errors };
-  });
+  let allErrors = [];
+  const coercedProperties = Object.fromEntries(
+    Object.entries(resolvedProperties ?? {}).map(([propertyName, value]) => {
+      const validationDefinition = propertyDefinitions[propertyName]?.validation ?? {};
+      const schema = generateSchemaFromValidationDefinition(validationDefinition);
+      const [valid, errors] = validate(value, schema);
+      allErrors = [...allErrors, ...errors];
+      return [propertyName, valid ? value : validationDefinition.default];
+    })
+  );
+  return [coercedProperties, allErrors];
 };

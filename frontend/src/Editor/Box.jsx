@@ -123,7 +123,9 @@ export const Box = function Box({
   const [renderCount, setRenderCount] = useState(0);
   const [renderStartTime, setRenderStartTime] = useState(new Date());
 
-  const resolvedProperties = resolveProperties(component, currentState, null, customResolvables);
+  const [resolvedProperties, setResolvedProperties] = useState(
+    resolveProperties(component, currentState, null, customResolvables)
+  );
   const resolvedStyles = resolveStyles(component, currentState, null, customResolvables);
   resolvedStyles.visibility = resolvedStyles.visibility !== false ? true : false;
 
@@ -138,7 +140,9 @@ export const Box = function Box({
       }
       setRenderStartTime(currentTime);
     }
-    validateProperties(resolvedProperties, component.properties);
+    const [newProperties, errors] = validateProperties(resolvedProperties, component.properties);
+    setResolvedProperties(newProperties);
+    console.log({ newProperties, errors });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify({ resolvedProperties, resolvedStyles })]);
 
