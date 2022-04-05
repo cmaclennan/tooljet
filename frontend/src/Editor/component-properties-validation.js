@@ -1,4 +1,4 @@
-import { object, number, string, array, any, defaulted, create, assert } from 'superstruct';
+import { object, number, string, array, any, optional, assert } from 'superstruct';
 import _ from 'lodash';
 
 const generateSchemaFromValidationDefinition = (definition) => {
@@ -32,7 +32,7 @@ const generateSchemaFromValidationDefinition = (definition) => {
       schema = any();
   }
 
-  return schema;
+  return definition.required ? schema : optional(schema);
 };
 
 const validate = (value, schema) => {
@@ -55,7 +55,9 @@ export const validateProperties = (resolvedProperties, propertyDefinitions) => {
     Object.entries(resolvedProperties ?? {}).map(([propertyName, value]) => {
       const validationDefinition = propertyDefinitions[propertyName]?.validation ?? {};
       const schema = generateSchemaFromValidationDefinition(validationDefinition);
+
       const [valid, errors] = validate(value, schema);
+
       allErrors = [...allErrors, ...errors];
       return [propertyName, valid ? value : validationDefinition.default];
     })

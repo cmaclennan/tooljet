@@ -123,7 +123,11 @@ export const componentTypes = [
       showOnMobile: { type: 'toggle', displayName: 'Show on mobile' },
     },
     properties: {
-      text: { type: 'code', displayName: 'Button Text' },
+      text: {
+        type: 'code',
+        displayName: 'Button Text',
+        validation: { type: 'string', default: 'Button', required: true },
+      },
       loadingState: { type: 'toggle', displayName: 'Loading State' },
     },
     events: {
