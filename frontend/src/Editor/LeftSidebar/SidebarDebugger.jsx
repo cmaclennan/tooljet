@@ -31,7 +31,7 @@ export const LeftSidebarDebugger = ({ darkMode, errors }) => {
       const newError = _.flow([
         Object.entries,
         // eslint-disable-next-line no-unused-vars
-        (arr) => arr.filter(([key, value]) => value.data.status),
+        (arr) => arr.filter(([key, value]) => value.data?.status),
         Object.fromEntries,
       ])(errors);
 

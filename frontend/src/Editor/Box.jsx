@@ -105,6 +105,7 @@ export const Box = function Box({
   parentId,
   allComponents,
   extraProps,
+  sideBarDebugger,
 }) {
   const backgroundColor = yellow ? 'yellow' : '';
 
@@ -127,6 +128,12 @@ export const Box = function Box({
     resolveProperties(component, currentState, null, customResolvables),
     component.properties
   );
+
+  useEffect(() => {
+    sideBarDebugger.error({ [component.component]: { data: propertyErrors } });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(propertyErrors)]);
+
   const resolvedStyles = resolveStyles(component, currentState, null, customResolvables);
   resolvedStyles.visibility = resolvedStyles.visibility !== false ? true : false;
 

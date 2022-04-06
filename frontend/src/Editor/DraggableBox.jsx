@@ -95,6 +95,7 @@ export const DraggableBox = function DraggableBox({
   parentId,
   hoveredComponent,
   onComponentHover,
+  sideBarDebugger,
 }) {
   const [isResizing, setResizing] = useState(false);
   const [isDragging2, setDragging] = useState(false);
@@ -278,6 +279,7 @@ export const DraggableBox = function DraggableBox({
                   parentId={parentId}
                   allComponents={allComponents}
                   extraProps={extraProps}
+                  sideBarDebugger={sideBarDebugger}
                 />
               </ErrorBoundary>
             </div>

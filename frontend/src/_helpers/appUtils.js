@@ -824,3 +824,17 @@ export const getSvgIcon = (key, height = 50, width = 50) => {
 
   return <Icon style={{ height, width }} />;
 };
+
+export const debuggerActions = {
+  error: (_self, error) => {
+    _self.setState({
+      currentState: {
+        ..._self.state.currentState,
+        errors: {
+          ..._self.state.currentState.errors,
+          error,
+        },
+      },
+    });
+  },
+};
