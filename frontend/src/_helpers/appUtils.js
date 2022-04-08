@@ -832,9 +832,13 @@ export const debuggerActions = {
         ..._self.state.currentState,
         errors: {
           ..._self.state.currentState.errors,
-          error,
+          ...error,
         },
       },
     });
   },
 };
+
+export const getComponentName = (currentState, id) => {
+  return Object.entries(currentState?.components).filter(([_, component]) => component.id === id)[0][0];
+}

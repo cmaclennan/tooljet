@@ -58,7 +58,10 @@ export const validateProperties = (resolvedProperties, propertyDefinitions) => {
 
       const [valid, errors] = validate(value, schema);
 
-      allErrors = [...allErrors, ...errors];
+      allErrors = [
+        ...allErrors,
+        ...errors.map((message) => ({ property: propertyDefinitions[propertyName]?.displayName, message })),
+      ];
       return [propertyName, valid ? value : validationDefinition.default];
     })
   );

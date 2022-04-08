@@ -301,6 +301,7 @@ export const DraggableBox = function DraggableBox({
               currentState={currentState}
               darkMode={darkMode}
               removeComponent={removeComponent}
+              sideBarDebugger={sideBarDebugger}
             />
           </ErrorBoundary>
         </div>

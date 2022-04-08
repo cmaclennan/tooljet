@@ -908,7 +908,10 @@ class Editor extends React.Component {
   };
 
   sideBarDebugger = {
-    error: (data) => debuggerActions.error(this, data),
+    error: (data) => {
+      debuggerActions.error(this, data);
+      console.log({yepski: this.state})
+    },
   };
 
   changeDarkMode = (newMode) => {

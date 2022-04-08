@@ -24,6 +24,8 @@ export const LeftSidebarDebugger = ({ darkMode, errors }) => {
     setErrorLogs(() => []);
   };
 
+  console.log({ errors });
+
   React.useEffect(() => {
     setErrorLogs((prev) => {
       let copy = JSON.parse(JSON.stringify(prev));
@@ -36,11 +38,14 @@ export const LeftSidebarDebugger = ({ darkMode, errors }) => {
       ])(errors);
 
       const errorData = [];
+      console.log({ errors, newError });
       Object.entries(newError).forEach(([key, value]) => {
         const variableNames = {
           options: '',
           response: '',
           request: '',
+          resolvedProperties: '',
+          effectiveProperties: '',
         };
 
         switch (value.type) {
@@ -55,6 +60,12 @@ export const LeftSidebarDebugger = ({ darkMode, errors }) => {
           case 'transformations':
             variableNames.response = 'data';
             break;
+
+          case 'component':
+            variableNames.resolvedProperties = 'resolvedProperties';
+            variableNames.effectiveProperties = 'propertiesAfterUsingDefaults';
+            break;
+
           default:
             'options';
         }
@@ -65,11 +76,13 @@ export const LeftSidebarDebugger = ({ darkMode, errors }) => {
           message: value.data.message,
           description: value.data.description,
           options: { name: variableNames.options, data: value.options },
+          resolvedProperties: value.resolvedProperties,
+          effectiveProperties: value.effectiveProperties,
           response: {
             name: variableNames.response,
             data: value.kind === 'restapi' ? value.data.data.responseObject : value.data.data,
           },
-          request: { name: variableNames.request, data: value.data.data.requestObject },
+          request: { name: variableNames.request, data: value.data?.data?.requestObject ?? {} },
           timestamp: moment(),
         });
       });
@@ -77,7 +90,7 @@ export const LeftSidebarDebugger = ({ darkMode, errors }) => {
       const newData = [...errorData, ...copy];
       return newData;
     });
-  }, [errors]);
+  }, [JSON.stringify(errors)]);
 
   React.useEffect(() => {
     if (open === false && errorLogs.length !== unReadErrorCount.read) {
@@ -157,7 +170,8 @@ export const LeftSidebarDebugger = ({ darkMode, errors }) => {
 
         {currrentTab === 1 && (
           <div className="card-body">
-            {errorLogs.length === 0 && <center className="p-2 text-muted">No errors found.</center>}
+            {console.log({ errorLogs }) ||
+              (errorLogs.length === 0 && <center className="p-2 text-muted">No errors found.</center>)}
 
             <div className="tab-content">
               {errorLogs.map((error, index) => (
@@ -183,7 +197,11 @@ function ErrorLogsComponent({ errorProps, idx, darkMode }) {
           height="16"
         />
         [{_.capitalize(errorProps.type)} {errorProps.key}] &nbsp;
-        <span className="text-red">{`${_.startCase(errorProps.type)} Failed: ${errorProps.message}`} .</span>
+        {errorProps.type != 'component' ? (
+          <span className="text-red">{`${_.startCase(errorProps.type)} failed: ${errorProps.message}`} .</span>
+        ) : (
+          <span className="text-red">{`Invalid properties detected: ${errorProps.message}`} .</span>
+        )}
         <br />
         <small className="text-muted px-1">{moment(errorProps.timestamp).fromNow()}</small>
       </p>
@@ -205,26 +223,62 @@ function ErrorLogsComponent({ errorProps, idx, darkMode }) {
             />
           </span>
         )}
-        <span>
-          <ReactJson
-            src={errorProps.response.data}
-            theme={darkMode ? 'shapeshifter' : 'rjv-default'}
-            name={errorProps.response.name}
-            style={{ fontSize: '0.7rem', paddingLeft: '0.17rem' }}
-            enableClipboard={false}
-            displayDataTypes={false}
-            collapsed={true}
-            displayObjectSize={false}
-            quotesOnKeys={false}
-            sortKeys={false}
-          />
-        </span>
+        {errorProps.type != 'component' && (
+          <span>
+            <ReactJson
+              src={errorProps.response.data}
+              theme={darkMode ? 'shapeshifter' : 'rjv-default'}
+              name={errorProps.response.name}
+              style={{ fontSize: '0.7rem', paddingLeft: '0.17rem' }}
+              enableClipboard={false}
+              displayDataTypes={false}
+              collapsed={true}
+              displayObjectSize={false}
+              quotesOnKeys={false}
+              sortKeys={false}
+            />
+          </span>
+        )}
         {errorProps.kind === 'restapi' && (
           <span>
             <ReactJson
               src={errorProps.request.data}
               theme={darkMode ? 'shapeshifter' : 'rjv-default'}
               name={errorProps.request.name}
+              style={{ fontSize: '0.7rem', paddingLeft: '0.17rem' }}
+              enableClipboard={false}
+              displayDataTypes={false}
+              collapsed={true}
+              displayObjectSize={false}
+              quotesOnKeys={false}
+              sortKeys={false}
+              collapseStringsAfterLength={1000}
+            />
+          </span>
+        )}
+        {errorProps.kind === 'component' && (
+          <span>
+            <ReactJson
+              src={errorProps.resolvedProperties}
+              theme={darkMode ? 'shapeshifter' : 'rjv-default'}
+              name={'resolvedProperties'}
+              style={{ fontSize: '0.7rem', paddingLeft: '0.17rem' }}
+              enableClipboard={false}
+              displayDataTypes={false}
+              collapsed={true}
+              displayObjectSize={false}
+              quotesOnKeys={false}
+              sortKeys={false}
+              collapseStringsAfterLength={1000}
+            />
+          </span>
+        )}
+        {errorProps.kind === 'component' && (
+          <span>
+            <ReactJson
+              src={errorProps.effectiveProperties}
+              theme={darkMode ? 'shapeshifter' : 'rjv-default'}
+              name={'effectiveProperties'}
               style={{ fontSize: '0.7rem', paddingLeft: '0.17rem' }}
               enableClipboard={false}
               displayDataTypes={false}
