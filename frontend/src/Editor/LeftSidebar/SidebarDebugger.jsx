@@ -24,8 +24,6 @@ export const LeftSidebarDebugger = ({ darkMode, errors }) => {
     setErrorLogs(() => []);
   };
 
-  console.log({ errors });
-
   React.useEffect(() => {
     setErrorLogs((prev) => {
       let copy = JSON.parse(JSON.stringify(prev));
@@ -38,7 +36,6 @@ export const LeftSidebarDebugger = ({ darkMode, errors }) => {
       ])(errors);
 
       const errorData = [];
-      console.log({ errors, newError });
       Object.entries(newError).forEach(([key, value]) => {
         const variableNames = {
           options: '',
@@ -170,8 +167,7 @@ export const LeftSidebarDebugger = ({ darkMode, errors }) => {
 
         {currrentTab === 1 && (
           <div className="card-body">
-            {console.log({ errorLogs }) ||
-              (errorLogs.length === 0 && <center className="p-2 text-muted">No errors found.</center>)}
+            {errorLogs.length === 0 && <center className="p-2 text-muted">No errors found.</center>}
 
             <div className="tab-content">
               {errorLogs.map((error, index) => (

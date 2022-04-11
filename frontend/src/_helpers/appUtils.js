@@ -827,19 +827,15 @@ export const getSvgIcon = (key, height = 50, width = 50) => {
 
 export const debuggerActions = {
   error: (_self, error) => {
-    console.log({ prevState: _self.state.currentState.errors });
-    _self.setState(
-      {
-        currentState: {
-          ..._self.state.currentState,
-          errors: {
-            // ..._self.state.currentState.errors,
-            ...error,
-          },
+    _self.setState({
+      currentState: {
+        ..._self.state.currentState,
+        errors: {
+          // ..._self.state.currentState.errors,
+          ...error,
         },
       },
-      () => console.log({ newState: _self.state.currentState.errors })
-    );
+    });
   },
 };
 

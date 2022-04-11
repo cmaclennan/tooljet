@@ -123,21 +123,9 @@ export const Box = function Box({
   const ComponentToRender = AllComponents[component.component];
   const [renderCount, setRenderCount] = useState(0);
   const [renderStartTime, setRenderStartTime] = useState(new Date());
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  // const componentName = useMemo(
-  //   () =>
-  //     (currentState?.components ?? []).length > 0
-  //       ? Object.entries(currentState?.components).filter(([_, component]) => component.id === id)[0][0]
-  //       : '',
-  //   [JSON.stringify(currentState?.components ?? '')]
-  // );
-
-  // console.log({componentName})
 
   const properties = resolveProperties(component, currentState, null, customResolvables);
   const [resolvedProperties, propertyErrors] = validateProperties(properties, component.properties);
-
-  // console.log({ sideBarDebugger, component })
 
   useEffect(() => {
     propertyErrors.forEach((propertyError) => {
@@ -151,7 +139,6 @@ export const Box = function Box({
         },
       });
     });
-    console.log({ propertyErrors, component });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(propertyErrors)]);
 
