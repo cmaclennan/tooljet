@@ -12,9 +12,61 @@ export default class Woocomerce implements QueryService {
 
     try {
       switch (operation) {
+        case 'list_customer': {
+          break;
+        }
+        case 'update_customer': {
+          break;
+        }
+        case 'delete_customer': {
+          break;
+        }
+        case 'batch_update_customer': {
+          break;
+        }
+        case 'create_customer': {
+          break;
+        }
+        case 'retreive_customer': {
+          break;
+        }
         case 'list_product': {
-          // const [datasets] = await client.getDatasets(this.parseJSON(queryOptions.options));
-          // result = datasets;
+          break;
+        }
+        case ' update_product': {
+          break;
+        }
+        case 'delete_product': {
+          break;
+        }
+        case 'batch_update_product': {
+          break;
+        }
+        case 'create_product': {
+          break;
+        }
+        case 'retreive_product': {
+          break;
+        }
+        case 'list_order': {
+          break;
+        }
+        case 'update_order': {
+          break;
+        }
+        case ' delete_order': {
+          break;
+        }
+        case 'batch_update_order': {
+          break;
+        }
+        case 'create_order': {
+          break;
+        }
+        case 'retreive_order': {
+          break;
+        }
+        case 'list_coupon': {
           break;
         }
       }
