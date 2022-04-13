@@ -1,0 +1,327 @@
+{
+  "$schema": "https://raw.githubusercontent.com/ToolJet/ToolJet/develop/plugins/schemas/operations.schema.json",
+  "title": "Woocomerce datasource",
+  "description": "A schema defining Woocomerce datasource",
+  "type": "api",
+  "defaults": {},
+  "properties": {
+    "operation": {
+      "label": "Operation",
+      "key": "operation",
+      "type": "dropdown-component-flip",
+      "description": "Single select dropdown for operation",
+      "list": [
+        {
+          "value": "list_customer",
+          "name": "List all Customer"
+        },
+        {
+          "value": "update_customer",
+          "name": "Update a Customer"
+        },
+        {
+          "value": "delete_customer",
+          "name": "Delete a Customer"
+        },
+        {
+          "value": "batch_update_customer",
+          "name": "Batch update Customer"
+        },
+        {
+          "value": "create_customer",
+          "name": "Create a Customer"
+        },
+        {
+          "value": "retreive_customer",
+          "name": "Retrieve a Customer"
+        },
+        {
+          "value": "list_product",
+          "name": "List all product"
+        },
+        {
+          "value": "update_product",
+          "name": "Update a product"
+        },
+        {
+          "value": "delete_product",
+          "name": "Delete a product"
+        },
+        {
+          "value": "batch_update_product",
+          "name": "Batch update product"
+        },
+        {
+          "value": "create_product",
+          "name": "Create a product"
+        },
+        {
+          "value": "retreive_product",
+          "name": "Retrieve a product"
+        },
+        {
+          "value": "list_order",
+          "name": "List all order"
+        },
+        {
+          "value": "update_order",
+          "name": "Update a order"
+        },
+        {
+          "value": "delete_order",
+          "name": "Delete a order"
+        },
+        {
+          "value": "batch_update_order",
+          "name": "Batch update order"
+        },
+        {
+          "value": "create_order",
+          "name": "Create a order"
+        },
+        {
+          "value": "retreive_order",
+          "name": "Retrieve a order"
+        },
+        {
+          "value": "list_coupon",
+          "name": "List all coupons"
+        }
+      ]
+    },
+    "list_customer": {
+      "table_id": {
+        "label": "Table ID",
+        "key": "table_id",
+        "type": "codehinter",
+        "lineNumbers": false,
+        "description": "Enter table ID",
+        "width": "320px",
+        "height": "36px",
+        "className": "codehinter-plugins",
+        "placeholder": "56472"
+      }
+    },
+    "update_customer": {
+      "table_id": {
+        "label": "Table ID",
+        "key": "table_id",
+        "type": "codehinter",
+        "lineNumbers": false,
+        "description": "Enter table ID",
+        "width": "320px",
+        "height": "36px",
+        "className": "codehinter-plugins",
+        "placeholder": "56472"
+      }
+    },
+    "delete_customer": {
+      "table_id": {
+        "label": "Table ID",
+        "key": "table_id",
+        "type": "codehinter",
+        "lineNumbers": false,
+        "description": "Enter table ID",
+        "width": "320px",
+        "height": "36px",
+        "className": "codehinter-plugins",
+        "placeholder": "56472"
+      }
+    },
+    "batch_update_customer": {
+      "table_id": {
+        "label": "Table ID",
+        "key": "table_id",
+        "type": "codehinter",
+        "lineNumbers": false,
+        "description": "Enter table ID",
+        "width": "320px",
+        "height": "36px",
+        "className": "codehinter-plugins",
+        "placeholder": "56472"
+      }
+    },
+    "create_customer": {
+      "table_id": {
+        "label": "Table ID",
+        "key": "table_id",
+        "type": "codehinter",
+        "lineNumbers": false,
+        "description": "Enter table ID",
+        "width": "320px",
+        "height": "36px",
+        "className": "codehinter-plugins",
+        "placeholder": "56472"
+      }
+    },
+    "retreive_customer": {
+      "table_id": {
+        "label": "Table ID",
+        "key": "table_id",
+        "type": "codehinter",
+        "lineNumbers": false,
+        "description": "Enter table ID",
+        "width": "320px",
+        "height": "36px",
+        "className": "codehinter-plugins",
+        "placeholder": "56472"
+      }
+    }
+  },
+  "list_order": {
+    "table_id": {
+      "label": "Table ID",
+      "key": "table_id",
+      "type": "codehinter",
+      "lineNumbers": false,
+      "description": "Enter table ID",
+      "width": "320px",
+      "height": "36px",
+      "className": "codehinter-plugins",
+      "placeholder": "56472"
+    }
+  },
+  "update_order": {
+    "table_id": {
+      "label": "Table ID",
+      "key": "table_id",
+      "type": "codehinter",
+      "lineNumbers": false,
+      "description": "Enter table ID",
+      "width": "320px",
+      "height": "36px",
+      "className": "codehinter-plugins",
+      "placeholder": "56472"
+    }
+  },
+  "delete_order": {
+    "table_id": {
+      "label": "Table ID",
+      "key": "table_id",
+      "type": "codehinter",
+      "lineNumbers": false,
+      "description": "Enter table ID",
+      "width": "320px",
+      "height": "36px",
+      "className": "codehinter-plugins",
+      "placeholder": "56472"
+    }
+  },
+  "batch_update_order": {
+    "table_id": {
+      "label": "Table ID",
+      "key": "table_id",
+      "type": "codehinter",
+      "lineNumbers": false,
+      "description": "Enter table ID",
+      "width": "320px",
+      "height": "36px",
+      "className": "codehinter-plugins",
+      "placeholder": "56472"
+    }
+  },
+  "create_order": {
+    "table_id": {
+      "label": "Table ID",
+      "key": "table_id",
+      "type": "codehinter",
+      "lineNumbers": false,
+      "description": "Enter table ID",
+      "width": "320px",
+      "height": "36px",
+      "className": "codehinter-plugins",
+      "placeholder": "56472"
+    }
+  },
+  "retreive_order": {
+    "table_id": {
+      "label": "Table ID",
+      "key": "table_id",
+      "type": "codehinter",
+      "lineNumbers": false,
+      "description": "Enter table ID",
+      "width": "320px",
+      "height": "36px",
+      "className": "codehinter-plugins",
+      "placeholder": "56472"
+    }
+  },
+  "list_product": {
+    "table_id": {
+      "label": "Table ID",
+      "key": "table_id",
+      "type": "codehinter",
+      "lineNumbers": false,
+      "description": "Enter table ID",
+      "width": "320px",
+      "height": "36px",
+      "className": "codehinter-plugins",
+      "placeholder": "56472"
+    }
+  },
+  "update_product": {
+    "table_id": {
+      "label": "Table ID",
+      "key": "table_id",
+      "type": "codehinter",
+      "lineNumbers": false,
+      "description": "Enter table ID",
+      "width": "320px",
+      "height": "36px",
+      "className": "codehinter-plugins",
+      "placeholder": "56472"
+    }
+  },
+  "delete_product": {
+    "table_id": {
+      "label": "Table ID",
+      "key": "table_id",
+      "type": "codehinter",
+      "lineNumbers": false,
+      "description": "Enter table ID",
+      "width": "320px",
+      "height": "36px",
+      "className": "codehinter-plugins",
+      "placeholder": "56472"
+    }
+  },
+  "batch_update_product": {
+    "table_id": {
+      "label": "Table ID",
+      "key": "table_id",
+      "type": "codehinter",
+      "lineNumbers": false,
+      "description": "Enter table ID",
+      "width": "320px",
+      "height": "36px",
+      "className": "codehinter-plugins",
+      "placeholder": "56472"
+    }
+  },
+  "create_product": {
+    "table_id": {
+      "label": "Table ID",
+      "key": "table_id",
+      "type": "codehinter",
+      "lineNumbers": false,
+      "description": "Enter table ID",
+      "width": "320px",
+      "height": "36px",
+      "className": "codehinter-plugins",
+      "placeholder": "56472"
+    }
+  },
+  "retreive_product": {
+    "table_id": {
+      "label": "Table ID",
+      "key": "table_id",
+      "type": "codehinter",
+      "lineNumbers": false,
+      "description": "Enter table ID",
+      "width": "320px",
+      "height": "36px",
+      "className": "codehinter-plugins",
+      "placeholder": "56472"
+    }
+  }
+}
