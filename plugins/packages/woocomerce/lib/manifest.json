@@ -25,22 +25,19 @@
     "host": {
       "value": ""
     },
-    "database": {
+    "consumerKey": {
       "value": ""
     },
-    "username": {
-      "value": ""
-    },
-    "password": {
+    "consumerSecret": {
       "value": ""
     }
   },
   "properties": {
-    "database": {
-      "label": "Database",
-      "key": "database",
+    "consumerKey": {
+      "label": "ConsumerKey",
+      "key": "consumerKey",
       "type": "text",
-      "description": "database name",
+      "description": "consumerKey name",
       "helpText": "visit: <a href='https://woocommerce.github.io/woocommerce-rest-api-docs' target='_blank' rel='noreferrer'>rethinkDB docs</a>"
     },
     "host": {
@@ -49,18 +46,11 @@
       "type": "text",
       "description": ""
     },
-    "username": {
-      "label": "Username",
-      "key": "username",
+    "consumerSecret": {
+      "label": "ConsumerSecret",
+      "key": "consumerSecret",
       "type": "text",
       "description": ""
-    },
-    "password": {
-      "label": "Password",
-      "key": "password",
-      "type": "text",
-      "description": "",
-      "encrypted": true
     },
     "port": {
       "label": "Port",
@@ -70,5 +60,5 @@
       "helpText": ""
     }
   },
-  "required": ["username", "password", "database", "port", "host", "protocol"]
+  "required": ["consumerSecret", "consumerKey", "port", "host", "protocol"]
 }
