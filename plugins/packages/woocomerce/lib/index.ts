@@ -82,36 +82,32 @@ export default class Woocomerce implements QueryService {
   }
 
   async getConnection(sourceOptions: any, _options?: object): Promise<any> {
-    // Setup:
+    const { host, consumerKey, consumerSecret } = sourceOptions;
     const WooCommerceRestApi = require('@woocommerce/woocommerce-rest-api').default;
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const WooCommerce = new WooCommerceRestApi({
-      url: 'http://example.com', // Your store URL
-      consumerKey: 'consumer_key', // Your consumer key
-      consumerSecret: 'consumer_secret', // Your consumer secret
+      url: host, // Your store URL
+      consumerKey: consumerKey, // Your consumer key
+      consumerSecret: consumerSecret, // Your consumer secret
       version: 'wc/v3', // WooCommerce WP REST API version
     });
+    return WooCommerce;
   }
 
   async testConnection(sourceOptions: SourceOptions): Promise<ConnectionTestResult> {
-    // Setup:
+    const { host, consumerKey, consumerSecret } = sourceOptions;
     const WooCommerceRestApi = require('@woocommerce/woocommerce-rest-api').default;
-    // import WooCommerceRestApi from "@woocommerce/woocommerce-rest-api"; // Supports ESM
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const WooCommerce = new WooCommerceRestApi({
-      url: 'http://example.com', // Your store URL
-      consumerKey: 'consumer_key', // Your consumer key
-      consumerSecret: 'consumer_secret', // Your consumer secret
+      url: host, // Your store URL
+      consumerKey: consumerKey, // Your consumer key
+      consumerSecret: consumerSecret, // Your consumer secret
       version: 'wc/v3', // WooCommerce WP REST API version
     });
 
-    // if (!client) {
-    //   throw new Error('Invalid credentials');
-    // }
+    if (!WooCommerce) {
+      throw new Error('Invalid credentials');
+    }
 
-    // await client.getDatasets();
+    // await WooCommerce.getDatasets();
 
     return {
       status: 'ok',
