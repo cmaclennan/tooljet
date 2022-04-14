@@ -34,11 +34,11 @@
   },
   "properties": {
     "consumerKey": {
-      "label": "ConsumerKey",
+      "label": "Consumer key",
       "key": "consumerKey",
       "type": "text",
       "description": "consumerKey name",
-      "helpText": "visit: <a href='https://woocommerce.github.io/woocommerce-rest-api-docs' target='_blank' rel='noreferrer'>rethinkDB docs</a>"
+      "helpText": "visit: <a href='https://woocommerce.github.io/woocommerce-rest-api-docs' target='_blank' rel='noreferrer'>woocomerce docs</a>"
     },
     "host": {
       "label": "Host",
@@ -47,7 +47,7 @@
       "description": ""
     },
     "consumerSecret": {
-      "label": "ConsumerSecret",
+      "label": "Consumer secret",
       "key": "consumerSecret",
       "type": "text",
       "description": ""
