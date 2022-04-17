@@ -9,6 +9,8 @@ export default class Woocomerce implements QueryService {
     const operation = queryOptions.operation;
     // const client = await this.getConnection(sourceOptions);
     const result = {};
+    // let response = null;
+    const { consumerKey, host, consumerSecret } = sourceOptions;
 
     try {
       switch (operation) {
@@ -31,6 +33,21 @@ export default class Woocomerce implements QueryService {
           break;
         }
         case 'list_product': {
+          const WooCommerceRestApi = require('@woocommerce/woocommerce-rest-api').default;
+
+          const WooCommerce = new WooCommerceRestApi({
+            url: host, // Your store URL
+            consumerKey: consumerKey, // Your consumer key
+            consumerSecret: consumerSecret, // Your consumer secret
+            version: 'wc/v3', // WooCommerce WP REST API version
+          });
+          WooCommerce.get('products')
+            .then((response) => {
+              console.log(response.data);
+            })
+            .catch((error) => {
+              console.log(error.response.data);
+            });
           break;
         }
         case ' update_product': {
