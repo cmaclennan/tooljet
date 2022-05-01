@@ -41,6 +41,7 @@ import { SvgImage } from './Components/SvgImage';
 import { CustomComponent } from './Components/CustomComponent/CustomComponent';
 import { VerticalDivider } from './Components/verticalDivider';
 import { PDF } from './Components/PDF';
+import { Html } from './Components/Html';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import '@/_styles/custom.scss';
 import { resolveProperties, resolveStyles } from './component-properties-resolution';
@@ -88,6 +89,7 @@ const AllComponents = {
   CustomComponent,
   VerticalDivider,
   PDF,
+  Html,
 };
 
 export const Box = function Box({

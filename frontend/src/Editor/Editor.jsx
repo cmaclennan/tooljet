@@ -963,6 +963,7 @@ class Editor extends React.Component {
 
   getCanvasHeight = () => {
     const canvasBoundingRect = document.getElementsByClassName('canvas-area')[0].getBoundingClientRect();
+    console.log(canvasBoundingRect?.height, ':height');
     return canvasBoundingRect?.height;
   };
 
