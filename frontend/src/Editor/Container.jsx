@@ -47,7 +47,7 @@ export const Container = ({
 }) => {
   const styles = {
     width: currentLayout === 'mobile' ? deviceWindowWidth : '100%',
-    height: 2400,
+    height: 5000,
     maxWidth: `${canvasWidth}px`,
     position: 'absolute',
     backgroundSize: `${canvasWidth / 43}px 10px`,
