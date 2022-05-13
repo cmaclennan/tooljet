@@ -19,7 +19,6 @@ import produce from 'immer';
 
 export const Container = ({
   canvasWidth,
-  canvasHeight,
   mode,
   snapToGrid,
   onComponentClick,
@@ -48,9 +47,8 @@ export const Container = ({
 }) => {
   const styles = {
     width: currentLayout === 'mobile' ? deviceWindowWidth : '100%',
-    height: '100%',
+    height: 2400,
     maxWidth: `${canvasWidth}px`,
-    maxHeight: `${canvasHeight}px`,
     position: 'absolute',
     backgroundSize: `${canvasWidth / 43}px 10px`,
   };
