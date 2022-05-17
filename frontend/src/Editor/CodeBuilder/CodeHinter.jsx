@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSpring, config, animated } from 'react-spring';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
@@ -90,12 +90,26 @@ export function CodeHinter({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentState.components]);
 
-  let suggestions = useMemo(() => {
-    return getSuggestionKeys(realState);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [realState.components, realState.queries]);
+  // let suggestions = useCallback(() => {
+  //   if (isFocused) {
+  //     return getSuggestionKeys(realState);
+  //   }
+  //   return [];
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [isFocused]);
 
-  function valueChanged(editor, onChange, suggestions, ignoreBraces) {
+  const [suggestions, setSuggestions] = useState([]);
+
+  useEffect(() => {
+    if (isFocused) {
+      setSuggestions(getSuggestionKeys(realState));
+    }
+  }, [isFocused, realState]);
+
+  console.log('getSuggestionKeys is called', suggestions, componentName);
+
+  function valueChanged(editor, onChange, ignoreBraces) {
+    // const _suggestions = suggestions();
     handleChange(editor, onChange, suggestions, ignoreBraces);
     setCurrentValue(editor.getValue()?.trim());
   }
@@ -233,7 +247,7 @@ export function CodeHinter({
                 isOpen={isOpen}
                 callback={setIsOpen}
                 componentName={componentName}
-                key={suggestions.length}
+                key={componentName}
                 customComponent={getPreview}
                 forceUpdate={forceUpdate}
                 optionalProps={{ styles: { height: 300 }, cls: className }}
@@ -251,7 +265,7 @@ export function CodeHinter({
                     onChange(value);
                     setFocused(false);
                   }}
-                  onChange={(editor) => valueChanged(editor, onChange, suggestions, ignoreBraces)}
+                  onChange={(editor) => valueChanged(editor, onChange, ignoreBraces)}
                   onBeforeChange={(editor, change) => onBeforeChange(editor, change, ignoreBraces)}
                   options={options}
                   viewportMargin={Infinity}
