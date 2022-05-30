@@ -91,7 +91,6 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: './src/index.html',
-      favicon: './assets/images/logo.svg',
     }),
     new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /(en)$/),
     new webpack.DefinePlugin({
