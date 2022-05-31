@@ -104,14 +104,8 @@ export const Tabs = function Tabs({
         ))}
       </ul>
       {tabIdsToBeRendered.map((tabIdToBeRendered) => (
-        <div
-          className="tab-content"
-          ref={parentRef}
-          id={`${id}-${currentTab}`}
-          key={tabIdToBeRendered}
-          style={{ display: currentTab === tabIdToBeRendered ? 'block' : 'none' }}
-        >
-          <div className="tab-pane active show">
+        <div className="tab-content" ref={parentRef} id={`${id}-${currentTab}`} key={tabIdToBeRendered}>
+          <div className={`tab-pane show active`}>
             <SubContainer
               parent={`${id}-${currentTab}`}
               {...containerProps}
