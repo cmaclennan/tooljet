@@ -104,23 +104,32 @@ export const Tabs = function Tabs({
         ))}
       </ul>
       {tabIdsToBeRendered.map((tabIdToBeRendered) => (
-        <div className="tab-content" ref={parentRef} id={`${id}-${currentTab}`} key={tabIdToBeRendered}>
-          <div className={`tab-pane show active`}>
+        <div
+          className="tab-content"
+          ref={(newCurrent) => {
+            if (currentTab === tabIdToBeRendered) {
+              parentRef.current = newCurrent;
+            }
+          }}
+          id={`${id}-${tabIdToBeRendered}`}
+          key={tabIdToBeRendered}
+        >
+          <div className={`tab-pane ${tabIdToBeRendered === currentTab ? 'active' : ''}`}>
             <SubContainer
-              parent={`${id}-${currentTab}`}
+              parent={`${id}-${tabIdToBeRendered}`}
               {...containerProps}
               parentRef={parentRef}
               removeComponent={removeComponent}
               containerCanvasWidth={width}
               parentComponent={component}
             />
-            <SubCustomDragLayer
-              parent={id}
-              parentRef={parentRef}
-              currentLayout={containerProps.currentLayout}
-              containerCanvasWidth={width}
-            />
           </div>
+          <SubCustomDragLayer
+            parent={`${id}-${tabIdToBeRendered}`}
+            parentRef={parentRef}
+            currentLayout={containerProps.currentLayout}
+            containerCanvasWidth={width}
+          />
         </div>
       ))}
     </div>
