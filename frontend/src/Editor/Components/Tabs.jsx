@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { SubCustomDragLayer } from '../SubCustomDragLayer';
 import { SubContainer } from '../SubContainer';
 import { resolveReferences, resolveWidgetFieldValue } from '@/_helpers/utils';
+import _ from 'lodash';
 
 export const Tabs = function Tabs({
   id,
@@ -65,47 +66,70 @@ export const Tabs = function Tabs({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTab]);
 
+  const { appDefinition } = containerProps;
+  const allComponents = appDefinition ? appDefinition.components : {};
+  const childComponentIds = Object.keys(allComponents).filter((componentId) =>
+    allComponents[componentId]?.parent?.includes(id)
+  );
+
+  const tabIdsBasedOnPresenceOfChildren = childComponentIds.map((childComponentId) =>
+    allComponents[childComponentId].parent.slice(-1)
+  );
+  const tabIdsParsedFromTabsProperty = parsedTabs.map((parsedTab) => parsedTab.id);
+  const tabIdsToBeRendered = _.uniq([...tabIdsBasedOnPresenceOfChildren, ...tabIdsParsedFromTabsProperty, currentTab]);
+
+  console.log({ tabIdsToBeRendered });
+
   return (
-    <div data-disabled={parsedDisabledState} className="jet-tabs card" style={computedStyles}>
-      <ul className="nav nav-tabs" data-bs-toggle="tabs" style={{ display: parsedHideTabs && 'none' }}>
-        {parsedTabs.map((tab) => (
-          <li className="nav-item" onClick={() => setCurrentTab(tab.id)} key={tab.id}>
-            <a
-              className={`nav-link ${currentTab == tab.id ? 'active' : ''}`}
-              style={
-                currentTab == tab.id
-                  ? { color: parsedHighlightColor, borderBottom: `1px solid ${parsedHighlightColor}` }
-                  : {}
-              }
-              ref={(el) => {
-                if (el && currentTab == tab.id) {
-                  el.style.setProperty('color', parsedHighlightColor, 'important');
-                }
-              }}
-            >
-              {tab.title}
-            </a>
-          </li>
-        ))}
-      </ul>
-      <div className="tab-content" ref={parentRef} id={`${id}-${currentTab}`}>
-        <div className="tab-pane active show">
-          <SubContainer
-            parent={`${id}-${currentTab}`}
-            {...containerProps}
-            parentRef={parentRef}
-            removeComponent={removeComponent}
-            containerCanvasWidth={width}
-            parentComponent={component}
-          />
-          <SubCustomDragLayer
-            parent={id}
-            parentRef={parentRef}
-            currentLayout={containerProps.currentLayout}
-            containerCanvasWidth={width}
-          />
+    <div>
+      {tabIdsToBeRendered.map((tabIdToBeRendered) => (
+        <div
+          data-disabled={parsedDisabledState}
+          className="jet-tabs card"
+          style={{ ...computedStyles, display: tabIdToBeRendered === currentTab ? 'block' : 'none' }}
+          key={tabIdToBeRendered}
+        >
+          <ul className="nav nav-tabs" data-bs-toggle="tabs" style={{ display: parsedHideTabs && 'none' }}>
+            {parsedTabs.map((tab) => (
+              <li className="nav-item" onClick={() => setCurrentTab(tab.id)} key={tab.id}>
+                <a
+                  className={`nav-link ${currentTab == tab.id ? 'active' : ''}`}
+                  style={
+                    currentTab == tab.id
+                      ? { color: parsedHighlightColor, borderBottom: `1px solid ${parsedHighlightColor}` }
+                      : {}
+                  }
+                  ref={(el) => {
+                    if (el && currentTab == tab.id) {
+                      el.style.setProperty('color', parsedHighlightColor, 'important');
+                    }
+                  }}
+                >
+                  {tab.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+          <div className="tab-content" ref={parentRef} id={`${id}-${currentTab}`}>
+            <div className="tab-pane active show">
+              <SubContainer
+                parent={`${id}-${currentTab}`}
+                {...containerProps}
+                parentRef={parentRef}
+                removeComponent={removeComponent}
+                containerCanvasWidth={width}
+                parentComponent={component}
+              />
+              <SubCustomDragLayer
+                parent={id}
+                parentRef={parentRef}
+                currentLayout={containerProps.currentLayout}
+                containerCanvasWidth={width}
+              />
+            </div>
+          </div>
         </div>
-      </div>
+      ))}
     </div>
   );
 };
