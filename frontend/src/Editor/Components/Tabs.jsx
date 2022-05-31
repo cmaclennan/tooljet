@@ -81,52 +81,51 @@ export const Tabs = function Tabs({
   console.log({ tabIdsToBeRendered });
 
   return (
-    <div>
+    <div data-disabled={parsedDisabledState} className="jet-tabs card" style={computedStyles}>
+      <ul className="nav nav-tabs" data-bs-toggle="tabs" style={{ display: parsedHideTabs && 'none' }}>
+        {parsedTabs.map((tab) => (
+          <li className="nav-item" onClick={() => setCurrentTab(tab.id)} key={tab.id}>
+            <a
+              className={`nav-link ${currentTab == tab.id ? 'active' : ''}`}
+              style={
+                currentTab == tab.id
+                  ? { color: parsedHighlightColor, borderBottom: `1px solid ${parsedHighlightColor}` }
+                  : {}
+              }
+              ref={(el) => {
+                if (el && currentTab == tab.id) {
+                  el.style.setProperty('color', parsedHighlightColor, 'important');
+                }
+              }}
+            >
+              {tab.title}
+            </a>
+          </li>
+        ))}
+      </ul>
       {tabIdsToBeRendered.map((tabIdToBeRendered) => (
         <div
-          data-disabled={parsedDisabledState}
-          className="jet-tabs card"
-          style={{ ...computedStyles, display: tabIdToBeRendered === currentTab ? 'block' : 'none' }}
+          className="tab-content"
+          ref={parentRef}
+          id={`${id}-${currentTab}`}
           key={tabIdToBeRendered}
+          style={{ display: currentTab === tabIdToBeRendered ? 'block' : 'none' }}
         >
-          <ul className="nav nav-tabs" data-bs-toggle="tabs" style={{ display: parsedHideTabs && 'none' }}>
-            {parsedTabs.map((tab) => (
-              <li className="nav-item" onClick={() => setCurrentTab(tab.id)} key={tab.id}>
-                <a
-                  className={`nav-link ${currentTab == tab.id ? 'active' : ''}`}
-                  style={
-                    currentTab == tab.id
-                      ? { color: parsedHighlightColor, borderBottom: `1px solid ${parsedHighlightColor}` }
-                      : {}
-                  }
-                  ref={(el) => {
-                    if (el && currentTab == tab.id) {
-                      el.style.setProperty('color', parsedHighlightColor, 'important');
-                    }
-                  }}
-                >
-                  {tab.title}
-                </a>
-              </li>
-            ))}
-          </ul>
-          <div className="tab-content" ref={parentRef} id={`${id}-${currentTab}`}>
-            <div className="tab-pane active show">
-              <SubContainer
-                parent={`${id}-${currentTab}`}
-                {...containerProps}
-                parentRef={parentRef}
-                removeComponent={removeComponent}
-                containerCanvasWidth={width}
-                parentComponent={component}
-              />
-              <SubCustomDragLayer
-                parent={id}
-                parentRef={parentRef}
-                currentLayout={containerProps.currentLayout}
-                containerCanvasWidth={width}
-              />
-            </div>
+          <div className="tab-pane active show">
+            <SubContainer
+              parent={`${id}-${currentTab}`}
+              {...containerProps}
+              parentRef={parentRef}
+              removeComponent={removeComponent}
+              containerCanvasWidth={width}
+              parentComponent={component}
+            />
+            <SubCustomDragLayer
+              parent={id}
+              parentRef={parentRef}
+              currentLayout={containerProps.currentLayout}
+              containerCanvasWidth={width}
+            />
           </div>
         </div>
       ))}
