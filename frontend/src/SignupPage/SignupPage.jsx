@@ -14,7 +14,7 @@ class SignupPage extends React.Component {
   }
 
   handleChange = (event) => {
-    this.setState({ [event.target.name]: event.target.value });
+    this.setState({ [event.target.name]: event.target.value.toLowerCase() });
   };
 
   signup = (e) => {
