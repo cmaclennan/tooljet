@@ -7,6 +7,7 @@ services:
     repo: https://github.com/ToolJet/ToolJet.git
     dockerfilePath: ./docker/production.Dockerfile
     dockerCommand: npm run start:prod
+    dockerContext: ./
     healthCheckPath: /api/health
     envVars:
       - key: DATABASE_URL
