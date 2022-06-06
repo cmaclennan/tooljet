@@ -6,7 +6,7 @@ services:
     env: docker
     repo: https://github.com/ToolJet/ToolJet.git
     dockerfilePath: ./docker/production.Dockerfile
-    dockerCommand: npm run start:prod
+    dockerCommand: npm run db:seed && npm run start:prod
     dockerContext: ./
     healthCheckPath: /api/health
     envVars:
