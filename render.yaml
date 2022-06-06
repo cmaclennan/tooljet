@@ -23,6 +23,7 @@ services:
           type: web
           name: ToolJet
           envVarKey: RENDER_EXTERNAL_URL
+      - fromGroup: tooljet-preview-env
 databases:
   - name: postgres-preview
     previewPlan: free
