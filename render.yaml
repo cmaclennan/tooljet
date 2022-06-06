@@ -2,7 +2,7 @@ previewsEnabled: true
 services:
   - type: web
     name: ToolJet
-    previewPlan: free
+    previewPlan: starter
     env: docker
     repo: https://github.com/ToolJet/ToolJet.git
     dockerfilePath: ./docker/production.Dockerfile
@@ -27,6 +27,6 @@ services:
       - fromGroup: tooljet-preview-env
 databases:
   - name: postgres-preview
-    previewPlan: free
+    previewPlan: starter
     databaseName: tooljet_preview
     postgresMajorVersion: 13
