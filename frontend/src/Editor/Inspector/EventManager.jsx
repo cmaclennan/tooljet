@@ -61,9 +61,7 @@ export const EventManager = ({
     if (!result.destination) {
       return;
     }
-
-    const items = reorder(this.state.items, result.source.index, result.destination.index);
-
+    const items = reorder(events, result.source.index, result.destination.index);
     events = items;
   };
 
