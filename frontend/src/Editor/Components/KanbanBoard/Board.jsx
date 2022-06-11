@@ -22,16 +22,9 @@ const getItemStyle = (isDragging, draggableStyle) => {
 
 function Board({ height, state, colStyles, setState, fireEvent, setExposedVariable }) {
   const addNewItem = (state, keyIndex) => {
-    const newItem = {
-      id: uuidv4(),
-      title: 'New card',
-      columnId: state[keyIndex].id,
-    };
-    const newState = [...state];
-    if (!newState[keyIndex]['cards']) [(newState[keyIndex]['cards'] = [])];
-    newState[keyIndex]['cards'].push(newItem);
-    setState(newState);
-    setExposedVariable('lastAddedCard', newItem).then(() => fireEvent('onCardAdded'));
+    setExposedVariable('lastAddCardClickDetails', { columnIndex: keyIndex, columnId: state[keyIndex].id }).then(() =>
+      fireEvent('onAddCardClicked')
+    );
   };
 
   function onDragEnd(result) {
