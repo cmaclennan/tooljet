@@ -35,7 +35,13 @@ export const Listview = function Listview({
   const [childrenData, setChildrenData] = useState([]);
   useEffect(() => {
     setExposedVariable('data', childrenData);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    setExposedVariable('data', childrenData);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [childrenData]);
 
   return (
     <div
@@ -70,9 +76,9 @@ export const Listview = function Listview({
               listViewItemOptions={{ index }}
               onChildrenDataUpdated={(newData) => {
                 const cleanedNewData = _.omitBy(newData, _.isNil);
-                const finalData = { ...childrenData, ...cleanedNewData };
-                setExposedVariable('data', finalData);
-                setChildrenData(finalData);
+                setChildrenData((prevState) => {
+                  return { ...prevState, ...cleanedNewData };
+                });
               }}
             />
           </div>
