@@ -38,6 +38,7 @@ export const SubContainer = ({
   onComponentHover,
   hoveredComponent,
   selectedComponents,
+  onChildrenDataUpdated,
 }) => {
   const [_containerCanvasWidth, setContainerCanvasWidth] = useState(0);
 
@@ -371,6 +372,7 @@ export const SubContainer = ({
           [optionName]: value,
         },
       };
+      onChildrenDataUpdated && onChildrenDataUpdated(newData);
       return onComponentOptionChanged(parentComponent, 'data', newData);
     } else {
       return onComponentOptionChanged(component, optionName, value, extraProps);

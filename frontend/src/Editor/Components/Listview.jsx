@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { SubContainer } from '../SubContainer';
 import _ from 'lodash';
 
@@ -12,7 +12,7 @@ export const Listview = function Listview({
   properties,
   styles,
   currentState,
-  fireEvent,
+  setExposedVariable,
 }) {
   const fallbackProperties = { height: 100, showBorder: false, data: [] };
   const fallbackStyles = { visibility: true, disabledState: false };
@@ -27,10 +27,15 @@ export const Listview = function Listview({
   };
 
   const onRowClicked = (index) => {
-    fireEvent('onRowClicked', { data: currentState.components[`${component.name}`].data[index], rowId: index });
+    // fireEvent('onRowClicked', { data: currentState.components[`${component.name}`].data[index], rowId: index });
   };
 
   const parentRef = useRef(null);
+
+  const [childrenData, setChildrenData] = useState([]);
+  useEffect(() => {
+    setExposedVariable('data', childrenData);
+  }, []);
 
   return (
     <div
@@ -63,6 +68,12 @@ export const Listview = function Listview({
               parentRef={parentRef}
               removeComponent={removeComponent}
               listViewItemOptions={{ index }}
+              onChildrenDataUpdated={(newData) => {
+                const cleanedNewData = _.omitBy(newData, _.isNil);
+                const finalData = { ...childrenData, ...cleanedNewData };
+                setExposedVariable('data', finalData);
+                setChildrenData(finalData);
+              }}
             />
           </div>
         ))}
