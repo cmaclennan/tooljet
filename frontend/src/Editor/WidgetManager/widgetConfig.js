@@ -618,6 +618,13 @@ export const widgets = [
       width: 6,
       height: 60,
     },
+    actions: [
+      {
+        handle: 'selectOption',
+        displayName: 'Select option',
+        params: [{ handle: 'option', displayName: 'Option', defaultValue: '' }],
+      },
+    ],
     others: {
       showOnDesktop: { type: 'toggle', displayName: 'Show on desktop' },
       showOnMobile: { type: 'toggle', displayName: 'Show on mobile' },
