@@ -815,7 +815,7 @@ export function Table({
     ['targetPageIndex']
   );
   registerAction('clear', async function () {
-    tableData = [];
+    setPageCopy([]);
   });
 
   useEffect(() => {
@@ -833,18 +833,6 @@ export function Table({
   }, [clientSidePagination, serverSidePagination, rows]);
 
   useEffect(() => {
-    console.log('running', tableData);
-    const pageData = page.map((row) => row.original);
-    const currentData = rows.map((row) => row.original);
-    onComponentOptionsChanged(component, [
-      ['currentPageData', pageData],
-      ['currentData', currentData],
-      ['selectedRow', []],
-      ['selectedRowId', null],
-    ]);
-  }, [tableData.length, componentState.changeSet]);
-
-  useEffect(() => {
     if (!state.columnResizing.isResizingColumn) {
       changeCanDrag(true);
       paramUpdated(id, 'columnSizes', { ...columnSizes, ...state.columnResizing.columnWidths });
@@ -854,11 +842,23 @@ export function Table({
   }, [state.columnResizing.isResizingColumn]);
 
   const [paginationInternalPageIndex, setPaginationInternalPageIndex] = useState(pageIndex ?? 1);
+  const [pageCopy, setPageCopy] = useState(page ?? []);
 
   useEffect(() => {
     if (pageCount <= pageIndex) gotoPage(pageCount - 1);
   }, [pageCount]);
 
+  useEffect(() => {
+    console.log('running', tableData);
+    const pageData = pageCopy.map((row) => row.original);
+    const currentData = rows.map((row) => row.original);
+    onComponentOptionsChanged(component, [
+      ['currentPageData', pageData],
+      ['currentData', currentData],
+      ['selectedRow', []],
+      ['selectedRowId', null],
+    ]);
+  }, [tableData.length, componentState.changeSet, pageCopy]);
   const tableRef = React.useRef();
 
   return (
@@ -928,8 +928,8 @@ export function Table({
 
           {!loadingState && (
             <tbody {...getTableBodyProps()} style={{ color: computeFontColor() }}>
-              {console.log('page', page)}
-              {page.map((row, index) => {
+              {console.log('page', pageCopy)}
+              {pageCopy.map((row, index) => {
                 prepareRow(row);
                 return (
                   <tr
