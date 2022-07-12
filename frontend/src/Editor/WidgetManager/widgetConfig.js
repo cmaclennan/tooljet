@@ -99,6 +99,10 @@ export const widgets = [
           },
         ],
       },
+      {
+        handle: 'clear',
+        displayName: 'Clear',
+      },
     ],
     definition: {
       others: {

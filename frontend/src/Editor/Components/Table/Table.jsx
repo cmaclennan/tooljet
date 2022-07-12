@@ -814,6 +814,9 @@ export function Table({
     },
     ['targetPageIndex']
   );
+  registerAction('clear', async function () {
+    tableData = [];
+  });
 
   useEffect(() => {
     const selectedRowsOriginalData = selectedFlatRows.map((row) => row.original);
@@ -830,6 +833,7 @@ export function Table({
   }, [clientSidePagination, serverSidePagination, rows]);
 
   useEffect(() => {
+    console.log('running', tableData);
     const pageData = page.map((row) => row.original);
     const currentData = rows.map((row) => row.original);
     onComponentOptionsChanged(component, [
