@@ -79,7 +79,6 @@ export function Table({
 
   const highlightSelectedRowProperty = component.definition.properties.highlightSelectedRow?.value;
   const highlightSelectedRow = resolveWidgetFieldValue(highlightSelectedRowProperty, currentState) ?? false; // default is false for backward compatibility
-
   const clientSidePaginationProperty = component.definition.properties.clientSidePagination?.value;
   let clientSidePagination =
     resolveWidgetFieldValue(clientSidePaginationProperty, currentState) ?? !serverSidePagination; // default is true for backward compatibility
@@ -814,8 +813,28 @@ export function Table({
     },
     ['targetPageIndex']
   );
+
   registerAction('clear', async function () {
     setPageCopy([]);
+  });
+
+  registerAction('selectRow', async function (id) {
+    const item = currentState.components[component.name]['currentData'].filter((item) => item.id == id);
+    let rowId = '';
+    let original = '';
+    page.map((item, index) => {
+      if (item.original.id == id) {
+        rowId = item.id;
+        original = item.original;
+      }
+    });
+    setcomponentState((prevState) => {
+      return { ...prevState, selectedRow: item[0], selectedRowId: rowId };
+    });
+    onComponentOptionChanged(component, 'selectedRows', item[0]);
+    onEvent('onRowClicked', { component, data: original, rowId: rowId });
+
+    // setExposedVariable('selectedRows', item[0]);
   });
 
   useEffect(() => {
@@ -843,13 +862,11 @@ export function Table({
 
   const [paginationInternalPageIndex, setPaginationInternalPageIndex] = useState(pageIndex ?? 1);
   const [pageCopy, setPageCopy] = useState(page ?? []);
-
   useEffect(() => {
     if (pageCount <= pageIndex) gotoPage(pageCount - 1);
   }, [pageCount]);
 
   useEffect(() => {
-    console.log('running', tableData);
     const pageData = pageCopy.map((row) => row.original);
     const currentData = rows.map((row) => row.original);
     onComponentOptionsChanged(component, [
@@ -928,7 +945,6 @@ export function Table({
 
           {!loadingState && (
             <tbody {...getTableBodyProps()} style={{ color: computeFontColor() }}>
-              {console.log('page', pageCopy)}
               {pageCopy.map((row, index) => {
                 prepareRow(row);
                 return (

@@ -95,6 +95,16 @@ export const widgets = [
           {
             handle: 'page',
             displayName: 'Page',
+          },
+        ],
+      },
+      {
+        handle: 'selectRow ',
+        displayName: 'Select row ',
+        params: [
+          {
+            handle: 'id',
+            displayName: 'ID',
             defaultValue: '{{1}}',
           },
         ],
