@@ -818,16 +818,22 @@ export function Table({
     setPageCopy([]);
   });
 
-  registerAction('selectRow', async function (id) {
-    const item = currentState.components[component.name]['currentData'].filter((item) => item.id == id);
+  registerAction('selectRowByKeyAndValue', async function (key, value) {
+    const item = currentState.components[component.name]['currentData'].filter((item) => item[key] == value);
+    console.log('xxx', item);
+
     let rowId = '';
     let original = '';
     page.map((item, index) => {
-      if (item.original.id == id) {
+      console.log('xxx2', item, value);
+
+      if (item.original[key] == value) {
         rowId = item.id;
         original = item.original;
       }
     });
+    console.log('xxx', rowId, original);
+
     setcomponentState((prevState) => {
       return { ...prevState, selectedRow: item[0], selectedRowId: rowId };
     });
@@ -835,6 +841,16 @@ export function Table({
     onEvent('onRowClicked', { component, data: original, rowId: rowId });
 
     // setExposedVariable('selectedRows', item[0]);
+  });
+  registerAction('selectRowByIndex', async function (index) {
+    const rowId = page?.[index]?.id;
+    const original = page?.[index]?.original;
+
+    setcomponentState((prevState) => {
+      return { ...prevState, selectedRow: original, selectedRowId: rowId };
+    });
+    onComponentOptionChanged(component, 'selectedRows', original);
+    onEvent('onRowClicked', { component, data: original, rowId: rowId });
   });
 
   useEffect(() => {
