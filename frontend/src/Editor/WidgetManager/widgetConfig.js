@@ -99,6 +99,17 @@ export const widgets = [
           },
         ],
       },
+      {
+        handle: 'setData',
+        displayName: 'Set data',
+        params: [
+          {
+            handle: 'data',
+            displayName: 'data',
+            defaultValue: [],
+          },
+        ],
+      },
     ],
     definition: {
       others: {

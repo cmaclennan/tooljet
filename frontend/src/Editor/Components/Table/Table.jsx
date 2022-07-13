@@ -598,7 +598,8 @@ export function Table({
   if (currentState) {
     tableData = resolveReferences(component.definition.properties.data.value, currentState, []);
     if (!Array.isArray(tableData)) tableData = [];
-    console.log('resolved param', tableData);
+    console.log('resolved param', component.definition.properties.data.value);
+    console.log('runned');
   }
 
   tableData = tableData || [];
@@ -815,6 +816,12 @@ export function Table({
     ['targetPageIndex']
   );
 
+  registerAction('setData', async function (data) {
+    console.log('dataxx', data, tableData);
+    tableData = resolveReferences(data, currentState, []);
+    console.log('dataxx3', data, tableData);
+  });
+
   useEffect(() => {
     const selectedRowsOriginalData = selectedFlatRows.map((row) => row.original);
     onComponentOptionChanged(component, 'selectedRows', selectedRowsOriginalData);
@@ -830,6 +837,7 @@ export function Table({
   }, [clientSidePagination, serverSidePagination, rows]);
 
   useEffect(() => {
+    console.log('tabledata', tableData);
     const pageData = page.map((row) => row.original);
     const currentData = rows.map((row) => row.original);
     onComponentOptionsChanged(component, [
@@ -838,7 +846,7 @@ export function Table({
       ['selectedRow', []],
       ['selectedRowId', null],
     ]);
-  }, [tableData.length, componentState.changeSet]);
+  }, [JSON.stringify(tableData[0]), componentState.changeSet]);
 
   useEffect(() => {
     if (!state.columnResizing.isResizingColumn) {
