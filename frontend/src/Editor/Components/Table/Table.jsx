@@ -592,8 +592,9 @@ export function Table({
       },
     };
   });
+  let [tableData, setTableData] = useState([]);
 
-  let tableData = [];
+  // let tableData = [];
   if (currentState) {
     tableData = resolveReferences(component.definition.properties.data.value, currentState, []);
     if (!Array.isArray(tableData)) tableData = [];
@@ -815,7 +816,7 @@ export function Table({
   );
 
   registerAction('clear', async function () {
-    setPageCopy([]);
+    setTableData([]);
   });
 
   registerAction('selectRowByKeyAndValue', async function (key, value) {
@@ -877,13 +878,12 @@ export function Table({
   }, [state.columnResizing.isResizingColumn]);
 
   const [paginationInternalPageIndex, setPaginationInternalPageIndex] = useState(pageIndex ?? 1);
-  const [pageCopy, setPageCopy] = useState(page ?? []);
   useEffect(() => {
     if (pageCount <= pageIndex) gotoPage(pageCount - 1);
   }, [pageCount]);
 
   useEffect(() => {
-    const pageData = pageCopy.map((row) => row.original);
+    const pageData = page.map((row) => row.original);
     const currentData = rows.map((row) => row.original);
     onComponentOptionsChanged(component, [
       ['currentPageData', pageData],
@@ -891,7 +891,7 @@ export function Table({
       ['selectedRow', []],
       ['selectedRowId', null],
     ]);
-  }, [tableData.length, componentState.changeSet, pageCopy]);
+  }, [tableData.length, componentState.changeSet]);
   const tableRef = React.useRef();
 
   return (
@@ -961,7 +961,7 @@ export function Table({
 
           {!loadingState && (
             <tbody {...getTableBodyProps()} style={{ color: computeFontColor() }}>
-              {pageCopy.map((row, index) => {
+              {page.map((row, index) => {
                 prepareRow(row);
                 return (
                   <tr
