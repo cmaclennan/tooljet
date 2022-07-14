@@ -593,15 +593,17 @@ export function Table({
     };
   });
   let [tableData, setTableData] = useState([]);
+  useEffect(() => {
+    if (currentState) {
+      setTableData(resolveReferences(component.definition.properties.data.value, currentState, []));
+      if (!Array.isArray(tableData)) setTableData([]);
+      console.log('resolved param', tableData);
+    }
+  }, [currentState, component.definition.properties.data.value]);
 
   // let tableData = [];
-  if (currentState) {
-    tableData = resolveReferences(component.definition.properties.data.value, currentState, []);
-    if (!Array.isArray(tableData)) tableData = [];
-    console.log('resolved param', tableData);
-  }
 
-  tableData = tableData || [];
+  // tableData = tableData || [];
 
   const leftActions = () => actions.value.filter((action) => action.position === 'left');
   const rightActions = () => actions.value.filter((action) => [undefined, 'right'].includes(action.position));
@@ -844,8 +846,10 @@ export function Table({
     // setExposedVariable('selectedRows', item[0]);
   });
   registerAction('selectRowByIndex', async function (index) {
+    console.log('page is', page);
     const rowId = page?.[index]?.id;
     const original = page?.[index]?.original;
+    console.log('xxx', rowId, original);
 
     setcomponentState((prevState) => {
       return { ...prevState, selectedRow: original, selectedRowId: rowId };
