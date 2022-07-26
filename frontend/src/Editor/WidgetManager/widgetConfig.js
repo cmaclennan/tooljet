@@ -2628,7 +2628,10 @@ export const widgets = [
         },
       },
     },
-    events: { onFileSelected: { displayName: 'On File Selected' } },
+    events: {
+      onFileSelected: { displayName: 'On File Selected' },
+      onFileDeselected: { displayName: 'On File Deselected' },
+    },
     styles: {
       visibility: {
         type: 'toggle',

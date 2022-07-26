@@ -273,6 +273,7 @@ export const FilePicker = ({
       copy.splice(index, 1);
       return copy;
     });
+    onEvent('onFileDeselected', { component });
   };
 
   useEffect(() => {
