@@ -52,6 +52,7 @@
     "@tooljet-plugins/slack": "file:packages/slack",
     "@tooljet-plugins/smtp": "file:packages/smtp",
     "@tooljet-plugins/snowflake": "file:packages/snowflake",
+    "@tooljet-plugins/sqlite": "file:packages/sqlite",
     "@tooljet-plugins/stripe": "file:packages/stripe",
     "@tooljet-plugins/twilio": "file:packages/twilio",
     "@tooljet-plugins/typesense": "file:packages/typesense",
