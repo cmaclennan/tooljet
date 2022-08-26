@@ -137,6 +137,7 @@ export const Box = function Box({
   dataQueries,
   readOnly,
 }) {
+  // console.log('ConfigHandle RENDERS Box');
   const backgroundColor = yellow ? 'yellow' : '';
 
   let styles = {
@@ -154,7 +155,7 @@ export const Box = function Box({
     return componentTypes.find((comp) => component.component === comp.component);
   }, [component]);
 
-  const ComponentToRender = AllComponents[component.component];
+  const ComponentToRender = React.useMemo(() => AllComponents[component.component], [component.component]);
   const [renderCount, setRenderCount] = useState(0);
   const [renderStartTime, setRenderStartTime] = useState(new Date());
 

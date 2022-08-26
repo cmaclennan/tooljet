@@ -84,14 +84,14 @@ export function CodeHinter({
   const [heightRef, currentHeight] = useHeight();
   const isPreviewFocused = useRef(false);
   const wrapperRef = useRef(null);
-  const slideInStyles = useSpring({
-    config: { ...config.stiff },
-    from: { opacity: 0, height: 0 },
-    to: {
-      opacity: isFocused ? 1 : 0,
-      height: isFocused ? currentHeight : 0,
-    },
-  });
+  // const slideInStyles = useSpring({
+  //   config: { ...config.stiff },
+  //   from: { opacity: 0, height: 0 },
+  //   to: {
+  //     opacity: isFocused ? 1 : 0,
+  //     height: isFocused ? currentHeight : 0,
+  //   },
+  // });
 
   const { variablesExposedForPreview } = useContext(EditorContext);
 
@@ -133,6 +133,8 @@ export function CodeHinter({
           return JSON.stringify(content);
         case 'boolean':
           return content.toString();
+        case 'string':
+          return content.length > 100000 ? content.substring(0, 100000) : content;
         default:
           return content;
       }
@@ -169,11 +171,18 @@ export function CodeHinter({
     const [preview, error] = resolveReferences(currentValue, realState, null, customResolvables, true);
     const themeCls = darkMode ? 'bg-dark  py-1' : 'bg-light  py-1';
 
+    //style to slide open the preview with css
+    const previewStyle = {
+      height: isFocused ? currentHeight : 0,
+      opacity: isFocused ? 1 : 0,
+      transition: 'all 0.3s ease-in-out',
+    };
+
     if (error) {
       const err = String(error);
       const errorMessage = err.includes('.run()') ? `${err} in ${componentName.split('::')[0]}'s field` : err;
       return (
-        <animated.div className={isOpen ? themeCls : null} style={{ ...slideInStyles, overflow: 'hidden' }}>
+        <div className={isOpen ? themeCls : null} style={{ ...previewStyle, overflow: 'hidden' }}>
           <div ref={heightRef} className="dynamic-variable-preview bg-red-lt px-1 py-1">
             <div>
               <div className="heading my-1">
@@ -182,7 +191,7 @@ export function CodeHinter({
               {errorMessage}
             </div>
           </div>
-        </animated.div>
+        </div>
       );
     }
 
@@ -196,9 +205,9 @@ export function CodeHinter({
     const content = getPreviewContent(previewContent, previewType);
 
     return (
-      <animated.div
+      <div
         className={isOpen ? themeCls : null}
-        style={{ ...slideInStyles, overflow: 'hidden' }}
+        style={{ ...previewStyle, overflow: 'hidden' }}
         onMouseEnter={() => focusPreview()}
         onMouseLeave={() => unFocusPreview()}
       >
@@ -217,7 +226,7 @@ export function CodeHinter({
             {content}
           </div>
         </div>
-      </animated.div>
+      </div>
     );
   };
   enablePreview = enablePreview ?? true;

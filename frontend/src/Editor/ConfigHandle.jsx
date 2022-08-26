@@ -9,7 +9,21 @@ export const ConfigHandle = function ConfigHandle({
   widgetTop,
   widgetHeight,
   isMultipleComponentsSelected = false,
+  toShowConfig = false,
 }) {
+  const [showConfig, setShowConfig] = React.useState(false);
+
+  React.useEffect(() => {
+    if (toShowConfig !== showConfig) {
+      console.log('ConfigHandle RENDERS', toShowConfig);
+      setShowConfig(toShowConfig);
+    }
+  }, [toShowConfig]);
+
+  if (!showConfig) {
+    return null;
+  }
+
   return (
     <div
       className="config-handle"
