@@ -29,6 +29,7 @@ import FxButton from './Elements/FxButton';
 import { ToolTip } from '../Inspector/Elements/Components/ToolTip';
 import { toast } from 'react-hot-toast';
 import { EditorContext } from '@/Editor/Context/EditorContextWrapper';
+import _ from 'lodash';
 
 const AllElements = {
   Color,
@@ -133,8 +134,6 @@ export function CodeHinter({
           return JSON.stringify(content);
         case 'boolean':
           return content.toString();
-        case 'string':
-          return content.length > 100000 ? content.substring(0, 100000) : content;
         default:
           return content;
       }
@@ -168,7 +167,17 @@ export function CodeHinter({
   const getPreview = () => {
     if (!enablePreview) return;
     const customResolvables = getCustomResolvables();
-    const [preview, error] = resolveReferences(currentValue, realState, null, customResolvables, true);
+    const [preview, error] = resolveReferences(
+      currentValue,
+      realState,
+      null,
+      customResolvables,
+      true,
+      'prevPreviewContent'
+    );
+
+    console.log('enablePreview', enablePreview, preview, isFocused);
+
     const themeCls = darkMode ? 'bg-dark  py-1' : 'bg-light  py-1';
 
     //style to slide open the preview with css
@@ -345,7 +354,7 @@ export function CodeHinter({
                 />
               </CodeHinter.Portal>
             </div>
-            {enablePreview && !isOpen && getPreview()}
+            {isFocused && enablePreview && !isOpen && getPreview()}
           </div>
         </div>
       </div>

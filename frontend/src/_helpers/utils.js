@@ -45,7 +45,9 @@ function resolveCode(code, state, customObjects = {}, withError = false, reserve
     error = `Cannot resolve function call ${code}`;
   } else {
     try {
-      const evalFunction = Function(
+      const start = performance.now();
+
+      const evalFunction = new Function(
         [
           'variables',
           'components',
@@ -72,6 +74,8 @@ function resolveCode(code, state, customObjects = {}, withError = false, reserve
         ...Object.values(customObjects),
         null
       );
+      const end = performance.now();
+      console.log(`Execution time: ${(end - start).toFixed(2)}ms`);
     } catch (err) {
       error = err;
       console.log('eval_error', err);
@@ -82,7 +86,8 @@ function resolveCode(code, state, customObjects = {}, withError = false, reserve
   return result;
 }
 
-export function resolveReferences(object, state, defaultValue, customObjects = {}, withError = false) {
+export function resolveReferences(object, state, defaultValue, customObjects = {}, withError = false, prev) {
+  // console.log('enablePreview 2.0', prev);
   const reservedKeyword = ['app']; //Keywords that slows down the app
   object = _.clone(object);
   const objectType = typeof object;
