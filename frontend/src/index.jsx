@@ -1,10 +1,13 @@
 import React from 'react';
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import * as Sentry from '@sentry/react';
 import { Integrations } from '@sentry/tracing';
 import { createBrowserHistory } from 'history';
 import { appService } from '@/_services';
 import { App } from './App';
+
+const container = document.getElementById('app');
+const root = createRoot(container);
 
 appService
   .getConfig()
@@ -35,4 +38,4 @@ appService
       });
     }
   })
-  .then(() => render(<App></App>, document.getElementById('app')));
+  .then(() => root.render(<App />));
