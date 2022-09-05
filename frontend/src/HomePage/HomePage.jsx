@@ -11,6 +11,8 @@ import Modal from './Modal';
 import SelectSearch from 'react-select-search';
 import Fuse from 'fuse.js';
 import configs from './Configs/AppIcon.json';
+import WorkSpaceSetup from './OnBoardingSetup/WorkSpaceSetup';
+import { VerificationHeader } from '../_components/VerificationHeader';
 
 const { iconList, defaultIcon } = configs;
 
@@ -607,19 +609,21 @@ class HomePage extends React.Component {
           </div>
         </Modal>
 
-        <Header switchDarkMode={this.props.switchDarkMode} darkMode={this.props.darkMode} />
+        {/* <Header switchDarkMode={this.props.switchDarkMode} darkMode={this.props.darkMode} /> */}
+        <VerificationHeader />
         {!isLoading && meta.total_count === 0 && !currentFolder.id && !appSearchKey && (
-          <BlankPage
-            createApp={this.createApp}
-            isImportingApp={isImportingApp}
-            fileInput={this.fileInput}
-            handleImportApp={this.handleImportApp}
-            creatingApp={creatingApp}
-            darkMode={this.props.darkMode}
-            showTemplateLibraryModal={this.state.showTemplateLibraryModal}
-            viewTemplateLibraryModal={this.showTemplateLibraryModal}
-            hideTemplateLibraryModal={this.hideTemplateLibraryModal}
-          />
+          <WorkSpaceSetup />
+          // <BlankPage
+          //   createApp={this.createApp}
+          //   isImportingApp={isImportingApp}
+          //   fileInput={this.fileInput}
+          //   handleImportApp={this.handleImportApp}
+          //   creatingApp={creatingApp}
+          //   darkMode={this.props.darkMode}
+          //   showTemplateLibraryModal={this.state.showTemplateLibraryModal}
+          //   viewTemplateLibraryModal={this.showTemplateLibraryModal}
+          //   hideTemplateLibraryModal={this.hideTemplateLibraryModal}
+          // />
         )}
 
         {(isLoading || meta.total_count > 0 || currentFolder.id || appSearchKey) && (
