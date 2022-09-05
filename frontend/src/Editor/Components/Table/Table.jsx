@@ -430,6 +430,9 @@ export function Table({
                       draggable="true"
                       {...column.getResizerProps()}
                       className={`resizer ${column.isResizing ? 'isResizing' : ''}`}
+                      onClick={(event) => {
+                        event.stopPropagation();
+                      }}
                     />
                   </th>
                 ))}
