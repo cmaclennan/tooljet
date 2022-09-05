@@ -171,6 +171,7 @@ class Table extends React.Component {
                 { name: 'Default', value: 'default' },
                 { name: 'String', value: 'string' },
                 { name: 'Text', value: 'text' },
+                { name: 'Number', value: 'number' },
                 { name: 'Badge', value: 'badge' },
                 { name: 'Multiple badges', value: 'badges' },
                 { name: 'Tags', value: 'tags' },
@@ -236,7 +237,10 @@ class Table extends React.Component {
             />
           </div>
 
-          {(column.columnType === 'string' || column.columnType === undefined || column.columnType === 'default') && (
+          {(column.columnType === 'string' ||
+            column.columnType === undefined ||
+            column.columnType === 'default' ||
+            column.columnType === 'number') && (
             <div>
               <div className="field mb-2">
                 <label className="form-label">Text color</label>

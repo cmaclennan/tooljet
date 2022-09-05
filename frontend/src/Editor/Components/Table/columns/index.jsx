@@ -172,6 +172,27 @@ export default function generateColumnsData({
               ></textarea>
             );
           }
+          case 'number': {
+            return (
+              <input
+                className="table-number-input form-control-plaintext"
+                readOnly={!column.isEditable}
+                style={{ maxWidth: width - 10, minWidth: width - 10, border: 0 }}
+                type="number"
+                onBlur={(e) => {
+                  if (column.isEditable) {
+                    handleCellValueChange(cell.row.index, column.key || column.name, e.target.value, cell.row.original);
+                  }
+                }}
+                onChange={(e) => {
+                  if (column.isEditable) {
+                    handleCellValueChange(cell.row.index, column.key || column.name, e.target.value, cell.row.original);
+                  }
+                }}
+                defaultValue={cellValue}
+              ></input>
+            );
+          }
           case 'dropdown': {
             const validationData = validateWidget({
               validationObject: {
