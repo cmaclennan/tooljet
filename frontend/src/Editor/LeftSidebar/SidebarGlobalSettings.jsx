@@ -33,13 +33,24 @@ export const LeftSidebarGlobalSettings = ({
   React.useEffect(() => {
     setRealState(currentState);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentState.components]);
+  }, [currentState]);
 
   React.useEffect(() => {
-    backgroundFxQuery &&
-      globalSettingsChanged('canvasBackgroundColor', resolveReferences(backgroundFxQuery, realState));
+    const theme = {
+      dark: '#2f3c4c',
+      light: '#edeff5',
+    };
+
+    const canvasBg = backgroundFxQuery
+      ? resolveReferences(backgroundFxQuery, realState)
+      : Object.values(theme).includes(canvasBackgroundColor)
+      ? theme[darkMode ? 'dark' : 'light']
+      : canvasBackgroundColor;
+
+    globalSettingsChanged('canvasBackgroundColor', canvasBg);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(resolveReferences(backgroundFxQuery, realState))]);
+  }, [darkMode, JSON.stringify(resolveReferences(backgroundFxQuery, realState))]);
 
   return (
     <>
