@@ -39,7 +39,7 @@ export const VerificationHeader = function VerificationHeader({ switchDarkMode, 
 
   return (
     <header className="navbar tabbed-navbar navbar-expand-md navbar-light d-print-none">
-      <div className="">
+      <div className="onboarding-nav-wrapper">
         {/* <button
           className="navbar-toggler"
           type="button"
@@ -63,13 +63,6 @@ export const VerificationHeader = function VerificationHeader({ switchDarkMode, 
                 <path d="M16.3432 19V5H18.3432V19H16.3432Z" fill="currentColor" />
               </svg>
               <p className="onboarding-steps ">Create account</p>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M7.41421 5L6 6.41421L11.6569 12.0711L6 17.7279L7.41421 19.1421L14.4853 12.0711L7.41421 5Z"
-                  fill="currentColor"
-                />
-                <path d="M16.3432 19V5H18.3432V19H16.3432Z" fill="currentColor" />
-              </svg>
             </div>
             <div className="onboarding-steps onboarding-step-2">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -79,14 +72,7 @@ export const VerificationHeader = function VerificationHeader({ switchDarkMode, 
                 />
                 <path d="M16.3432 19V5H18.3432V19H16.3432Z" fill="currentColor" />
               </svg>
-              <p className="onboarding-steps">Create account</p>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M7.41421 5L6 6.41421L11.6569 12.0711L6 17.7279L7.41421 19.1421L14.4853 12.0711L7.41421 5Z"
-                  fill="currentColor"
-                />
-                <path d="M16.3432 19V5H18.3432V19H16.3432Z" fill="currentColor" />
-              </svg>
+              <p className="onboarding-steps">Verify email</p>
             </div>
             <div className="onboarding-steps onboarding-step-2">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -96,14 +82,7 @@ export const VerificationHeader = function VerificationHeader({ switchDarkMode, 
                 />
                 <path d="M16.3432 19V5H18.3432V19H16.3432Z" fill="currentColor" />
               </svg>
-              <p className="onboarding-steps">Create account</p>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M7.41421 5L6 6.41421L11.6569 12.0711L6 17.7279L7.41421 19.1421L14.4853 12.0711L7.41421 5Z"
-                  fill="currentColor"
-                />
-                <path d="M16.3432 19V5H18.3432V19H16.3432Z" fill="currentColor" />
-              </svg>
+              <p className="onboarding-steps">Set up org</p>
             </div>
           </div>
           <div className="nav-item dropdown ms-2 user-avatar-nav-item">

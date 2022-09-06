@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+
 function OnBoardingForm() {
   const [buttonState, setButtonState] = useState(false);
 
@@ -10,6 +11,10 @@ function OnBoardingForm() {
     employeeNo: '',
   });
 
+  useEffect(() => {
+    console.log('formdata', formData, buttonState, page);
+  }, [formData, buttonState, page]);
+
   const FORM_TITLES = [
     'Where do you work John?',
     'What best describes your role',
@@ -20,13 +25,13 @@ function OnBoardingForm() {
 
   const PageShift = () => {
     if (page === 0) {
-      return <Page0 />;
+      return <Page0 formData={formData} setFormData={setFormData} setButtonState={setButtonState} />;
     } else if (page === 1) {
-      return <Page1 />;
+      return <Page1 formData={formData} setFormData={setFormData} setButtonState={setButtonState} />;
     } else if (page === 2) {
-      return <Page2 />;
+      return <Page2 formData={formData} setFormData={setFormData} setButtonState={setButtonState} />;
     } else {
-      return <Page3 />;
+      return <Page3 formData={formData} setFormData={setFormData} setButtonState={setButtonState} />;
     }
   };
 
@@ -39,7 +44,7 @@ function OnBoardingForm() {
             disabled={page == 0}
             onClick={() => {
               setPage((currPage) => currPage - 1);
-              // setButtonState(true);
+              setButtonState(false);
             }}
             style={{ cursor: 'pointer' }}
           >
@@ -47,7 +52,7 @@ function OnBoardingForm() {
             <p>Back</p>
           </div>
         )}
-        <div className="onboarding-bubbles-container">{onBoardingBubbles()}</div>
+        <div className="onboarding-bubbles-container">{onBoardingBubbles({ formData, page })}</div>
       </div>
       <div className="form-container">
         <div className="onboarding-header-wrapper">
@@ -55,67 +60,98 @@ function OnBoardingForm() {
           <p className="onboarding-page-sub-header">{FormSubTitles[0]}</p>
         </div>
         {PageShift()}
-        <div className="">
-          <div
-            onClick={() => {
-              if (page === FORM_TITLES.length - 1) {
-                console.log(formData);
-              } else {
-                setPage((currPage) => currPage + 1);
-                // setButtonState(true);
-              }
-            }}
-          >
-            {onBoardingButton({ buttonState })}{' '}
-          </div>
-        </div>
+        <div className="">{continueButton({ buttonState, setButtonState, setPage, page, formData })}</div>
       </div>
     </div>
   );
 }
 
-// components
-export function onBoardingButton(props) {
-  console.log('PROSP', props);
+// __COMPONENTS__
+
+export function onBoardingBubbles({ formData, page }) {
   return (
-    <button className="onboarding-page-button" disabled={props.buttonState}>
+    <div className="onboarding-bubbles-wrapper">
+      <div
+        className={`onboarding-bubbles ${formData.companyName !== '' && 'onboarding-bubbles-selected'} ${
+          page === 0 && 'onboarding-bubbles-active'
+        }`}
+      ></div>
+      <div
+        className={`onboarding-bubbles ${formData.role !== '' && 'onboarding-bubbles-selected'} ${
+          page === 1 && 'onboarding-bubbles-active'
+        }`}
+      ></div>
+      <div
+        className={`onboarding-bubbles ${formData.companySize !== '' && 'onboarding-bubbles-selected'} ${
+          page === 2 && 'onboarding-bubbles-active'
+        } `}
+      ></div>
+      <div
+        className={`onboarding-bubbles ${formData.employeeNo !== '' && 'onboarding-bubbles-selected'} ${
+          page === 3 && 'onboarding-bubbles-active'
+        }`}
+      ></div>
+    </div>
+  );
+}
+
+export function continueButton({ buttonState, setPage, setButtonState, formData, page }) {
+  return (
+    <button
+      className="onboarding-page-continue-button"
+      disabled={buttonState && Object.values(formData)[page] == ''}
+      onClick={() => {
+        setPage((currPage) => currPage + 1);
+        setButtonState(true);
+        console.log('hecker', Object.values(formData)[page]);
+      }}
+    >
       <p className="mb-0">Continue</p>
       <img src="/assets/images/onboarding/tick.svg" />
     </button>
   );
 }
 
-export function onBoardingInput() {
-  return <input placeholder="Enter your company name" className="onboarding-input" />;
+export function onBoardingInput({ formData, setFormData, setButtonState }) {
+  return (
+    <input
+      value={formData.companyName}
+      placeholder="Enter your company name"
+      className="onboarding-input"
+      onChange={(e) => {
+        setFormData({ ...formData, companyName: e.target.value });
+        setButtonState(false);
+      }}
+    />
+  );
 }
 
 export function onBoardingRadioInput(props) {
+  const { formData, setFormData, setButtonState, field, key } = props;
   return (
-    <div className="onboarding-input">
-      <input type="radio" />
-      <p>{props.field}</p>
+    <div className={`onboarding-input ${formData[key] === field && 'onboarding-radio-checked'}`}>
+      <input
+        type="radio"
+        name={field}
+        value={field}
+        checked={formData[key] === field}
+        onChange={(e) => {
+          console.log('target', e.target.value);
+          setFormData({ ...formData, [key]: e.target.value });
+          setButtonState(false);
+        }}
+      />
+      <p>{field}</p>
     </div>
   );
 }
 
-export function onBoardingBubbles(props) {
-  return (
-    <div className="onboarding-bubbles-wrapper">
-      <div className={`onboarding-bubbles`}></div>
-      <div className={`onboarding-bubbles`}></div>
-      <div className={`onboarding-bubbles-active`}></div>
-      <div className={`onboarding-bubbles`}></div>
-      <div className="onboarding-bubbles"></div>
-    </div>
-  );
-}
+// __PAGES__
 
-// pages
-
-export function Page0() {
-  return <div className="onboarding-pages-wrapper">{onBoardingInput()}</div>;
+export function Page0({ formData, setFormData, setButtonState }) {
+  return <div className="onboarding-pages-wrapper">{onBoardingInput({ formData, setFormData, setButtonState })}</div>;
 }
-export function Page1() {
+export function Page1({ formData, setFormData, setButtonState }) {
   const ON_BOARDING_ROLES = [
     'Engineering manager',
     'Developer ',
@@ -124,33 +160,35 @@ export function Page1() {
     'Mobile Developer',
     'Other',
   ];
-
+  const key = 'role';
   return (
     <div className="onboarding-pages-wrapper">
-      {ON_BOARDING_ROLES.map((item) => (
-        <div key={item}> {onBoardingRadioInput({ field: item })}</div>
+      {ON_BOARDING_ROLES.map((field) => (
+        <div key={field}> {onBoardingRadioInput({ formData, setFormData, setButtonState, field, key })}</div>
       ))}
     </div>
   );
 }
-export function Page2() {
+export function Page2({ formData, setFormData, setButtonState }) {
   const ON_BOARDING_SIZE = ['1-5', '5-20', '20-50', '50-100', '100-200', '200+'];
+  const key = 'companySize';
 
   return (
     <div className="onboarding-pages-wrapper">
-      {ON_BOARDING_SIZE.map((item) => (
-        <div key={item}> {onBoardingRadioInput({ field: item })}</div>
+      {ON_BOARDING_SIZE.map((field) => (
+        <div key={field}> {onBoardingRadioInput({ formData, setFormData, setButtonState, field, key })}</div>
       ))}
     </div>
   );
 }
-export function Page3() {
+export function Page3({ formData, setFormData, setButtonState }) {
   const ON_BOARDING_SIZE = ['1-5', '5-20', '20-50', '50-100', '100-200', '200+'];
+  const key = 'employeeNo';
 
   return (
     <div className="onboarding-pages-wrapper">
-      {ON_BOARDING_SIZE.map((item) => (
-        <div key={item}> {onBoardingRadioInput({ field: item })}</div>
+      {ON_BOARDING_SIZE.map((field) => (
+        <div key={field}> {onBoardingRadioInput({ formData, setFormData, setButtonState, field, key })}</div>
       ))}
     </div>
   );
