@@ -6425,3 +6425,325 @@ input.hide-input-arrows {
   color: #4B5563;
   line-height: 24px;
 }
+
+
+
+// LOGIN
+
+.common-auth-section-whole-wrapper {
+  display: flex;
+  flex-direction: row;
+
+  .common-auth-section-right-wrapper {
+    width: 25%;
+    background-color: #E4E7EB;
+  }
+
+  .common-auth-section-left-wrapper {
+    width: 75%;
+    border-right: 1px solid #E4E7EB;
+  }
+
+  .common-auth-container-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 352px;
+    margin-left: 336px;
+    margin-top: 98px;
+    align-items: flex-start;
+  }
+
+  .login-header {
+    font-weight: 400;
+    font-size: 45px;
+    line-height: 68px;
+    color: #111827;
+  }
+
+
+
+  .login-sso-wrapper {
+    padding: 6px 16px;
+    gap: 5px;
+
+    width: 352px;
+    height: 40px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 12px;
+    background: #FFFFFF;
+    border: 1px solid #D1D5DB;
+    border-radius: 4px;
+
+
+  }
+}
+
+.sso-info-text {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 24px;
+  margin-left: 11px;
+}
+
+.sso-button {
+  background-color: #fff;
+
+  img {
+    height: 16.8px;
+    width: 16.8px;
+  }
+}
+
+.login-input {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 8px 12px;
+  gap: 8px;
+
+  width: 352px;
+  height: 40px;
+
+  /* Base/White 00 */
+
+  background: #FFFFFF !important;
+  /* Nutral Grey/40 */
+
+  border: 1px solid #D1D5DB;
+  border-radius: 4px;
+
+  margin-bottom: 12px;
+}
+
+.common-auth-sub-label {
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 20px;
+  margin-bottom: 4px !important;
+  display: flex;
+  align-items: center;
+  color: #172531;
+}
+
+.common-sub-header {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 24px;
+  margin-bottom: 32px;
+
+  color: #111827;
+}
+
+.login-firgot-password {
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 16px;
+  /* identical to box height, or 145% */
+
+  display: flex;
+  align-items: center;
+
+  /* Blue/60* */
+  margin-left: 4px;
+  color: #466BF2;
+}
+
+.login-testimonial {
+  margin-top: 130px;
+  margin-left: 64px;
+  margin-bottom: 18px;
+  // margin-right: 108px;
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 24px;
+  color: #4B5563;
+
+}
+
+// ______________________________LOGIN STYLES END
+
+
+// _______________________________FORGOT PASSWROD START
+
+.forgot-password-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  min-height: 100%;
+}
+
+.forgot-passsword-testimonial {
+  width: 25%;
+}
+
+.common-auth-section-header {
+  font-weight: 400;
+  font-size: 45px;
+  line-height: 68px;
+  color: #111827;
+  margin-bottom: 32px;
+}
+
+.forgot-password-card {
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0px;
+    gap: 32px;
+    height: 100%;
+    width: 352px;
+    height: 256px;
+    margin-left: 336px;
+    margin-top: 162px;
+  }
+}
+
+.common-input-auth-section {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 8px 16px;
+  gap: 10px;
+  width: 352px;
+  height: 44px;
+  background: #FFFFFF;
+  border: 1px solid #D1D5DB;
+  border-radius: 4px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 24px;
+  display: flex;
+  align-items: center;
+  color: #6B7787;
+  margin-bottom: 12px;
+
+  p {
+    margin-bottom: 0 !important;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 24px;
+    color: #000000;
+
+  }
+
+  &:hover {
+    border: 1px solid #D1D5DB;
+    box-shadow: 0px 0px 0px 4px #E4E7EB;
+  }
+
+  &:focus {
+    border: 1px solid #466BF2;
+    box-shadow: none;
+
+  }
+
+}
+
+.common-input-warning-text {
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 16px;
+  color: #6B7787;
+  margin-top: 2px;
+}
+
+.common-continue-btn-auth-section {
+  border: none;
+  margin-top: 12px;
+  height: 48px;
+  width: 352px;
+  border-radius: 4px;
+  padding: 12px 16px 12px 16px;
+  background-color: #466BF2;
+  display: flex;
+  flex-direction: row;
+  color: #fff;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+
+  p {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
+  }
+
+  &:hover {
+    background: #5F81FF;
+    box-shadow: 0px 0px 0px 4px #D2DDFF;
+  }
+
+  &:disabled,
+  &[disabled] {
+    background: linear-gradient(0deg, #F3F4F6, #F3F4F6);
+    border: 1px solid #E4E7EB;
+    color: #D1D5DB;
+  }
+}
+
+
+// RESET PASSWORD
+
+// .reset-password-card-wrapper {
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   width: 352px;
+//   height: 352px;
+//   margin-left: 336px;
+//   margin-top: 98px;
+
+// }
+
+
+.reset-password-input {
+  margin-bottom: 0px !important;
+}
+
+.reset-password-input-container {
+  margin-bottom: 24px !important;
+}
+
+.common-auth-inputs-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.singup-terms {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 24px;
+  margin-top: 12px;
+  color: #1F2937;
+
+  span {
+    color: #466BF2;
+  }
+}
+
+// SUCCESS INFO
+
+.email-verification-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+
+
+/* Auto layout */
+.email-verification-card {
+  width: 352px;
+  height: 578.69px;
+  margin-top: 132px;
+}

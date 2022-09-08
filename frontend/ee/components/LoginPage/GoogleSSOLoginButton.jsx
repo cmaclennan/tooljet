@@ -12,15 +12,15 @@ export default function GoogleSSOLoginButton(props) {
         redirectUri={`${window.public_config?.TOOLJET_HOST}/sso/google${props.configId ? `/${props.configId}` : ''}`}
         render={(renderProps) => (
           <div>
-            <button {...renderProps} className="btn border-0 rounded-2">
+            <button {...renderProps} className="sso-button border-0 rounded-2">
               <img
                 onClick={renderProps.onClick}
                 disabled={renderProps.disabled}
                 src="assets/images/sso-buttons/google.svg"
-                className="h-4"
+                className=""
                 data-cy="google-icon"
               />
-              <span className="px-1" data-cy="google-sign-in-text">
+              <span className="px-1 sso-info-text" data-cy="google-sign-in-text">
                 {props.text || 'Sign in with Google'}
               </span>
             </button>
