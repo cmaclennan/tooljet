@@ -7,6 +7,7 @@ import GoogleSSOLoginButton from '@ee/components/LoginPage/GoogleSSOLoginButton'
 import GitSSOLoginButton from '@ee/components/LoginPage/GitSSOLoginButton';
 import { validateEmail } from '../_helpers/utils';
 import { ShowLoading } from '@/_components';
+import OnboardingHeader from '../_components/OnboardingHeader';
 class LoginPage2 extends React.Component {
   constructor(props) {
     super(props);
@@ -138,143 +139,136 @@ class LoginPage2 extends React.Component {
   render() {
     const { isLoading, configs, isGettingConfigs } = this.state;
     return (
-      <div className="common-auth-section-whole-wrapper page">
-        <div className="common-auth-section-left-wrapper">
-          <form className="" action="." method="get" autoComplete="off">
-            {isGettingConfigs ? (
-              <ShowLoading />
-            ) : (
-              <div className="common-auth-container-wrapper ">
-                {!configs && <div className="text-center">No login methods enabled for this workspace</div>}
-                {configs?.form?.enabled && (
-                  <div>
-                    <h2 className="common-auth-section-header">Sign in</h2>
-                    <p className="common-auth-sub-label">
-                      {/* Login to {this.single_organization ? 'your account' : configs?.name || 'your account'} */}
-                      {!this.organizationId && configs?.form?.enabled && configs?.form?.enable_sign_up && (
-                        <div className="common-sub-header" data-cy="sign-up-message">
-                          New to toolJet?{' '}
-                          <Link to={'/signup'} tabIndex="-1" data-cy="sign-up-link">
-                            Create an account
-                          </Link>
+      <>
+        {/* <OnboardingHeader /> */}
+
+        <div className="common-auth-section-whole-wrapper page">
+          {/* <OnboardingHeader /> */}
+
+          <div className="common-auth-section-left-wrapper">
+            <div></div>
+            <form className="" action="." method="get" autoComplete="off">
+              {isGettingConfigs ? (
+                <ShowLoading />
+              ) : (
+                <div className="common-auth-container-wrapper ">
+                  {!configs && <div className="text-center">No login methods enabled for this workspace</div>}
+                  {configs?.form?.enabled && (
+                    <div>
+                      <h2 className="common-auth-section-header">Sign in</h2>
+                      <div className="common-auth-sub-label">
+                        {/* Login to {this.single_organization ? 'your account' : configs?.name || 'your account'} */}
+                        {!this.organizationId && configs?.form?.enabled && configs?.form?.enable_sign_up && (
+                          <div className="common-sub-header">
+                            New to toolJet?{' '}
+                            <Link to={'/signup'} tabIndex="-1">
+                              Create an account
+                            </Link>
+                          </div>
+                        )}
+                      </div>
+                      {this.state.configs?.git?.enabled && (
+                        <div className="login-sso-wrapper">
+                          <GitSSOLoginButton configs={this.state.configs?.git?.configs} />
                         </div>
                       )}
-                    </p>
-                    {this.state.configs?.git?.enabled && (
-                      <div className="login-sso-wrapper">
-                        <GitSSOLoginButton configs={this.state.configs?.git?.configs} />
+                      {this.state.configs?.google?.enabled && (
+                        <div className="login-sso-wrapper">
+                          <GoogleSSOLoginButton
+                            configs={this.state.configs?.google?.configs}
+                            configId={this.state.configs?.google?.config_id}
+                          />
+                        </div>
+                      )}
+                      <div className="separator-onboarding ">
+                        <div className="mt-2 separator">
+                          <h2>
+                            <span>OR</span>
+                          </h2>
+                        </div>
                       </div>
-                    )}
-                    {this.state.configs?.google?.enabled && (
-                      <div className="login-sso-wrapper">
-                        <GoogleSSOLoginButton
-                          configs={this.state.configs?.google?.configs}
-                          configId={this.state.configs?.google?.config_id}
-                        />
-                      </div>
-                    )}
-                    <div className="mt-2 separator">
-                      <h2>
-                        <span>OR</span>
-                      </h2>
-                    </div>
 
-                    <div className="mb-3">
-                      <label className="common-auth-sub-label" data-cy="email-label">
-                        Work email
-                      </label>
-                      <input
-                        onChange={this.handleChange}
-                        name="email"
-                        type="email"
-                        className="login-input"
-                        placeholder="Enter your Work email"
-                        data-testid="emailField"
-                        data-cy="email-text-field"
-                      />
-                    </div>
-                    <div className="mb-2">
-                      <label className="login-label" data-cy="password-label">
-                        Password
-                        <span style={{ marginLeft: '4px' }}>
-                          <Link
-                            to={'/forgot-password'}
-                            tabIndex="-1"
-                            data-cy="forgot-password-link"
-                            className="login-forgot-password"
-                          >
-                            Forgot
-                          </Link>
-                        </span>
-                      </label>
-                      <div className="">
+                      <div className="mb-3">
+                        <label className="common-auth-sub-label">Work email</label>
                         <input
                           onChange={this.handleChange}
-                          name="password"
-                          type={this.state.showPassword ? 'text' : 'password'}
+                          name="email"
+                          type="email"
                           className="login-input"
-                          placeholder="Enter new password"
-                          autoComplete="off"
-                          data-testid="passwordField"
-                          data-cy="password-text-field"
+                          placeholder="Enter your Work email"
+                          style={{ backgroundColor: '#fff' }}
                         />
-                        {/* <span className="input-group-text"></span> */}
+                      </div>
+                      <div className="mb-2">
+                        <label className="login-label">
+                          Password
+                          <span style={{ marginLeft: '4px' }}>
+                            <Link to={'/forgot-password'} tabIndex="-1" className="login-forgot-password">
+                              Forgot
+                            </Link>
+                          </span>
+                        </label>
+                        <div className="">
+                          <input
+                            onChange={this.handleChange}
+                            name="password"
+                            type={this.state.showPassword ? 'text' : 'password'}
+                            className="login-input"
+                            placeholder="Enter new password"
+                            autoComplete="off"
+                            style={{ backgroundColor: '#fff' }}
+                          />
+                          {/* <span className="input-group-text"></span> */}
+                        </div>
+                      </div>
+                      <div className="form-check show-password-field">
+                        <input
+                          type="checkbox"
+                          className="form-check-input"
+                          id="check-input"
+                          name="check-input"
+                          onChange={this.handleOnCheck}
+                        />
+                        <label className="form-check-label show-password-label" htmlFor="check-input">
+                          show password
+                        </label>
                       </div>
                     </div>
-                    <div className="form-check show-password-field">
-                      <input
-                        type="checkbox"
-                        className="form-check-input"
-                        id="check-input"
-                        name="check-input"
-                        onChange={this.handleOnCheck}
-                        data-cy="checkbox-input"
-                      />
-                      <label
-                        className="form-check-label show-password-label"
-                        htmlFor="check-input"
-                        data-cy="show-password-label"
-                      >
-                        show password
-                      </label>
-                    </div>
-                  </div>
-                )}
-                <div
-                  className={`form-footer d-flex flex-column align-items-center ${
-                    !configs?.form?.enabled ? 'mt-0' : ''
-                  }`}
-                >
-                  {configs?.form?.enabled && (
-                    <button
-                      style={{ width: '352px' }}
-                      data-testid="loginButton"
-                      // className={`btn btn-primary w-100 ${isLoading ? 'btn-loading' : ''}`}
-                      className={`onboarding-page-continue-button ${isLoading ? 'btn-loading' : ''}`}
-                      onClick={this.authUser}
-                      data-cy="login-button"
-                    >
-                      Log in
-                    </button>
                   )}
+                  <div
+                    className={`form-footer d-flex flex-column align-items-center ${
+                      !configs?.form?.enabled ? 'mt-0' : ''
+                    }`}
+                  >
+                    {configs?.form?.enabled && (
+                      <button
+                        style={{ width: '352px' }}
+                        className={`onboarding-page-continue-button ${isLoading ? 'btn-loading' : ''}`}
+                        onClick={this.authUser}
+                      >
+                        Log in
+                      </button>
+                    )}
+                  </div>
                 </div>
+              )}
+            </form>
+            <div></div>
+
+            {authenticationService?.currentUserValue?.organization && (
+              <div className="text-center mt-3">
+                back to <Link to="/">{authenticationService?.currentUserValue?.organization}</Link>
               </div>
             )}
-          </form>
-
-          {authenticationService?.currentUserValue?.organization && (
-            <div className="text-center mt-3">
-              back to <Link to="/">{authenticationService?.currentUserValue?.organization}</Link>
-            </div>
-          )}
+          </div>
+          <div className="common-auth-section-right-wrapper">
+            <p className="login-testimonial">
+              “We definitely wanted to invest in low-code technology to ensure our razor focus is on bringing feature
+              richness, experience and proven scale -
+            </p>
+          </div>
         </div>
-        <div className="common-auth-section-right-wrapper">
-          <p className="login-testimonial">
-            “We definitely wanted to invest in low-code technology to ensure our razor focus is on bringing feature
-            richness, experience and proven scale -
-          </p>
-        </div>
-      </div>
+      </>
     );
   }
 }

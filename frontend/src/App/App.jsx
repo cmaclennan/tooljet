@@ -5,8 +5,8 @@ import { history } from '@/_helpers';
 import { authenticationService, tooljetService } from '@/_services';
 import { PrivateRoute } from '@/_components';
 import { HomePage } from '@/HomePage';
-import { LoginPage } from '@/LoginPage';
-import { SignupPage } from '@/SignupPage';
+import { LoginPage2 } from '../LoginPage/LoginPage2';
+import { SignupPage2 } from '../SignupPage/SignupPage2';
 import { ConfirmationPage, OrganizationInvitationPage } from '@/ConfirmationPage';
 import { Authorize } from '@/Oauth2';
 import { Authorize as Oauth } from '@/Oauth';
@@ -16,8 +16,8 @@ import { ManageOrgUsers } from '@/ManageOrgUsers';
 import { ManageGroupPermissionResources } from '@/ManageGroupPermissionResources';
 import { SettingsPage } from '../SettingsPage/SettingsPage';
 import { OnboardingModal } from '@/Onboarding/OnboardingModal';
-import { ForgotPassword } from '@/ForgotPassword';
-import { ResetPassword } from '@/ResetPassword';
+import { ForgotPassword2 } from '../ForgotPassword/ForgotPassword2';
+import { ResetPassword2 } from '../ResetPassword/ResetPassword2';
 import { ManageSSO } from '@/ManageSSO';
 import { ManageOrgVars } from '@/ManageOrgVars';
 import { lt } from 'semver';
@@ -124,12 +124,12 @@ class App extends React.Component {
               switchDarkMode={this.switchDarkMode}
               darkMode={darkMode}
             />
-            <Route path="/login/:organizationId" exact component={LoginPage} />
-            <Route path="/login" exact component={LoginPage} />
+            <Route path="/login/:organizationId" exact component={LoginPage2} />
+            <Route path="/login" exact component={LoginPage2} />
             <Route path="/sso/:origin/:configId" exact component={Oauth} />
             <Route path="/sso/:origin" exact component={Oauth} />
-            <Route path="/signup" component={SignupPage} />
-            <Route path="/forgot-password" component={ForgotPassword} />
+            <Route path="/signup" component={SignupPage2} />
+            <Route path="/forgot-password" component={ForgotPassword2} />
             <Route path="/multiworkspace" component={RedirectSso} />
             <Route
               path="/reset-password/:token"
@@ -144,7 +144,7 @@ class App extends React.Component {
                 />
               )}
             />
-            <Route path="/reset-password" component={ResetPassword} />
+            <Route path="/reset-password" component={ResetPassword2} />
             <Route
               path="/invitations/:token"
               render={(props) => (
