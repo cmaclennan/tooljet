@@ -27,6 +27,9 @@ import generateColumnsData from './columns';
 import generateActionsData from './columns/actions';
 import IndeterminateCheckbox from './IndeterminateCheckbox';
 import { useTranslation } from 'react-i18next';
+import JsPDF from 'jspdf';
+import 'jspdf-autotable';
+import * as XLSX from 'xlsx/xlsx.mjs';
 
 export function Table({
   id,
@@ -125,10 +128,49 @@ export function Table({
     return setExposedVariables(changesToBeSavedAndExposed);
   }
 
-  function getExportFileBlob({ columns, data }) {
-    const headerNames = columns.map((col) => col.exportValue);
-    const csvString = Papa.unparse({ fields: headerNames, data });
-    return new Blob([csvString], { type: 'text/csv' });
+  function getExportFileBlob({ columns, data, fileType, fileName }) {
+    console.log(fileType, 'filetype');
+    if (fileType === 'csv') {
+      const headerNames = columns.map((col) => col.exportValue);
+      const csvString = Papa.unparse({ fields: headerNames, data });
+      return new Blob([csvString], { type: 'text/csv' });
+    }
+    if (fileType === 'pdf') {
+      const headerNames = columns.map((column) => column.exportValue);
+      const doc = new JsPDF();
+      doc.autoTable({
+        head: [headerNames],
+        body: data,
+        margin: { top: 20 },
+        styles: {
+          minCellHeight: 9,
+          halign: 'left',
+          valign: 'center',
+          fontSize: 11,
+        },
+      });
+      doc.save(`${fileName}.pdf`);
+      return false;
+    }
+    if (fileType === 'xlsx') {
+      const header = columns.map((c) => c.exportValue);
+      const compatibleData = data.map((row) => {
+        const obj = {};
+        header.forEach((col, index) => {
+          obj[col] = row[index];
+        });
+        return obj;
+      });
+
+      let wb = XLSX.utils.book_new();
+      let ws1 = XLSX.utils.json_to_sheet(compatibleData, {
+        header,
+      });
+      XLSX.utils.book_append_sheet(wb, ws1, 'React Table Data');
+      XLSX.writeFile(wb, `${fileName}.xlsx`);
+      // Returning false as downloading of file is already taken care of
+      return false;
+    }
   }
 
   function onPageIndexChanged(page) {
@@ -420,13 +462,29 @@ export function Table({
                 </span>
               )}
               {showDownloadButton && (
-                <span
-                  data-tip="Download as CSV"
-                  className="btn btn-light btn-sm p-1"
-                  onClick={() => exportData('csv', true)}
-                >
-                  <img src="assets/images/icons/download.svg" width="15" height="15" />
-                </span>
+                <>
+                  <span
+                    data-tip="Download as CSV"
+                    className="btn btn-light btn-sm p-1"
+                    onClick={() => exportData('csv', true)}
+                  >
+                    <img src="assets/images/icons/download.svg" width="15" height="15" />
+                  </span>
+                  <span
+                    data-tip="Download as CSV"
+                    className="btn btn-light btn-sm p-1"
+                    onClick={() => exportData('pdf', true)}
+                  >
+                    <img src="" width="15" height="15" alt="pdf" />
+                  </span>
+                  <span
+                    data-tip="Download as CSV"
+                    className="btn btn-light btn-sm p-1"
+                    onClick={() => exportData('xlsx', true)}
+                  >
+                    <img src="" width="15" height="15" alt="xlsx" />
+                  </span>
+                </>
               )}
             </div>
           </div>
