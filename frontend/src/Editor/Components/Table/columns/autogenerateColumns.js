@@ -16,6 +16,7 @@ export default function autogenerateColumns(tableData, existingColumns, setPrope
     keys.includes(column.name)
   );
 
+  console.log({ generatedColumns, existingColumns, newColumns });
   setProperty('columns', newColumns);
 }
 

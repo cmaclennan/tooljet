@@ -169,6 +169,7 @@ export const Box = function Box({
     mode === 'edit' && component.validate
       ? validateProperties(resolvedProperties, componentMeta.properties)
       : [resolvedProperties, []];
+  console.log({ columns: '', validatedProperties, currentState });
 
   const resolvedStyles = resolveStyles(component, currentState, null, customResolvables);
   const [validatedStyles, styleErrors] =

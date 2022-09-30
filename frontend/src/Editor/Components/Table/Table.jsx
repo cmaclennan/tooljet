@@ -245,9 +245,14 @@ export function Table({
     ]
   );
 
+  console.log({ columns: component.definition.properties.columns.value, definition: component });
   useEffect(() => {
     autogenerateColumns(tableData, component.definition.properties.columns.value, setProperty);
   }, [JSON.stringify(tableData)]);
+
+  useEffect(() => {
+    setExposedVariable('columns', component.definition.properties.columns.value);
+  }, [component.definition.properties.columns.value]);
 
   const computedStyles = {
     // width: `${width}px`,
@@ -319,6 +324,8 @@ export function Table({
         ]);
     }
   );
+
+  console.log({ columns: '', state });
 
   registerAction(
     'setPage',
