@@ -12,6 +12,7 @@ import {
 } from '@tooljet-plugins/common';
 const JSON5 = require('json5');
 import got, { Headers, HTTPError, OptionsOfTextResponseBody } from 'got';
+const _ = require('lodash');
 
 function isEmpty(value: number | null | undefined | string) {
   return (
@@ -201,7 +202,10 @@ export default class RestapiQueryService implements QueryService {
           },
           responseObject: {
             statusCode: error.response.statusCode,
-            responseBody: error.response.body,
+            responseBody: _.pipe(
+              _.get('response.body'),
+              _.pick(['message', 'errors', 'error', 'error_description', 'error_message'])
+            )(error),
           },
           responseHeaders: error.response.headers,
         };
