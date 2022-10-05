@@ -396,8 +396,8 @@ export const SubContainer = ({
   function customRemoveComponent(component) {
     // const componentName = appDefinition.components[component.id]['component'].name;
     removeComponent(component);
-    console.log({ boxToBeRemoved });
-    const newBoxes = _.omit(boxes, boxToBeRemoved.id);
+    console.log({ component });
+    const newBoxes = _.omit(boxes, component.id);
     setBoxes(newBoxes);
     // if (parentComponent.component === 'Listview') {
     //   const currentData = currentState.components[parentComponent.name]?.data || [];
