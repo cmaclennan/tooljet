@@ -539,6 +539,7 @@ class EditorComponent extends React.Component {
   };
 
   appDefinitionChanged = (newDefinition, opts = {}) => {
+    console.log(' appDefinitionChanged called ');
     if (isEqual(this.state.appDefinition, newDefinition)) return;
     if (config.ENABLE_MULTIPLAYER_EDITING && !opts.skipYmapUpdate) {
       this.props.ymap?.set('appDef', { newDefinition, editingVersionId: this.state.editingVersion?.id });
@@ -555,6 +556,8 @@ class EditorComponent extends React.Component {
       if (!opts.skipAutoSave) this.autoSave();
     });
     computeComponentState(this, newDefinition.components);
+    console.log('acd: componentState recomputed with newDefinition ', newDefinition);
+    console.log({ newDefinition });
   };
 
   handleInspectorView = () => {
@@ -1184,6 +1187,8 @@ class EditorComponent extends React.Component {
       isDraggingOrResizing,
       queryConfirmationList,
     } = this.state;
+
+    console.log('acd: Editor app definition: ', this.state.appDefinition);
 
     const appVersionPreviewLink = editingVersion ? `/applications/${app.id}/versions/${editingVersion.id}` : '';
 

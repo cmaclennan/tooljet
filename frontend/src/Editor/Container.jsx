@@ -15,6 +15,7 @@ import Spinner from '@/_ui/Spinner';
 import { useHotkeys } from 'react-hotkeys-hook';
 import produce from 'immer';
 import { addComponents, addNewWidgetToTheEditor } from '@/_helpers/appUtils';
+import _ from 'lodash';
 
 export const Container = ({
   canvasWidth,
@@ -107,10 +108,6 @@ export const Container = ({
     return () => document.removeEventListener('click', handleClick);
   }, [isContainerFocused, canvasRef]);
 
-  useEffect(() => {
-    setBoxes(components);
-  }, [components]);
-
   const moveBox = useCallback(
     (id, layouts) => {
       setBoxes(
@@ -127,14 +124,25 @@ export const Container = ({
   // Dont update first time to skip
   // redundant save on app definition load
   const firstUpdate = useRef(true);
+  console.log('acd: boxes value just outside useEffect', { boxes });
+  console.log(
+    'acd: length of columns array in boxes just outside useEffect',
+    Object.values(boxes)?.[0]?.component?.definition?.properties?.columns?.value?.length
+  );
   useEffect(() => {
+    console.log('acd: Boxes updated with', boxes);
     if (firstUpdate.current) {
       firstUpdate.current = false;
       return;
     }
+    console.log('acd: AppDefinition changed called with', { ...appDefinition, components: boxes });
     appDefinitionChanged({ ...appDefinition, components: boxes });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [boxes]);
+  }, [JSON.stringify(boxes)]);
+
+  // useEffect(() => {
+  //   setBoxes(components);
+  // }, [components)]);
 
   const { draggingState } = useDragLayer((monitor) => {
     if (monitor.isDragging()) {
@@ -292,8 +300,8 @@ export const Container = ({
 
   function paramUpdated(id, param, value) {
     if (Object.keys(value).length > 0) {
-      setBoxes(
-        update(boxes, {
+      setBoxes((boxes) => {
+        const newBoxes = update(boxes, {
           [id]: {
             $merge: {
               component: {
@@ -308,8 +316,10 @@ export const Container = ({
               },
             },
           },
-        })
-      );
+        });
+        console.log('acd: Inside setBoxes of paramUpdated with ', { id, param, value, boxes, newBoxes });
+        return newBoxes;
+      });
     }
   }
 
@@ -403,6 +413,12 @@ export const Container = ({
     styles.cursor = `url("data:image/svg+xml,%3Csvg width='34' height='34' viewBox='0 0 34 34' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='17' cy='17' r='15.25' fill='white' stroke='%23FCAA0D' stroke-width='2.5' opacity='0.5' /%3E%3Ctext x='10' y='20' fill='%23000' opacity='0.5' font-family='inherit' font-size='11.2' font-weight='500' color='%23656d77'%3E%3C/text%3E%3C/svg%3E%0A"), text`;
   }
 
+  const removeBox = (boxToBeRemoved) => {
+    console.log({ boxToBeRemoved });
+    const newBoxes = _.omit(boxes, boxToBeRemoved.id);
+    setBoxes(newBoxes);
+  };
+
   return (
     <div
       {...(config.COMMENT_FEATURE_ENABLE && showComments && { onClick: handleAddThread })}
@@ -471,7 +487,10 @@ export const Container = ({
               inCanvas={true}
               zoomLevel={zoomLevel}
               setSelectedComponent={setSelectedComponent}
-              removeComponent={removeComponent}
+              removeComponent={(componentTobeRemoved) => {
+                removeBox(componentTobeRemoved);
+                removeComponent(componentTobeRemoved);
+              }}
               currentLayout={currentLayout}
               deviceWindowWidth={deviceWindowWidth}
               isSelectedComponent={

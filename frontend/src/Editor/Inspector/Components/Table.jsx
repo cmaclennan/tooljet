@@ -672,6 +672,8 @@ class TableComponent extends React.Component {
     const { dataQueries, component, paramUpdated, componentMeta, components, currentState, darkMode } = this.props;
 
     const columns = component.component.definition.properties.columns;
+    console.log('acd: columns on inspector', { columns });
+    console.log('acd: columns length on inspector', columns?.value?.length);
     const actions = component.component.definition.properties.actions || { value: [] };
 
     if (!component.component.definition.properties.displaySearchBox)

@@ -17,6 +17,7 @@ export default function autogenerateColumns(tableData, existingColumns, setPrope
   );
 
   console.log({ generatedColumns, existingColumns, newColumns });
+  console.log('acd: setProperty called with ', { newColumns });
   setProperty('columns', newColumns);
 }
 

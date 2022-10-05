@@ -312,6 +312,7 @@ export const Box = function Box({
             exposeToCodeHinter={exposeToCodeHinter}
             setProperty={(property, value) => {
               paramUpdated(id, property, { value });
+              console.log('acd: paramUpdated called with', { id, property, value });
             }}
           ></ComponentToRender>
         ) : (
