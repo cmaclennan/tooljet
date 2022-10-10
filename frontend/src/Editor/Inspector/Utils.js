@@ -39,7 +39,7 @@ export function renderElement(
       param={{ name: param, ...component.component.properties[param] }}
       definition={definition}
       dataQueries={dataQueries}
-      onChange={paramUpdated}
+      paramUpdated={paramUpdated}
       paramType={paramType}
       components={components}
       componentMeta={componentMeta}

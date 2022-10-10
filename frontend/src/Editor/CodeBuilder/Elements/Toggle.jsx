@@ -10,7 +10,11 @@ export const Toggle = ({ value, onChange, forceCodeBox, cyLabel }) => {
             <input
               className="form-check-input"
               type="checkbox"
-              onClick={() => onChange(`{{${!value}}}`)}
+              onClick={() => {
+                const newValue = `{{${!value}}}`;
+                console.log(`acd: onChange to be called with ${newValue}`);
+                onChange(newValue);
+              }}
               checked={value}
               data-cy={`${cyLabel}-toggle-button`}
             />

@@ -4,7 +4,7 @@ import { CodeHinter } from '../../CodeBuilder/CodeHinter';
 export const Code = ({
   param,
   definition,
-  onChange,
+  paramUpdated,
   paramType,
   componentMeta,
   currentState,
@@ -19,7 +19,7 @@ export const Code = ({
   const displayName = paramMeta.displayName || param.name;
 
   function handleCodeChanged(value) {
-    onChange(param, 'value', value, paramType);
+    paramUpdated(param, 'value', value, paramType);
   }
 
   const options = paramMeta.options || {};

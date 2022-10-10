@@ -114,6 +114,7 @@ export const Inspector = ({
   };
 
   function paramUpdated(param, attr, value, paramType) {
+    console.log(`acd: column length is ${component.component.definition.properties.columns.value.length}`);
     let newDefinition = { ...component.component.definition };
     let allParams = newDefinition[paramType] || {};
     const paramObject = allParams[param.name];

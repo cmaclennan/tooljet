@@ -331,6 +331,7 @@ export function CodeHinter({
                   onFocus={() => setFocused(true)}
                   onBlur={(editor) => {
                     const value = editor.getValue();
+                    console.log(`acd: onChange to be called with ${value}`);
                     onChange(value);
                     if (!isPreviewFocused.current) {
                       setFocused(false);
