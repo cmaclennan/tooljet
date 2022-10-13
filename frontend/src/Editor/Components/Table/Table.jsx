@@ -35,6 +35,7 @@ import { IconEyeOff } from '@tabler/icons';
 import * as XLSX from 'xlsx/xlsx.mjs';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
+import { useDraggableInPortal } from '../../../_hooks/use-table-portal';
 
 export function Table({
   id,
@@ -95,14 +96,13 @@ export function Table({
     ...draggableStyle,
     userSelect: 'none',
     background: isDragging ? 'rgba(77, 114, 250, 0.2)' : '',
-    top: 'auto',
     borderRadius: '4px',
     ...(isDragging && {
-      marginLeft: '-120px',
       display: 'flex',
       alignItems: 'center',
       paddingLeft: '10px',
       height: '30px',
+      pointerEvents: 'none',
     }),
     ...(!isDragging && { transform: 'translate(0,0)', width: '100%' }),
     ...(isDropAnimating && { transitionDuration: '0.001s' }),
@@ -113,7 +113,7 @@ export function Table({
   const [hoverAdded, setHoverAdded] = useState(false);
   const mergeToTableDetails = (payload) => dispatch(reducerActions.mergeToTableDetails(payload));
   const mergeToFilterDetails = (payload) => dispatch(reducerActions.mergeToFilterDetails(payload));
-
+  const renderDraggable = useDraggableInPortal();
   useEffect(() => {
     setExposedVariable(
       'filters',
@@ -666,16 +666,17 @@ export function Table({
                           index={index}
                           isDragDisabled={!column.accessor}
                         >
-                          {(provided, snapshot) => {
+                          {renderDraggable((provided, snapshot) => {
                             return (
                               <th
                                 key={index}
-                                {...column.getHeaderProps(column.getSortByToggleProps())}
+                                {...column.getHeaderProps()}
                                 className={
                                   column.isSorted ? (column.isSortedDesc ? 'sort-desc th' : 'sort-asc th') : 'th'
                                 }
                               >
                                 <div
+                                  {...column.getSortByToggleProps()}
                                   {...provided.draggableProps}
                                   {...provided.dragHandleProps}
                                   // {...extraProps}
@@ -695,7 +696,7 @@ export function Table({
                                 />
                               </th>
                             );
-                          }}
+                          })}
                         </Draggable>
                       ))}
                     </tr>
