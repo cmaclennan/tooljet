@@ -108,7 +108,7 @@ export function Table({
     ...(isDropAnimating && { transitionDuration: '0.001s' }),
   });
   const { t } = useTranslation();
-
+  const [saveBtn, setSaveBtn] = useState(false);
   const [tableDetails, dispatch] = useReducer(reducer, initialState());
   const [hoverAdded, setHoverAdded] = useState(false);
   const mergeToTableDetails = (payload) => dispatch(reducerActions.mergeToTableDetails(payload));
@@ -153,6 +153,7 @@ export function Table({
 
   function handleCellValueChange(index, key, value, rowData) {
     const changeSet = tableDetails.changeSet;
+    console.log('changeSet', changeSet);
     const dataUpdates = tableDetails.dataUpdates || [];
     const clonedTableData = _.cloneDeep(tableData);
 
@@ -279,6 +280,7 @@ export function Table({
     tableRef,
     t,
     darkMode,
+    setSaveBtn,
   });
 
   const [leftActionsCellData, rightActionsCellData] = useMemo(
@@ -829,7 +831,7 @@ export function Table({
               )}
             </div>
             <div className="col d-flex justify-content-end">
-              {showBulkUpdateActions && Object.keys(tableDetails.changeSet || {}).length > 0 ? (
+              {showBulkUpdateActions && saveBtn == true ? (
                 <>
                   <button
                     className={`btn btn-primary btn-sm mx-2 ${tableDetails.isSavingChanges ? 'btn-loading' : ''}`}

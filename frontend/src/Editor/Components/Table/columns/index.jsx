@@ -24,6 +24,7 @@ export default function generateColumnsData({
   tableRef,
   t,
   darkMode,
+  setSaveBtn,
 }) {
   return columnProperties.map((column) => {
     const columnSize = columnSizes[column.id] || columnSizes[column.name];
@@ -121,6 +122,10 @@ export default function generateColumnsData({
                   <input
                     type="text"
                     style={{ ...cellStyles, maxWidth: width, minWidth: width - 10 }}
+                    onChange={(e) => {
+                      setSaveBtn(true);
+                      if (e.target.value == '') setSaveBtn(false);
+                    }}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
                         if (e.target.defaultValue !== e.target.value) {
