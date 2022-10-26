@@ -191,7 +191,7 @@ class App extends React.Component {
             <Route path="/confirm-invite" component={OrganizationInvitationPage} />
             <PrivateRoute
               exact
-              path="/apps/:id"
+              path="/apps/:id/:pageHandle?"
               component={config.ENABLE_MULTIPLAYER_EDITING ? RealtimeEditor : Editor}
               switchDarkMode={this.switchDarkMode}
               darkMode={darkMode}

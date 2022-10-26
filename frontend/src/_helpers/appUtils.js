@@ -955,6 +955,7 @@ export function renderTooltip({ props, text }) {
 }
 
 export function computeComponentState(_ref, components = {}) {
+  console.log({ components });
   let componentState = {};
   const currentComponents = _ref.state.currentState.components;
   Object.keys(components).forEach((key) => {

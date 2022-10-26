@@ -54,7 +54,8 @@ export const Container = ({
     backgroundSize: `${canvasWidth / 43}px 10px`,
   };
 
-  const components = appDefinition.components;
+  const pageHandle = currentState.globals.page.handle;
+  const components = appDefinition.components[pageHandle] ?? {};
 
   const [boxes, setBoxes] = useState(components);
   const [isDragging, setIsDragging] = useState(false);
@@ -131,7 +132,10 @@ export const Container = ({
       firstUpdate.current = false;
       return;
     }
-    appDefinitionChanged({ ...appDefinition, components: boxes });
+    appDefinitionChanged({
+      ...appDefinition,
+      components: { ...appDefinition.components, [pageHandle]: boxes },
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [boxes]);
 
@@ -291,24 +295,24 @@ export const Container = ({
 
   function paramUpdated(id, param, value) {
     if (Object.keys(value).length > 0) {
-      setBoxes(
-        update(boxes, {
-          [id]: {
-            $merge: {
-              component: {
-                ...boxes[id].component,
-                definition: {
-                  ...boxes[id].component.definition,
-                  properties: {
-                    ...boxes[id].component.definition.properties,
-                    [param]: value,
-                  },
+      const newBoxes = update(boxes, {
+        [id]: {
+          $merge: {
+            component: {
+              ...boxes[id].component,
+              definition: {
+                ...boxes[id].component.definition,
+                properties: {
+                  ...boxes[id].component.definition.properties,
+                  [param]: value,
                 },
               },
             },
           },
-        })
-      );
+        },
+      });
+      console.log({ newBoxes });
+      setBoxes(newBoxes);
     }
   }
 

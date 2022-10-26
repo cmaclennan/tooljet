@@ -72,6 +72,8 @@ class EditorComponent extends React.Component {
 
     const appId = this.props.match.params.id;
 
+    const pageHandle = this.props.match.params.pageHandle;
+
     const currentUser = authenticationService.currentUserValue;
 
     const { socket } = createWebsocketConnection(appId);
@@ -129,6 +131,9 @@ class EditorComponent extends React.Component {
           currentUser: userVars,
           theme: { name: props.darkMode ? 'dark' : 'light' },
           urlparams: JSON.parse(JSON.stringify(queryString.parse(props.location.search))),
+          page: {
+            handle: pageHandle,
+          },
         },
         errors: {},
         variables: {},
@@ -215,7 +220,7 @@ class EditorComponent extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (!isEqual(prevState.appDefinition, this.state.appDefinition)) {
-      computeComponentState(this, this.state.appDefinition.components);
+      computeComponentState(this, this.state.appDefinition.components[this.state.currentState.globals.page.handle]);
     }
   }
 
@@ -383,7 +388,10 @@ class EditorComponent extends React.Component {
         async () => {
           if (isEmpty(this.state.editingVersion)) await this.createInitVersion(appId);
 
-          computeComponentState(this, this.state.appDefinition.components).then(() => {
+          computeComponentState(
+            this,
+            this.state.appDefinition.components[this.state.currentState.globals.page.handle]
+          ).then(() => {
             this.runQueries(data.data_queries);
           });
           this.setWindowTitle(data.name);
@@ -561,7 +569,7 @@ class EditorComponent extends React.Component {
     this.setState({ isSaving: true, appDefinition: newDefinition, appDefinitionLocalVersion: uuid() }, () => {
       if (!opts.skipAutoSave) this.autoSave();
     });
-    computeComponentState(this, newDefinition.components);
+    computeComponentState(this, newDefinition.components[this.state.currentState.globals.page.handle]);
   };
 
   handleInspectorView = () => {
@@ -592,13 +600,14 @@ class EditorComponent extends React.Component {
   };
 
   removeComponent = (component) => {
+    const pageHandle = this.state.currentState.globals.page.handle;
     if (!this.isVersionReleased()) {
       let newDefinition = cloneDeep(this.state.appDefinition);
       // Delete child components when parent is deleted
 
       let childComponents = [];
 
-      if (newDefinition.components[component.id].component.component === 'Tabs') {
+      if (newDefinition.components?.[pageHandle][component.id].component.component === 'Tabs') {
         childComponents = Object.keys(newDefinition.components).filter((key) =>
           newDefinition.components[key].parent?.startsWith(component.id)
         );
@@ -609,7 +618,7 @@ class EditorComponent extends React.Component {
       }
 
       childComponents.forEach((componentId) => {
-        delete newDefinition.components[componentId];
+        delete newDefinition.components?.[pageHandle][componentId];
       });
 
       delete newDefinition.components[component.id];
@@ -628,7 +637,7 @@ class EditorComponent extends React.Component {
   componentDefinitionChanged = (componentDefinition) => {
     let _self = this;
 
-    if (this.state.appDefinition?.components[componentDefinition.id]) {
+    if (this.state.appDefinition?.[this.state.currentState.globals.page.handle]?.components[componentDefinition.id]) {
       const newDefinition = {
         appDefinition: produce(this.state.appDefinition, (draft) => {
           draft.components[componentDefinition.id].component = componentDefinition.component;
@@ -643,7 +652,7 @@ class EditorComponent extends React.Component {
         this.handleAddPatch
       );
       setStateAsync(_self, newDefinition).then(() => {
-        computeComponentState(_self, _self.state.appDefinition.components);
+        computeComponentState(_self, _self.state.appDefinition.components[this.state.currentState.globals.page.handle]);
         this.setState({ isSaving: true });
         this.autoSave();
         this.props.ymap?.set('appDef', {
@@ -663,7 +672,7 @@ class EditorComponent extends React.Component {
 
   moveComponents = (direction) => {
     let appDefinition = JSON.parse(JSON.stringify(this.state.appDefinition));
-    let newComponents = appDefinition.components;
+    let newComponents = appDefinition.components[this.state.currentState.globals.page.handle];
 
     for (const selectedComponent of this.state.selectedComponents) {
       newComponents = produce(newComponents, (draft) => {
@@ -691,7 +700,7 @@ class EditorComponent extends React.Component {
         draft[selectedComponent.id].layouts[this.state.currentLayout].left = left;
       });
     }
-    appDefinition.components = newComponents;
+    appDefinition.components[this.state.currentState.globals.page.handle] = newComponents;
     this.appDefinitionChanged(appDefinition);
   };
 
@@ -1140,10 +1149,11 @@ class EditorComponent extends React.Component {
   };
 
   onAreaSelectionEnd = (e) => {
+    const pageHandle = this.state.currentState.globals.page.handle;
     this.setState({ selectionInProgress: false });
     e.selected.forEach((el, index) => {
       const id = el.getAttribute('widgetid');
-      const component = this.state.appDefinition.components[id].component;
+      const component = this.state.appDefinition.components[pageHandle][id].component;
       const isMultiSelect = e.inputEvent.shiftKey || (!e.isClick && index != 0);
       this.setSelectedComponent(id, component, isMultiSelect);
     });
@@ -1671,7 +1681,9 @@ class EditorComponent extends React.Component {
                   <div className="pages-container">
                     {selectedComponents.length === 1 &&
                     !isEmpty(appDefinition.components) &&
-                    !isEmpty(appDefinition.components[selectedComponents[0].id]) ? (
+                    !isEmpty(
+                      appDefinition.components[this.state.currentState.globals.page.handle][selectedComponents[0].id]
+                    ) ? (
                       <Inspector
                         moveComponents={this.moveComponents}
                         componentDefinitionChanged={this.componentDefinitionChanged}
@@ -1679,7 +1691,7 @@ class EditorComponent extends React.Component {
                         removeComponent={this.removeComponent}
                         selectedComponentId={selectedComponents[0].id}
                         currentState={currentState}
-                        allComponents={appDefinition.components}
+                        allComponents={appDefinition.components[this.state.currentState.globals.page.handle]}
                         key={selectedComponents[0].id}
                         switchSidebarTab={this.switchSidebarTab}
                         apps={apps}
