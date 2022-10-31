@@ -636,24 +636,25 @@ class EditorComponent extends React.Component {
 
   componentDefinitionChanged = (componentDefinition) => {
     let _self = this;
+    const pageHandle = [this.state.currentState.globals.page.handle];
 
-    if (this.state.appDefinition?.[this.state.currentState.globals.page.handle]?.components[componentDefinition.id]) {
+    if (this.state.appDefinition?.components[pageHandle][componentDefinition.id]) {
       const newDefinition = {
         appDefinition: produce(this.state.appDefinition, (draft) => {
-          draft.components[componentDefinition.id].component = componentDefinition.component;
+          draft.components[pageHandle][componentDefinition.id].component = componentDefinition.component;
         }),
       };
 
       produce(
         this.state.appDefinition,
         (draft) => {
-          draft.components[componentDefinition.id].component = componentDefinition.component;
+          draft.components[pageHandle][componentDefinition.id].component = componentDefinition.component;
         },
         this.handleAddPatch
       );
       setStateAsync(_self, newDefinition).then(() => {
-        computeComponentState(_self, _self.state.appDefinition.components[this.state.currentState.globals.page.handle]);
-        this.setState({ isSaving: true });
+        computeComponentState(_self, _self.state.appDefinition.components[pageHandle]);
+        this.setState({ isSaving: true, appDefinitionLocalVersion: uuid() });
         this.autoSave();
         this.props.ymap?.set('appDef', {
           newDefinition: newDefinition.appDefinition,
