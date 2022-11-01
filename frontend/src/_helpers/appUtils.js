@@ -97,34 +97,20 @@ async function exceutePycode(payload, code, currentState, query, mode) {
       const _code = codeWithoutComments.replace('return ', '');
       currentState['variables'] = currentState['variables'] ?? {};
       const _currentState = JSON.stringify(currentState);
+      const components = currentState['components'];
+      const queries = currentState['queries'];
 
-      let execFunction = await pyodide.runPython(`
-        from pyodide.ffi import to_js
-        import json
-        def exec_code(payload, _currentState):
-          data = json.loads(payload)
-          currentState = json.loads(_currentState)
-          components = currentState['components']
-          queries = currentState['queries']
-          globals = currentState['globals']
-          variables = currentState['variables']
-          client = currentState['client']
-          server = currentState['server']
-          code_to_execute = ${_code}
-
-          try:
-            res = to_js(json.dumps(code_to_execute))
-            # convert dictioanry to js object
-            return res
-          except Exception as e:
-            print(e)
-            return {"error": str(e)}
-            
-        exec_code
-    `);
       const _data = JSON.stringify(payload);
-      result = execFunction(_data, _currentState);
-      return JSON.parse(result);
+
+      await pyodide.globals.set('data', payload);
+      await pyodide.globals.set('components', components);
+      await pyodide.globals.set('queries', queries);
+
+      let result = await pyodide.runPythonAsync(code);
+      // let result = await pyodide.code.eval_code(code);
+      console.log('python ==>', result);
+
+      return result;
     } catch (err) {
       console.error(err);
 
