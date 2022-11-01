@@ -55,7 +55,7 @@ export const Container = ({
   };
 
   const pageHandle = currentState.globals.page.handle;
-  const components = appDefinition.components[pageHandle] ?? {};
+  const components = appDefinition.pages[pageHandle]?.components ?? {};
 
   const [boxes, setBoxes] = useState(components);
   const [isDragging, setIsDragging] = useState(false);
@@ -109,7 +109,7 @@ export const Container = ({
 
   useEffect(() => {
     setBoxes(components);
-  }, [components]);
+  }, [JSON.stringify(components)]);
 
   const moveBox = useCallback(
     (id, layouts) => {
@@ -132,10 +132,19 @@ export const Container = ({
       firstUpdate.current = false;
       return;
     }
-    appDefinitionChanged({
+
+    const newDefinition = {
       ...appDefinition,
-      components: { ...appDefinition.components, [pageHandle]: boxes },
-    });
+      pages: {
+        ...appDefinition.pages,
+        [pageHandle]: {
+          ...appDefinition.pages[pageHandle],
+          components: boxes,
+        },
+      },
+    };
+
+    appDefinitionChanged(newDefinition);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [boxes]);
 
