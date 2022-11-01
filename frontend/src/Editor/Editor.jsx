@@ -1226,23 +1226,21 @@ class EditorComponent extends React.Component {
 
   switchPage = (handle) => {
     const { name } = this.state.appDefinition.pages[handle];
-    this.setState(
-      {
-        currentState: {
-          ...this.state.currentState,
-          globals: {
-            ...this.state.currentState.globals,
-            page: {
-              name,
-              handle,
-            },
+
+    this.props.history.push(`/apps/${this.state.appId}/${handle}`);
+
+    this.setState({
+      currentState: {
+        ...this.state.currentState,
+        globals: {
+          ...this.state.currentState.globals,
+          page: {
+            name,
+            handle,
           },
         },
       },
-      () => {
-        this.autoSave();
-      }
-    );
+    });
   };
 
   render() {
