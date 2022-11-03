@@ -629,7 +629,7 @@ class EditorComponent extends React.Component {
         delete newDefinition.pages[pageHandle].components[componentId];
       });
 
-      delete newDefinition.components[component.id];
+      delete newDefinition.pages[pageHandle].components[component.id];
       toast('Component deleted! (⌘Z to undo)', {
         icon: '🗑️',
       });
