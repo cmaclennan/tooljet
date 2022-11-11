@@ -14,6 +14,7 @@ import Slack from '@/_components/Slack';
 import Zendesk from '@/_components/Zendesk';
 
 import { find, isEmpty } from 'lodash';
+import defaultStyles from '@/_ui/Select/styles';
 
 const DynamicForm = ({
   schema,
@@ -26,14 +27,41 @@ const DynamicForm = ({
   isEditMode,
   optionsChanged,
   queryName,
+  shouldChangeOptionsOnMount = true,
 }) => {
   // if(schema.properties)  todo add empty check
   React.useLayoutEffect(() => {
-    if (!isEditMode || isEmpty(options)) {
+    if (shouldChangeOptionsOnMount && (!isEditMode || isEmpty(options))) {
       optionsChanged(schema?.defaults ?? {});
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const darkMode = localStorage.getItem('darkMode') === 'true';
+  const style = {
+    ...defaultStyles(darkMode, '100%'),
+    menu: (provided) => ({
+      ...provided,
+      backgroundColor: darkMode ? '#121212' : '#ffffff',
+    }),
+    option: (provided) => ({
+      ...provided,
+      backgroundColor: darkMode ? '#121212' : '#ffffff',
+      color: darkMode ? '#697177' : '#889096',
+      ':hover': {
+        backgroundColor: darkMode ? '#404d66' : '#F1F3F5',
+      },
+    }),
+    placeholder: (provided) => ({
+      ...provided,
+      color: darkMode ? '#697177' : '#889096',
+    }),
+    singleValue: (provided) => ({
+      ...provided,
+      color: darkMode ? '#697177' : '#889096',
+    }),
+    menuPortal: (provided) => ({ ...provided, zIndex: 2000 }),
+  };
 
   const getElement = (type) => {
     switch (type) {
@@ -153,14 +181,17 @@ const DynamicForm = ({
           mode,
           lineNumbers,
           className: className ? className : lineNumbers ? 'query-hinter' : 'codehinter-query-editor-input',
-          onChange: (value) => optionchanged(key, value),
+          onChange: (value) => {
+            if (!((options[key] === undefined || options[key] === '') && value === '')) {
+              optionchanged(key, value);
+            }
+          },
           theme: darkMode ? 'monokai' : lineNumbers ? 'duotone-light' : 'default',
           placeholder,
           height,
           width,
           componentName: queryName ? `${queryName}::${key ?? ''}` : null,
           ignoreBraces,
-          cyLabel: key ? `${String(key).toLocaleLowerCase().replace(/\s+/g, '-')}` : '',
         };
       case 'react-component-openapi-validator':
         return {
@@ -208,10 +239,7 @@ const DynamicForm = ({
           return (
             <div className={cx('my-2', { 'col-md-12': !className, [className]: !!className })} key={key}>
               {label && (
-                <label
-                  className="form-label"
-                  data-cy={`label-${String(label).toLocaleLowerCase().replace(/\s+/g, '-')}`}
-                >
+                <label className="form-label">
                   {label}
                   {(type === 'password' || encrypted) && (
                     <small className="text-green mx-2">
@@ -226,10 +254,7 @@ const DynamicForm = ({
                   )}
                 </label>
               )}
-              <Element
-                {...getElementProps(obj[key])}
-                data-cy={`${String(label).toLocaleLowerCase().replace(/\s+/g, '-')}-text-field`}
-              />
+              <Element {...getElementProps(obj[key])} />
             </div>
           );
         })}
@@ -254,19 +279,8 @@ const DynamicForm = ({
                 [flipComponentDropdown.className]: !!flipComponentDropdown.className,
               })}
             >
-              {flipComponentDropdown.label && (
-                <label
-                  className="form-label"
-                  data-cy={`${String(flipComponentDropdown.label)
-                    .toLocaleLowerCase()
-                    .replace(/\s+/g, '-')}-dropdown-label`}
-                >
-                  {flipComponentDropdown.label}
-                </label>
-              )}
-              <div data-cy={'query-select-dropdown'}>
-                <Select {...getElementProps(flipComponentDropdown)} />
-              </div>
+              {flipComponentDropdown.label && <label className="form-label">{flipComponentDropdown.label}</label>}
+              <Select {...getElementProps(flipComponentDropdown)} styles={style} />
               {flipComponentDropdown.helpText && (
                 <span className="flip-dropdown-help-text">{flipComponentDropdown.helpText}</span>
               )}

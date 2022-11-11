@@ -76,6 +76,9 @@ class EditorComponent extends React.Component {
 
     const { socket } = createWebsocketConnection(appId);
 
+    this.renameQueryNameId = React.createRef();
+    this.newNameForQuery = React.createRef();
+
     this.socket = socket;
     let userVars = {};
 
@@ -109,7 +112,6 @@ class EditorComponent extends React.Component {
       currentUser: authenticationService.currentUserValue,
       app: {},
       allComponentTypes: componentTypes,
-      queryPanelHeight: 70,
       isLoading: true,
       users: null,
       appId,
@@ -137,9 +139,8 @@ class EditorComponent extends React.Component {
       },
       apps: [],
       dataQueriesDefaultText: "You haven't created queries yet.",
-      showQuerySearchField: false,
+      // showQuerySearchField: false,
       isDeletingDataQuery: false,
-      showHiddenOptionsForDataQueryId: null,
       queryConfirmationList: [],
       showCreateVersionModalPrompt: false,
       isSourceSelected: false,
@@ -321,8 +322,9 @@ class EditorComponent extends React.Component {
                     ...queryState,
                   },
                 },
-                showQuerySearchField: false,
+                // showQuerySearchField: false,
               });
+              this.runQueries(data.data_queries);
             }
           );
         });
@@ -383,9 +385,7 @@ class EditorComponent extends React.Component {
         async () => {
           if (isEmpty(this.state.editingVersion)) await this.createInitVersion(appId);
 
-          computeComponentState(this, this.state.appDefinition.components).then(() => {
-            this.runQueries(data.data_queries);
-          });
+          computeComponentState(this, this.state.appDefinition.components);
           this.setWindowTitle(data.name);
           this.setState({
             showComments: !!queryString.parse(this.props.location.search).threadId,
@@ -794,6 +794,35 @@ class EditorComponent extends React.Component {
   deleteDataQuery = () => {
     this.setState({ showDataQueryDeletionConfirmation: true });
   };
+  createInputFieldToRenameQuery = (id) => {
+    this.renameQueryNameId.current = id;
+    this.setState({ renameQueryName: true });
+  };
+
+  updateQueryName = () => {
+    if (this.newNameForQuery.current) {
+      dataqueryService
+        .update(this.state.selectedQuery.id, this.newNameForQuery.current)
+        .then(() => {
+          toast.success('Query Name Updated');
+          this.setState({
+            renameQueryName: false,
+          });
+          this.newNameForQuery.current = null;
+          this.renameQueryNameId.current = null;
+          this.dataQueriesChanged();
+        })
+        .catch(({ error }) => {
+          this.setState({ renameQueryName: false });
+          this.newNameForQuery.current = null;
+          this.renameQueryNameId.current = null;
+          toast.error(error);
+        });
+    } else {
+      this.setState({ renameQueryName: false });
+      this.renameQueryNameId.current = null;
+    }
+  };
 
   cancelDeleteDataQuery = () => {
     this.setState({ showDataQueryDeletionConfirmation: false });
@@ -817,8 +846,11 @@ class EditorComponent extends React.Component {
       });
   };
 
-  setShowHiddenOptionsForDataQuery = (dataQueryId) => {
-    this.setState({ showHiddenOptionsForDataQueryId: dataQueryId });
+  selectQuery = (dataQuery, mode = 'edit') => {
+    if (mode === 'edit') {
+      return this.setState({ editingQuery: true, selectedQuery: dataQuery, addingQuery: false });
+    }
+    this.setState({ editingQuery: false, selectedQuery: dataQuery, addingQuery: true });
   };
 
   renderDataQuery = (dataQuery) => {
@@ -830,79 +862,81 @@ class EditorComponent extends React.Component {
       isSeletedQuery = dataQuery.id === this.state.selectedQuery.id;
     }
     const isQueryBeingDeleted = this.state.isDeletingDataQuery && isSeletedQuery;
-    const { currentState } = this.state;
+    // const { currentState } = this.state;
 
-    const isLoading = currentState.queries[dataQuery.name] ? currentState.queries[dataQuery.name].isLoading : false;
-
+    // const isLoading = currentState.queries[dataQuery.name] ? currentState.queries[dataQuery.name].isLoading : false;
     return (
       <div
         className={
-          'row query-row mb-1 py-2 px-3' +
-          (isSeletedQuery ? ' query-row-selected' : '') +
-          (this.props.darkMode ? ' dark' : '')
+          'row query-row' + (isSeletedQuery ? ' query-row-selected' : '') + (this.props.darkMode ? ' dark' : '')
         }
+        style={{
+          border:
+            this.state?.renameQueryName && this.renameQueryNameId?.current === dataQuery.id ? '1px solid blue' : '',
+        }}
         key={dataQuery.id}
-        onClick={() => this.setState({ editingQuery: true, selectedQuery: dataQuery })}
+        onClick={() => this.selectQuery(dataQuery)}
         role="button"
-        onMouseEnter={() => this.setShowHiddenOptionsForDataQuery(dataQuery.id)}
-        onMouseLeave={() => this.setShowHiddenOptionsForDataQuery(null)}
       >
-        <div className="col-auto" style={{ width: '28px' }}>
-          {icon}
-        </div>
-        <div className="col">
+        <div className="col-auto query-icon d-flex">{icon}</div>
+        <div className="col" style={{ fontWeight: '500' }}>
           <OverlayTrigger
             trigger={['hover', 'focus']}
             placement="top"
             delay={{ show: 800, hide: 100 }}
             overlay={<Tooltip id="button-tooltip">{dataQuery.name}</Tooltip>}
           >
-            <div className="px-3 query-name" data-cy={`${String(dataQuery.name).toLocaleLowerCase()}-query-label`}>
-              {dataQuery.name}
-            </div>
+            {this.state?.renameQueryName && this.renameQueryNameId?.current === dataQuery.id ? (
+              <input
+                className={`query-name border-0 bg-transparent ${this.props.darkMode && 'text-white'}`}
+                type="text"
+                defaultValue={dataQuery.name}
+                autoFocus={true}
+                onBlur={() => {
+                  this.updateQueryName();
+                }}
+                onChange={({ target }) => {
+                  this.newNameForQuery.current = target.value;
+                  debounce(() => this.updateQueryName(), 1000)();
+                }}
+              />
+            ) : (
+              <div className="query-name">{dataQuery.name}</div>
+            )}
           </OverlayTrigger>
         </div>
-        <div className="col-auto mx-1">
+        <div className="col-auto">
+          <span className="rename-query" onClick={() => this.createInputFieldToRenameQuery(dataQuery.id)}>
+            <div className="d-flex">
+              <svg width="12.67" height="12.67" viewBox="0 0 19 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M13.7087 1.40712C14.29 0.826221 15.0782 0.499893 15.9 0.499893C16.7222 0.499893 17.5107 0.82651 18.0921 1.40789C18.6735 1.98928 19.0001 2.7778 19.0001 3.6C19.0001 4.42197 18.6737 5.21028 18.0926 5.79162C18.0924 5.79178 18.0928 5.79145 18.0926 5.79162L16.8287 7.06006C16.7936 7.11191 16.753 7.16118 16.7071 7.20711C16.6621 7.25215 16.6138 7.292 16.563 7.32665L9.70837 14.2058C9.52073 14.3942 9.26584 14.5 9 14.5H6C5.44772 14.5 5 14.0523 5 13.5V10.5C5 10.2342 5.10585 9.97927 5.29416 9.79163L12.1733 2.93697C12.208 2.88621 12.2478 2.83794 12.2929 2.79289C12.3388 2.74697 12.3881 2.70645 12.4399 2.67132L13.7079 1.40789C13.7082 1.40763 13.7084 1.40738 13.7087 1.40712ZM13.0112 4.92545L7 10.9153V12.5H8.58474L14.5745 6.48876L13.0112 4.92545ZM15.9862 5.07202L14.428 3.51376L15.1221 2.82211C15.3284 2.6158 15.6082 2.49989 15.9 2.49989C16.1918 2.49989 16.4716 2.6158 16.6779 2.82211C16.8842 3.02842 17.0001 3.30823 17.0001 3.6C17.0001 3.89177 16.8842 4.17158 16.6779 4.37789L15.9862 5.07202ZM0.87868 5.37868C1.44129 4.81607 2.20435 4.5 3 4.5H4C4.55228 4.5 5 4.94772 5 5.5C5 6.05228 4.55228 6.5 4 6.5H3C2.73478 6.5 2.48043 6.60536 2.29289 6.79289C2.10536 6.98043 2 7.23478 2 7.5V16.5C2 16.7652 2.10536 17.0196 2.29289 17.2071C2.48043 17.3946 2.73478 17.5 3 17.5H12C12.2652 17.5 12.5196 17.3946 12.7071 17.2071C12.8946 17.0196 13 16.7652 13 16.5V15.5C13 14.9477 13.4477 14.5 14 14.5C14.5523 14.5 15 14.9477 15 15.5V16.5C15 17.2957 14.6839 18.0587 14.1213 18.6213C13.5587 19.1839 12.7957 19.5 12 19.5H3C2.20435 19.5 1.44129 19.1839 0.87868 18.6213C0.31607 18.0587 0 17.2957 0 16.5V7.5C0 6.70435 0.31607 5.94129 0.87868 5.37868Z"
+                  fill="#11181C"
+                />
+              </svg>
+            </div>
+          </span>
+        </div>
+        <div className="col-auto">
           {isQueryBeingDeleted ? (
             <div className="px-2">
               <div className="text-center spinner-border spinner-border-sm" role="status"></div>
             </div>
           ) : (
-            <button
-              className="btn badge bg-azure-lt"
-              onClick={this.deleteDataQuery}
-              style={{
-                display: this.state.showHiddenOptionsForDataQueryId === dataQuery.id ? 'block' : 'none',
-                marginTop: '3px',
-              }}
-              data-cy={`${String(dataQuery.name).toLocaleLowerCase()}-query-delete-button`}
-            >
-              <div>
-                <img src="assets/images/icons/query-trash-icon.svg" width="12" height="12" className="mx-1" />
+            <span className="delete-query" onClick={this.deleteDataQuery}>
+              <div className="d-flex">
+                <svg width="12" height="13.3" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M5.58579 0.585786C5.96086 0.210714 6.46957 0 7 0H11C11.5304 0 12.0391 0.210714 12.4142 0.585786C12.7893 0.960859 13 1.46957 13 2V4H15.9883C15.9953 3.99993 16.0024 3.99993 16.0095 4H17C17.5523 4 18 4.44772 18 5C18 5.55228 17.5523 6 17 6H16.9201L15.9997 17.0458C15.9878 17.8249 15.6731 18.5695 15.1213 19.1213C14.5587 19.6839 13.7957 20 13 20H5C4.20435 20 3.44129 19.6839 2.87868 19.1213C2.32687 18.5695 2.01223 17.8249 2.00035 17.0458L1.07987 6H1C0.447715 6 0 5.55228 0 5C0 4.44772 0.447715 4 1 4H1.99054C1.9976 3.99993 2.00466 3.99993 2.0117 4H5V2C5 1.46957 5.21071 0.960859 5.58579 0.585786ZM3.0868 6L3.99655 16.917C3.99885 16.9446 4 16.9723 4 17C4 17.2652 4.10536 17.5196 4.29289 17.7071C4.48043 17.8946 4.73478 18 5 18H13C13.2652 18 13.5196 17.8946 13.7071 17.7071C13.8946 17.5196 14 17.2652 14 17C14 16.9723 14.0012 16.9446 14.0035 16.917L14.9132 6H3.0868ZM11 4H7V2H11V4ZM6.29289 10.7071C5.90237 10.3166 5.90237 9.68342 6.29289 9.29289C6.68342 8.90237 7.31658 8.90237 7.70711 9.29289L9 10.5858L10.2929 9.29289C10.6834 8.90237 11.3166 8.90237 11.7071 9.29289C12.0976 9.68342 12.0976 10.3166 11.7071 10.7071L10.4142 12L11.7071 13.2929C12.0976 13.6834 12.0976 14.3166 11.7071 14.7071C11.3166 15.0976 10.6834 15.0976 10.2929 14.7071L9 13.4142L7.70711 14.7071C7.31658 15.0976 6.68342 15.0976 6.29289 14.7071C5.90237 14.3166 5.90237 13.6834 6.29289 13.2929L7.58579 12L6.29289 10.7071Z"
+                    fill="#DB4324"
+                  />
+                </svg>
               </div>
-            </button>
-          )}
-        </div>
-        <div className="col-auto" style={{ width: '28px' }}>
-          {isLoading === true ? (
-            <center>
-              <div className="pt-1">
-                <div className="text-center spinner-border spinner-border-sm" role="status"></div>
-              </div>
-            </center>
-          ) : (
-            <button
-              style={{ marginTop: '3px' }}
-              className="btn badge bg-light-1"
-              onClick={() => {
-                runQuery(this, dataQuery.id, dataQuery.name);
-              }}
-              data-cy={`${String(dataQuery.name).toLocaleLowerCase()}-query-run-button`}
-            >
-              <div className={`query-icon ${this.props.darkMode && 'dark'}`}>
-                <img src="assets/images/icons/editor/play.svg" width="8" height="8" className="mx-1" />
-              </div>
-            </button>
+            </span>
           )}
         </div>
       </div>
@@ -914,12 +948,6 @@ class EditorComponent extends React.Component {
       app: { ...this.state.app, name: newName },
     });
     this.setWindowTitle(newName);
-  };
-
-  toggleQueryEditor = () => {
-    this.setState(() => ({
-      queryPanelHeight: this.state.queryPanelHeight === 100 ? 30 : 100,
-    }));
   };
 
   toggleComments = () => {
@@ -967,11 +995,11 @@ class EditorComponent extends React.Component {
     }
   };
 
-  toggleQuerySearch = () => {
-    this.setState((prev) => ({
-      showQuerySearchField: !prev.showQuerySearchField,
-    }));
-  };
+  // toggleQuerySearch = () => {
+  //   this.setState((prev) => ({
+  //     showQuerySearchField: !prev.showQuerySearchField,
+  //   }));
+  // };
 
   onVersionRelease = (versionId) => {
     this.setState(
@@ -1116,7 +1144,7 @@ class EditorComponent extends React.Component {
           theme: { name: newMode ? 'dark' : 'light' },
         },
       },
-      showQuerySearchField: false,
+      // showQuerySearchField: false,
     });
     this.props.switchDarkMode(newMode);
   };
@@ -1201,15 +1229,14 @@ class EditorComponent extends React.Component {
       selectedQuery,
       editingQuery,
       app,
-      queryPanelHeight,
       showLeftSidebar,
       currentState,
       isLoading,
       zoomLevel,
       currentLayout,
       deviceWindowWidth,
-      dataQueriesDefaultText,
-      showQuerySearchField,
+      // dataQueriesDefaultText,
+      // showQuerySearchField,
       showDataQueryDeletionConfirmation,
       isDeletingDataQuery,
       apps,
@@ -1456,176 +1483,110 @@ class EditorComponent extends React.Component {
                     )}
                   </div>
                 </div>
-                <div
-                  className="query-pane"
-                  style={{
-                    height: 40,
-                    background: '#fff',
-                    padding: '8px 16px',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                  }}
-                >
-                  <h5 className="mb-0">QUERIES</h5>
-                  <span onClick={this.toggleQueryEditor} className="cursor-pointer m-1" data-tip="Show query editor">
-                    <svg
-                      style={{ transform: 'rotate(180deg)' }}
-                      width="18"
-                      height="10"
-                      viewBox="0 0 18 10"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M1 1L9 9L17 1"
-                        stroke="#61656F"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </span>
-                </div>
-                <QueryPanel queryPanelHeight={queryPanelHeight}>
-                  <div className="row main-row">
-                    <div className="data-pane">
-                      <div className="queries-container">
-                        <div className="queries-header row" style={{ marginLeft: '1.5px' }}>
-                          {showQuerySearchField && (
-                            <div className="col-12 p-1">
-                              <div className="queries-search px-1" data-cy={'query-search-field'}>
+                <QueryPanel>
+                  {({ toggleQueryEditor, createQueryButtonState }) => (
+                    <div className="row main-row d-flex" style={{ fontFamily: 'Roboto' }}>
+                      <div className="data-pane" style={{ flex: '0 0 249px' }}>
+                        <div className={`queries-container ${this.props.darkMode && 'theme-dark'}`}>
+                          <div className="queries-header row d-flex align-items-center justify-content-between">
+                            <div className="col-7">
+                              <div className={`queries-search ${this.props.darkMode && 'theme-dark'}`}>
                                 <SearchBoxComponent
                                   onChange={this.filterQueries}
-                                  callback={this.toggleQuerySearch}
-                                  placeholder={this.props.t('editor.searchQueries', 'Search queries')}
+                                  placeholder={this.props.t('globals.search', 'Search')}
                                 />
                               </div>
                             </div>
-                          )}
-
-                          {!showQuerySearchField && (
-                            <>
-                              <div className="col">
-                                <h5
-                                  style={{ fontSize: '14px', marginLeft: ' 6px' }}
-                                  className="py-1 px-3 mt-2 text-muted"
-                                  data-cy={'header-queries-on-query-manager'}
+                            <div
+                              className="col-auto d-flex align-items-center py-1 rounded default-secondary-button"
+                              role="button"
+                              onClick={() => {
+                                createQueryButtonState.isClicked = true;
+                                this.setState({
+                                  options: {},
+                                  selectedDataSource: null,
+                                  selectedQuery: {},
+                                  editingQuery: false,
+                                  addingQuery: true,
+                                  isSourceSelected: false,
+                                });
+                              }}
+                            >
+                              <span
+                                className={`query-btn d-flex align-items-center justify-content-end`}
+                                data-tip="Add new query"
+                                data-class=""
+                              >
+                                <svg
+                                  width="10.67"
+                                  height="10.67"
+                                  viewBox="0 0 16 16"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
                                 >
-                                  {this.props.t('editor.queries', 'Queries')}
-                                </h5>
-                              </div>
-
-                              <div className="col-auto mx-1">
-                                <span
-                                  className={`query-btn mx-1 ${this.props.darkMode ? 'dark' : ''}`}
-                                  data-class="py-1 px-0"
-                                  onClick={this.toggleQuerySearch}
-                                >
-                                  <img
-                                    className="py-1 mt-2"
-                                    src="assets/images/icons/lens.svg"
-                                    width="24"
-                                    height="24"
-                                    data-cy={'query-search-icon'}
+                                  <path
+                                    d="M8 15.25C7.71667 15.25 7.47917 15.1542 7.2875 14.9625C7.09583 14.7708 7 14.5333 7 14.25V9H1.75C1.46667 9 1.22917 8.90417 1.0375 8.7125C0.845833 8.52083 0.75 8.28333 0.75 8C0.75 7.71667 0.845833 7.47917 1.0375 7.2875C1.22917 7.09583 1.46667 7 1.75 7H7V1.75C7 1.46667 7.09583 1.22917 7.2875 1.0375C7.47917 0.845833 7.71667 0.75 8 0.75C8.28333 0.75 8.52083 0.845833 8.7125 1.0375C8.90417 1.22917 9 1.46667 9 1.75V7H14.25C14.5333 7 14.7708 7.09583 14.9625 7.2875C15.1542 7.47917 15.25 7.71667 15.25 8C15.25 8.28333 15.1542 8.52083 14.9625 8.7125C14.7708 8.90417 14.5333 9 14.25 9H9V14.25C9 14.5333 8.90417 14.7708 8.7125 14.9625C8.52083 15.1542 8.28333 15.25 8 15.25Z"
+                                    fill="#3E63DD"
                                   />
-                                </span>
+                                </svg>
+                              </span>
+                              <span>Add</span>
+                            </div>
+                          </div>
 
-                                <span
-                                  className={`query-btn mx-3 ${this.props.darkMode ? 'dark' : ''}`}
-                                  data-tip="Add new query"
-                                  data-class="py-1 px-2"
-                                  data-cy="button-add-new-queries"
-                                  onClick={() =>
-                                    this.setState({
-                                      options: {},
-                                      selectedDataSource: null,
-                                      selectedQuery: {},
-                                      editingQuery: false,
-                                      addingQuery: true,
-                                      isSourceSelected: false,
-                                    })
-                                  }
-                                >
-                                  <img className="mt-2" src="assets/images/icons/plus.svg" width="24" height="24" />
-                                </span>
-                              </div>
-                            </>
+                          {loadingDataQueries ? (
+                            <div className="p-5">
+                              <center>
+                                <div className="spinner-border" role="status"></div>
+                              </center>
+                            </div>
+                          ) : (
+                            <div className="query-list mt-1">
+                              <div>{this.state.filterDataQueries.map((query) => this.renderDataQuery(query))}</div>
+                              {this.state.filterDataQueries.length === 0 && (
+                                <div className=" d-flex  flex-column align-items-center justify-content-start">
+                                  <img src="assets/images/icons/no-queries-added.svg" alt="" />
+                                  <span className="mute-text pt-3">No queries added</span> <br />
+                                </div>
+                              )}
+                            </div>
                           )}
                         </div>
-
-                        {loadingDataQueries ? (
-                          <div className="p-5">
-                            <center>
-                              <div className="spinner-border" role="status"></div>
-                            </center>
-                          </div>
-                        ) : (
-                          <div className="query-list p-1 mt-1">
-                            <div>{this.state.filterDataQueries.map((query) => this.renderDataQuery(query))}</div>
-                            {this.state.filterDataQueries.length === 0 && (
-                              <div className="mt-5">
-                                <center>
-                                  <span className="mute-text" data-cy={'no-query-text'}>
-                                    {dataQueriesDefaultText}
-                                  </span>{' '}
-                                  <br />
-                                  <button
-                                    className={`button-family-secondary mt-3 ${this.props.darkMode && 'dark'}`}
-                                    onClick={() =>
-                                      this.setState({
-                                        options: {},
-                                        selectedDataSource: null,
-                                        selectedQuery: {},
-                                        editingQuery: false,
-                                        addingQuery: true,
-                                      })
-                                    }
-                                    data-cy={'create-query-button'}
-                                  >
-                                    {this.props.t('editor.createQuery', 'Create query')}
-                                  </button>
-                                </center>
-                              </div>
-                            )}
-                          </div>
-                        )}
                       </div>
-                    </div>
-                    <div className="query-definition-pane-wrapper">
-                      <div className="query-definition-pane">
-                        <div>
-                          <QueryManager
-                            toggleQueryEditor={this.toggleQueryEditor}
-                            dataSources={dataSources}
-                            dataQueries={dataQueries}
-                            mode={editingQuery ? 'edit' : 'create'}
-                            selectedQuery={selectedQuery}
-                            selectedDataSource={this.state.selectedDataSource}
-                            dataQueriesChanged={this.dataQueriesChanged}
-                            appId={appId}
-                            editingVersionId={editingVersion?.id}
-                            addingQuery={addingQuery}
-                            editingQuery={editingQuery}
-                            queryPanelHeight={queryPanelHeight}
-                            currentState={currentState}
-                            darkMode={this.props.darkMode}
-                            apps={apps}
-                            allComponents={appDefinition.components}
-                            isSourceSelected={this.state.isSourceSelected}
-                            isQueryPaneDragging={this.state.isQueryPaneDragging}
-                            runQuery={this.runQuery}
-                            dataSourceModalHandler={this.dataSourceModalHandler}
-                            setStateOfUnsavedQueries={this.setStateOfUnsavedQueries}
-                            appDefinition={appDefinition}
-                            editorState={this}
-                            showQueryConfirmation={queryConfirmationList.length > 0}
-                            loadingDataSources={loadingDataSources}
-                          />
+                      <div className="query-definition-pane-wrapper">
+                        <div className="query-definition-pane">
+                          <div>
+                            <QueryManager
+                              toggleQueryEditor={toggleQueryEditor}
+                              dataSources={dataSources}
+                              dataQueries={dataQueries}
+                              mode={editingQuery ? 'edit' : 'create'}
+                              selectedQuery={selectedQuery}
+                              selectedDataSource={this.state.selectedDataSource}
+                              dataQueriesChanged={this.dataQueriesChanged}
+                              appId={appId}
+                              editingVersionId={editingVersion?.id}
+                              addingQuery={addingQuery}
+                              editingQuery={editingQuery}
+                              currentState={currentState}
+                              darkMode={this.props.darkMode}
+                              apps={apps}
+                              allComponents={appDefinition.components}
+                              isSourceSelected={this.state.isSourceSelected}
+                              runQuery={this.runQuery}
+                              dataSourceModalHandler={this.dataSourceModalHandler}
+                              setStateOfUnsavedQueries={this.setStateOfUnsavedQueries}
+                              editorState={this}
+                              showQueryConfirmation={queryConfirmationList.length > 0}
+                              loadingDataSources={loadingDataSources}
+                              createQueryButtonState={createQueryButtonState}
+                              selectQuery={this.selectQuery}
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  )}
                 </QueryPanel>
               </div>
               <div className="editor-sidebar">

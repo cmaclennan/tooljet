@@ -353,7 +353,7 @@ export const EventManager = ({
             {event.actionId === 'run-query' && (
               <div className="row">
                 <div className="col-3 p-2">{t('editor.inspector.eventManager.query', 'Query')}</div>
-                <div className="col-9" data-cy="query-selection-field">
+                <div className="col-9">
                   <Select
                     className={`${darkMode ? 'select-search-dark' : 'select-search'}`}
                     options={dataQueries.map((query) => {
@@ -722,10 +722,10 @@ export const EventManager = ({
                                       />
                                     </svg>
                                   </div>
-                                  <div className="col text-truncate" data-cy="event-handler">
+                                  <div className="col text-truncate event-handler-display" data-cy="event-handler">
                                     {componentMeta.events[event.eventId]['displayName']}
                                   </div>
-                                  <div className="col text-truncate" data-cy="event-name">
+                                  <div className="col text-truncate event-name-display" data-cy="event-name">
                                     <small className="event-action font-weight-light text-truncate">
                                       {actionMeta.name}
                                     </small>
