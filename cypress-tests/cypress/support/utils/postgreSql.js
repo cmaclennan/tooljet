@@ -75,7 +75,9 @@ export const openQueryEditor = (dataSourceName) => {
   cy.reload();
   cy.wait(2000);
   cy.get(postgreSqlSelector.buttonAddNewQueries).click();
-  cy.get(`[data-cy="${cyParamName(dataSourceName)}-add-query-card"]`)
+  cy.get(`[data-cy="${cyParamName(dataSourceName)}-add-query-card"]`, {
+    timepout: 10000,
+  })
     .should("contain", dataSourceName)
     .click();
 };
