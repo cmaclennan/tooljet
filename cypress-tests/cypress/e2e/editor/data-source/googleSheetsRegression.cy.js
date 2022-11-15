@@ -1,6 +1,9 @@
 import { postgreSqlSelector } from "Selectors/postgreSql";
 import { postgreSqlText } from "Texts/postgreSql";
 
+import { googleSheetsText } from "Texts/googleSheets";
+import { googleSheetsSelector } from "Selectors/googleSheets";
+
 import { commonSelectors, commonWidgetSelector } from "Selectors/common";
 import { commonWidgetText } from "Texts/common";
 import {} from "Support/utils/commonWidget";
@@ -18,9 +21,9 @@ import {
 
 describe("Editor- Test Button widget", () => {
   const data = {};
-  data.sheetId = "123";
+  data.sheetId = "1GYSTLiHKhLatsSN6768VgseLCvLu4sJhgGI9xek8WwM";
   data.range = "A1:Z100";
-  data.gid = "1GYSTLiHKhLatsSN6768VgseLCvLu4sJhgGI9xek8WwM";
+  data.gid = "0";
   beforeEach(() => {
     cy.appUILogin();
     cy.createApp();
@@ -31,214 +34,239 @@ describe("Editor- Test Button widget", () => {
     cy.get(postgreSqlSelector.addDatasourceLink)
       .should("have.text", postgreSqlText.labelAddDataSource)
       .click();
-    cy.get(postgreSqlSelector.dataSourceSearchInputField).type("Google Sheets");
-    cy.get("[data-cy='data-source-google sheets']").click();
 
-    cy.get(
-      '[data-cy="google-sheet-connection-form-header"]'
-    ).verifyVisibleElement("have.text", "Authorize");
-    cy.get(
-      '[data-cy="google-sheet-connection-form-description"]'
-    ).verifyVisibleElement(
-      "have.text",
-      "If you want your ToolJet apps to modify your Google sheets, make sure to select read and write access"
+    cy.get(postgreSqlSelector.dataSourceSearchInputField).type(
+      googleSheetsText.dataSourceGoogleSheets
     );
+    cy.get(googleSheetsSelector.dataSourceGoogleSheets).click();
 
-    cy.get('[data-cy="read-only-input"]');
-    cy.get('[data-cy="read-only-label"]').verifyVisibleElement(
+    cy.get(googleSheetsSelector.connectionFormHeader).verifyVisibleElement(
       "have.text",
-      "Read only Your ToolJet apps can only read data from Google sheets"
+      googleSheetsText.connectionFormHeader
     );
-    cy.get('[data-cy="read-only-sub-label"]').verifyVisibleElement(
+    cy.get(googleSheetsSelector.connectionFormDescription).verifyVisibleElement(
       "have.text",
-      "Your ToolJet apps can only read data from Google sheets"
+      googleSheetsText.connectionFormDescription
     );
 
-    cy.get('[data-cy="read-and-write-input"]');
-    cy.get('[data-cy="read-and-write-label"]').verifyVisibleElement(
+    cy.get(googleSheetsSelector.checkboxReadonly).should("be.visible");
+    cy.get(googleSheetsSelector.labelReadonly).verifyVisibleElement(
       "have.text",
-      "Read and write Your ToolJet apps can read data from sheets, modify sheets, and more."
+      googleSheetsText.labelReadonly
     );
-    cy.get('[data-cy="read-and-write-sub-label"]').verifyVisibleElement(
+    cy.get(googleSheetsSelector.subLabelReadonly).verifyVisibleElement(
       "have.text",
-      "Your ToolJet apps can read data from sheets, modify sheets, and more."
+      googleSheetsText.subLabelReadonly
+    );
+
+    cy.get(googleSheetsSelector.checkboxReadAndWrite).should("be.visible");
+    cy.get(googleSheetsSelector.labelReadAndWrite).verifyVisibleElement(
+      "have.text",
+      googleSheetsText.labelReadAndWrite
+    );
+    cy.get(googleSheetsSelector.subLabelReadAndWrite).verifyVisibleElement(
+      "have.text",
+      googleSheetsText.subLabelReadAndWrite
     );
   });
-  it("should verify connection", () => {});
+
+  it.skip("should verify connection", () => {});
   it("should verify elements on query manager", () => {
     cy.visit("http://localhost:8082/apps/788123b1-1c5f-476a-8085-91e5f7e1e086");
-    openQueryEditor("Google Sheets");
+    cy.wait(5000);
+    openQueryEditor(googleSheetsText.dataSourceGoogleSheets);
     cy.get('[class="query-pane"]').invoke("css", "height", "calc(85%)");
 
-    selectQueryMode("Read data from a spreadsheet");
-    cy.get('[data-cy="label-spreadsheet-id"]').verifyVisibleElement(
+    selectQueryMode(googleSheetsText.readDataFromSpreadsheet);
+    cy.get(googleSheetsSelector.spreadSheetId).verifyVisibleElement(
       "have.text",
-      "Spreadsheet ID"
+      googleSheetsText.spreadSheetId
     );
-    cy.get('[data-cy="spreadsheet_id-input-field"]').should("be.visible");
+    cy.get(googleSheetsSelector.spreadSheetIdInputField).should("be.visible");
 
-    cy.get('[data-cy="label-range"]').verifyVisibleElement(
+    cy.get(googleSheetsSelector.labelRange).verifyVisibleElement(
       "have.text",
-      "Range"
+      googleSheetsText.labelRange
     );
-    cy.get('[data-cy="spreadsheet_range-input-field"]').should("be.visible");
+    cy.get(googleSheetsSelector.rangeInputField).should("be.visible");
 
-    cy.get('[data-cy="label-sheet"]').verifyVisibleElement(
+    cy.get(googleSheetsSelector.labelSheet).verifyVisibleElement(
       "have.text",
-      "Sheet"
+      googleSheetsText.labelSheet
     );
-    cy.get('[data-cy="sheet-input-field"]').should("be.visible");
+    cy.get(googleSheetsSelector.sheetInputField).should("be.visible");
 
-    cy.wait(5000);
-    selectQueryMode("Append data to a spreadsheet");
-    cy.get('[data-cy="label-spreadsheet-id"]').verifyVisibleElement(
+    cy.wait(2000);
+    selectQueryMode(googleSheetsText.appendDataToSheet);
+    cy.get(googleSheetsSelector.spreadSheetId).verifyVisibleElement(
       "have.text",
-      "Spreadsheet ID"
+      googleSheetsText.spreadSheetId
     );
-    cy.get('[data-cy="spreadsheet_id-input-field"]').should("be.visible");
+    cy.get(googleSheetsSelector.spreadSheetIdInputField).should("be.visible");
 
-    cy.get('[data-cy="label-sheet"]').verifyVisibleElement(
+    cy.get(googleSheetsSelector.labelSheet).verifyVisibleElement(
       "have.text",
-      "Sheet"
+      googleSheetsText.labelSheet
     );
-    cy.get('[data-cy="sheet-input-field"]').should("be.visible");
+    cy.get(googleSheetsSelector.sheetInputField).should("be.visible");
 
-    cy.get('[data-cy="label-rows"]').verifyVisibleElement("have.text", "Rows");
-    cy.get('[data-cy="rows-input-field"]').should("be.visible");
-
-    cy.wait(5000);
-    selectQueryMode("Get spreadsheet info");
-    cy.get('[data-cy="label-spreadsheet-id"]').verifyVisibleElement(
+    cy.get(googleSheetsSelector.labelRows).verifyVisibleElement(
       "have.text",
-      "Spreadsheet ID"
+      googleSheetsText.labelRows
     );
-    cy.get('[data-cy="spreadsheet_id-input-field"]').should("be.visible");
+    cy.get(googleSheetsSelector.rowsInputField).should("be.visible");
 
-    cy.wait(5000);
-    selectQueryMode("Update data to a spreadsheet");
-    cy.get('[data-cy="label-spreadsheet-id"]').verifyVisibleElement(
+    cy.wait(2000);
+    selectQueryMode(googleSheetsText.getSheetInfo);
+    cy.get(googleSheetsSelector.spreadSheetId).verifyVisibleElement(
       "have.text",
-      "Spreadsheet ID"
+      googleSheetsText.spreadSheetId
     );
-    cy.get('[data-cy="spreadsheet_id-input-field"]').should("be.visible");
+    cy.get(googleSheetsSelector.spreadSheetIdInputField).should("be.visible");
 
-    cy.get('[data-cy="label-range"]').verifyVisibleElement(
+    cy.wait(2000);
+    selectQueryMode(googleSheetsText.updateDataToSheet);
+    cy.get(googleSheetsSelector.spreadSheetId).verifyVisibleElement(
       "have.text",
-      "Range"
+      googleSheetsText.spreadSheetId
     );
-    cy.get('[data-cy="spreadsheet_range-input-field"]').should("be.visible");
+    cy.get(googleSheetsSelector.spreadSheetIdInputField).should("be.visible");
 
-    cy.get('[data-cy="label-sheet-name"]').verifyVisibleElement(
+    cy.get(googleSheetsSelector.labelRange).verifyVisibleElement(
       "have.text",
-      "Sheet name"
+      googleSheetsText.labelRange
     );
-    cy.get('[data-cy="sheet-input-field"]').should("be.visible");
+    cy.get(googleSheetsSelector.rangeInputField).should("be.visible");
 
-    cy.get('[data-cy="label-where"]').verifyVisibleElement(
+    cy.get(googleSheetsSelector.labelSheetName).verifyVisibleElement(
       "have.text",
-      "Where"
+      googleSheetsText.labelSheetName
     );
-    cy.get('[data-cy="where_field-input-field"]').should("be.visible");
+    cy.get(googleSheetsSelector.sheetInputField).should("be.visible");
 
-    cy.get('[data-cy="label-operator"]').verifyVisibleElement(
+    cy.get(googleSheetsSelector.labelWhere).verifyVisibleElement(
       "have.text",
-      "Operator"
+      googleSheetsText.labelWhere
     );
-    cy.get('[data-cy="where_field-input-field"]').should("be.visible");
+    cy.get(googleSheetsSelector.whereInputField).should("be.visible");
 
-    cy.get('[data-cy="label-value"]').verifyVisibleElement(
+    cy.get(googleSheetsSelector.labelOperator).verifyVisibleElement(
       "have.text",
-      "Value"
+      googleSheetsText.labelOperator
     );
-    cy.get('[data-cy="where_value-input-field"]').should("be.visible");
+    cy.get(googleSheetsSelector.whereInputField).should("be.visible");
 
-    cy.get('[data-cy="label-body"]').verifyVisibleElement("have.text", "Body");
-    cy.get('[data-cy="body-input-field"]').should("be.visible");
-
-    cy.wait(5000);
-    selectQueryMode("Delete row from a spreadsheet");
-    cy.get('[data-cy="label-spreadsheet-id"]').verifyVisibleElement(
+    cy.get(googleSheetsSelector.labelValue).verifyVisibleElement(
       "have.text",
-      "Spreadsheet ID"
+      googleSheetsText.labelValue
     );
-    cy.get('[data-cy="spreadsheet_id-input-field"]').should("be.visible");
+    cy.get(googleSheetsSelector.valueInputField).should("be.visible");
 
-    cy.get('[data-cy="label-gid"]').verifyVisibleElement("have.text", "GID");
-    cy.get('[data-cy="sheet-input-field"]').should("be.visible");
-
-    cy.get('[data-cy="label-delete-row-number"]').verifyVisibleElement(
+    cy.get(googleSheetsSelector.labelBody).verifyVisibleElement(
       "have.text",
-      "Delete row number"
+      googleSheetsText.labelBody
     );
-    cy.get('[data-cy="row_index-input-field"]').should("be.visible");
-    cy.wait(5000);
+    cy.get(googleSheetsSelector.bodyInputField).should("be.visible");
+
+    cy.wait(2000);
+    selectQueryMode(googleSheetsText.deleteRowFromSheet);
+    cy.get(googleSheetsSelector.spreadSheetId).verifyVisibleElement(
+      "have.text",
+      googleSheetsText.spreadSheetId
+    );
+    cy.get(googleSheetsSelector.spreadSheetIdInputField).should("be.visible");
+
+    cy.get(googleSheetsSelector.labelGid).verifyVisibleElement(
+      "have.text",
+      googleSheetsText.labelGid
+    );
+    cy.get(googleSheetsSelector.sheetInputField).should("be.visible");
+
+    cy.get(googleSheetsSelector.labelDeleteRowNumber).verifyVisibleElement(
+      "have.text",
+      googleSheetsText.labelDeleteRowNumber
+    );
+    cy.get(googleSheetsSelector.deleteRowIndexInputField).should("be.visible");
+    cy.wait(1000);
   });
-  it.only("should verify CURD operation on query", () => {
+  it("should verify CURD operation on query", () => {
     cy.visit("http://localhost:8082/apps/788123b1-1c5f-476a-8085-91e5f7e1e086");
+    cy.wait(5000);
     openQueryEditor("Google Sheets");
     cy.get('[class="query-pane"]').invoke("css", "height", "calc(85%)");
 
-    selectQueryMode("Read data from a spreadsheet");
-    cy.get('[data-cy="spreadsheet_id-input-field"]').clearAndTypeOnCodeMirror(
-      data.sheetId
-    );
+    selectQueryMode(googleSheetsText.readDataFromSpreadsheet); //read data
     cy.get(
-      '[data-cy="spreadsheet_range-input-field"]'
-    ).clearAndTypeOnCodeMirror(data.range);
-    cy.get('[data-cy="sheet-input-field"]'); // only needed for two pages/sheets
+      googleSheetsSelector.spreadSheetIdInputField
+    ).clearAndTypeOnCodeMirror(data.sheetId);
+    cy.get(googleSheetsSelector.rangeInputField).clearAndTypeOnCodeMirror(
+      data.range
+    );
+    cy.get(googleSheetsSelector.sheetInputField); // only needed for two pages/sheets
     cy.get('[data-cy="query-create-and-run-button"]').click();
+    cy.wait(10000);
+    cy.get('[data-cy="query-preview-button"]').click();
+    cy.get('[data-cy="query-preview-tree"]')
+      .find("li>span")
+      .each(($x, index) => {
+        if (index != 0) {
+          cy.wrap($x).click();
+        }
+      });
 
     openQueryEditor("Google Sheets");
-    selectQueryMode("Append data to a spreadsheet");
+    selectQueryMode("Append data to a spreadsheet"); //append
 
-    cy.get('[data-cy="spreadsheet_id-input-field"]').clearAndTypeOnCodeMirror(
-      data.sheetId
-    );
-    cy.get('[data-cy="sheet-input-field"]');
-    cy.get('[data-cy="rows-input-field"]').clearAndTypeOnCodeMirror(
+    cy.get(
+      googleSheetsSelector.spreadSheetIdInputField
+    ).clearAndTypeOnCodeMirror(data.sheetId);
+    cy.get(googleSheetsSelector.sheetInputField);
+    cy.get(googleSheetsSelector.rowsInputField).clearAndTypeOnCodeMirror(
       `[{"name":"mike", "email":"mike@example.com"},{"name":"mike1", "email":"mike1@example.com"},{"name":"mike2", "email":"mike2@example.com"}]`
     );
     cy.get('[data-cy="query-create-and-run-button"]').click();
 
     openQueryEditor("Google Sheets");
-    selectQueryMode("Get spreadsheet info");
-    cy.get('[data-cy="spreadsheet_id-input-field"]').clearAndTypeOnCodeMirror(
-      data.sheetId
-    );
+    selectQueryMode(googleSheetsText.getSheetInfo); //get info
+    cy.get(
+      googleSheetsSelector.spreadSheetIdInputField
+    ).clearAndTypeOnCodeMirror(data.sheetId);
     cy.get('[data-cy="query-create-and-run-button"]').click();
 
     openQueryEditor("Google Sheets");
-    selectQueryMode("Update data to a spreadsheet");
+    selectQueryMode(googleSheetsText.updateDataToSheet); //update data
 
-    cy.get('[data-cy="spreadsheet_id-input-field"]').clearAndTypeOnCodeMirror(
-      data.sheetId
-    );
     cy.get(
-      '[data-cy="spreadsheet_range-input-field"]'
-    ).clearAndTypeOnCodeMirror(data.range);
+      googleSheetsSelector.spreadSheetIdInputField
+    ).clearAndTypeOnCodeMirror(data.sheetId);
+    cy.get(googleSheetsSelector.rangeInputField).clearAndTypeOnCodeMirror(
+      data.range
+    );
 
-    cy.get('[data-cy="sheet-input-field"]');
+    cy.get(googleSheetsSelector.sheetInputField);
 
     cy.get('[data-cy="where_field-input-field"]').clearAndTypeOnCodeMirror(
       "name"
     );
 
-    cy.get('[data-cy="where_value-input-field"]').clearAndTypeOnCodeMirror(
+    cy.get(googleSheetsSelector.valueInputField).clearAndTypeOnCodeMirror(
       "Mike"
     );
-    cy.get('[data-cy="body-input-field"]').clearAndTypeOnCodeMirror(
+    cy.get(googleSheetsSelector.bodyInputField).clearAndTypeOnCodeMirror(
       `{{({"email":"steph@example.com"})`
     );
     cy.get('[data-cy="query-create-and-run-button"]').click();
 
     openQueryEditor("Google Sheets");
-    selectQueryMode("Delete row from a spreadsheet");
+    selectQueryMode(googleSheetsText.deleteRowFromSheet); //delete row
 
-    cy.get('[data-cy="spreadsheet_id-input-field"]').clearAndTypeOnCodeMirror(
-      data.sheetId
-    );
-    cy.get('[data-cy="sheet-input-field"]').clearAndTypeOnCodeMirror("0");
-    cy.get('[data-cy="row_index-input-field"]').clearAndTypeOnCodeMirror("4");
+    cy.get(
+      googleSheetsSelector.spreadSheetIdInputField
+    ).clearAndTypeOnCodeMirror(data.sheetId);
+    cy.get(googleSheetsSelector.sheetInputField).clearAndTypeOnCodeMirror("0");
+    cy.get(
+      googleSheetsSelector.deleteRowIndexInputField
+    ).clearAndTypeOnCodeMirror("4");
     cy.get('[data-cy="query-create-and-run-button"]').click();
   });
   it("should verify the preview", () => {});
