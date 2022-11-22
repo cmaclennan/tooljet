@@ -50,10 +50,12 @@ class ManageGroupPermissionResourcesComponent extends React.Component {
 
   fetchGroupPermission = (groupPermissionId) => {
     groupPermissionService.getGroup(groupPermissionId).then((data) => {
-      this.setState({
-        groupPermission: data,
-        currentTab: data?.group === 'admin' ? 'users' : 'apps',
-        isLoadingGroup: false,
+      this.setState((prevState) => {
+        return {
+          groupPermission: data,
+          currentTab: data?.group === 'admin' ? 'users' : prevState.currentTab,
+          isLoadingGroup: false,
+        };
       });
     });
   };
@@ -219,7 +221,7 @@ class ManageGroupPermissionResourcesComponent extends React.Component {
         this.fetchAppsInGroup(groupPermissionId);
       })
       .then(() => {
-        toast.success('Apps removed from the group', {
+        toast.success('App removed from the group', {
           position: 'top-center',
         });
       })
@@ -266,7 +268,7 @@ class ManageGroupPermissionResourcesComponent extends React.Component {
         this.fetchUsersInGroup(groupPermissionId);
       })
       .then(() => {
-        toast.success('Users removed from the group', {
+        toast.success('User removed from the group', {
           position: 'top-center',
         });
       })

@@ -58,7 +58,14 @@ const sidebars = {
         'tutorial/manage-users-groups',
         'tutorial/keyboard-shortcuts',
         'tutorial/multiworkspace',
-        'tutorial/workspace-environment-variables'
+        'tutorial/workspace-environment-variables',
+        {
+          type: 'category',
+          label: 'Dashboard',
+          items: [
+            'tutorial/app-menu-options',
+          ],
+        },
       ],
     },
     {
@@ -71,7 +78,6 @@ const sidebars = {
         'data-sources/athena',
         'data-sources/baserow',
         'data-sources/bigquery',
-        'data-sources/clickhouse',
         'data-sources/firestore',
         'data-sources/clickhouse',
         'data-sources/cosmosdb',
@@ -84,6 +90,7 @@ const sidebars = {
         'data-sources/graphql',
         'data-sources/influxdb',
         'data-sources/mailgun',
+        'data-sources/mariadb',
         'data-sources/minio',
         'data-sources/mongodb',
         'data-sources/mssql',
@@ -208,6 +215,7 @@ const sidebars = {
         'how-to/oauth2-authorization',
         'how-to/upload-files-aws',
         'how-to/upload-files-gcs',
+        'how-to/access-users-location',
       ],
     },
     {
@@ -218,6 +226,7 @@ const sidebars = {
         'Enterprise/white-label',
       ]
     },
+    'marketplace',
     {
       type: 'category',
       label: 'User Authentication',
@@ -290,6 +299,7 @@ const sidebars = {
             'contributing-guide/tutorials/creating-a-plugin',
           ],
         },
+        'contributing-guide/testing',
         'contributing-guide/l10n',
         {
           type: 'category',
