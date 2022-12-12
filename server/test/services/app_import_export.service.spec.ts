@@ -48,8 +48,8 @@ describe('AppImportExportService', () => {
       expect(result.organizationId).toBe(app.organizationId);
       expect(result.currentVersionId).toBe(null);
       expect(result.appVersions).toEqual([]);
-      expect(result.dataQueries).toEqual([]);
-      expect(result.dataSources).toEqual([]);
+      expect(result['dataQueries']).toEqual([]);
+      expect(result['dataSources']).toEqual([]);
     });
 
     it('should export app', async () => {
@@ -88,8 +88,8 @@ describe('AppImportExportService', () => {
       expect(result.organizationId).toBe(exportedApp.organizationId);
       expect(result.currentVersionId).toBe(null);
       expect(result.appVersions).toEqual(exportedApp.appVersions);
-      expect(result.dataQueries).toEqual(exportedApp.dataQueries);
-      expect(result.dataSources).toEqual(exportedApp.dataSources);
+      expect(result['dataQueries']).toEqual(exportedApp['dataQueries']);
+      expect(result['dataSources']).toEqual(exportedApp['dataSources']);
     });
 
     it('should export app with filtered version', async () => {
@@ -148,10 +148,10 @@ describe('AppImportExportService', () => {
       expect(result.isPublic).toBe(exportedApp.isPublic);
       expect(result.organizationId).toBe(exportedApp.organizationId);
       expect(result.currentVersionId).toBe(null);
-      expect(result.dataQueries.length).toBe(1);
-      expect(result.dataQueries[0].name).toEqual(dataQuery1.name);
-      expect(result.dataSources.length).toBe(1);
-      expect(result.dataSources[0].name).toEqual(dataSource1.name);
+      expect(result['dataQueries'].length).toBe(1);
+      expect(result['dataQueries'][0].name).toEqual(dataQuery1.name);
+      expect(result['dataSources'].length).toBe(1);
+      expect(result['dataSources'][0].name).toEqual(dataSource1.name);
       expect(result.appVersions.length).toBe(1);
       expect(result.appVersions[0].name).toEqual(appVersion1.name);
 
@@ -163,10 +163,10 @@ describe('AppImportExportService', () => {
       expect(result.isPublic).toBe(exportedApp.isPublic);
       expect(result.organizationId).toBe(exportedApp.organizationId);
       expect(result.currentVersionId).toBe(null);
-      expect(result.dataQueries.length).toBe(1);
-      expect(result.dataQueries[0].name).toEqual(dataQuery2.name);
-      expect(result.dataSources.length).toBe(1);
-      expect(result.dataSources[0].name).toEqual(dataSource2.name);
+      expect(result['dataQueries'].length).toBe(1);
+      expect(result['dataQueries'][0].name).toEqual(dataQuery2.name);
+      expect(result['dataSources'].length).toBe(1);
+      expect(result['dataSources'][0].name).toEqual(dataSource2.name);
       expect(result.appVersions.length).toBe(1);
       expect(result.appVersions[0].name).toEqual(appVersion2.name);
     });
@@ -220,8 +220,8 @@ describe('AppImportExportService', () => {
       expect(importedApp.organizationId).toBe(exportedApp.organizationId);
       expect(importedApp.currentVersionId).toBe(null);
       expect(importedApp.appVersions).toEqual([]);
-      expect(importedApp.dataQueries).toEqual([]);
-      expect(importedApp.dataSources).toEqual([]);
+      expect(importedApp['dataQueries']).toEqual([]);
+      expect(importedApp['dataSources']).toEqual([]);
 
       // assert group permissions are valid
       const appGroupPermissions = await getManager().find(AppGroupPermission, {
@@ -276,12 +276,12 @@ describe('AppImportExportService', () => {
       const appVersion = importedApp.appVersions[0];
       expect(appVersion.appId).toEqual(importedApp.id);
 
-      dataSource = importedApp.dataSources[0];
-      expect(dataSource.appId).toEqual(importedApp.id);
+      dataSource = importedApp['dataSources'][0];
+      expect(dataSource['appId']).toEqual(importedApp.id);
 
-      const dataQuery = importedApp.dataQueries[0];
+      const dataQuery = importedApp['dataQueries'][0];
       expect(dataQuery.appId).toEqual(importedApp.id);
-      expect(dataQuery.dataSourceId).toEqual(dataSource.id);
+      expect(dataQuery['dataSourceId']).toEqual(dataSource.id);
 
       // assert all fields except primary keys, foreign keys and timestamps are same
       const deleteFieldsNotToCheck = (entity) => {
@@ -296,10 +296,10 @@ describe('AppImportExportService', () => {
       };
       const importedAppVersions = importedApp.appVersions.map((version) => deleteFieldsNotToCheck(version));
       const exportedAppVersions = exportedApp.appVersions.map((version) => deleteFieldsNotToCheck(version));
-      const importedDataSources = importedApp.dataSources.map((source) => deleteFieldsNotToCheck(source));
-      const exportedDataSources = exportedApp.dataSources.map((source) => deleteFieldsNotToCheck(source));
-      const importedDataQueries = importedApp.dataQueries.map((query) => deleteFieldsNotToCheck(query));
-      const exportedDataQueries = exportedApp.dataQueries.map((query) => deleteFieldsNotToCheck(query));
+      const importedDataSources = importedApp['dataSources'].map((source) => deleteFieldsNotToCheck(source));
+      const exportedDataSources = exportedApp['dataSources'].map((source) => deleteFieldsNotToCheck(source));
+      const importedDataQueries = importedApp['dataQueries'].map((query) => deleteFieldsNotToCheck(query));
+      const exportedDataQueries = exportedApp['dataQueries'].map((query) => deleteFieldsNotToCheck(query));
 
       expect(importedAppVersions).toEqual(exportedAppVersions);
       expect(importedDataSources).toEqual(exportedDataSources);
