@@ -10,9 +10,9 @@ import {
   createDataQuery,
   createDataSource,
   createAppGroupPermission,
-  importAppFromTemplates,
   createAppEnvironments,
   createDataSourceOption,
+  generateAppDefaults,
 } from '../test.helper';
 import { App } from 'src/entities/app.entity';
 import { AppVersion } from 'src/entities/app_version.entity';
@@ -1012,23 +1012,16 @@ describe('apps controller', () => {
         });
 
         //will fix this
-        xit('creates new credentials and copies cipher text on data source', async () => {
+        it('creates new credentials and copies cipher text on data source', async () => {
           const adminUserData = await createUser(app, {
             email: 'admin@tooljet.io',
           });
-          const application = await importAppFromTemplates(app, adminUserData.user, 'customer-dashboard');
-
-          const results = await getManager().find(DataSource, {
-            where: { appVersionId: application?.editingVersion.id },
-            relations: ['dataSourceOptions'],
+          const { application, appVersion: initialVersion } = await generateAppDefaults(app, adminUserData.user, {
+            dsOptions: [{ key: 'foo', value: 'bar', encrypted: 'true' }],
           });
-          const dataSource = results[0];
 
-          let dataSources = await getManager().find(DataSource);
-          let dataQueries = await getManager().find(DataQuery);
-          const credential = await getManager().findOneOrFail(Credential, {
-            where: { id: dataSource.dataSourceOptions[0].options['password']['credential_id'] },
-          });
+          let credentials = await getManager().find(Credential);
+          const credential = credentials[0];
           credential.valueCiphertext = 'strongPassword';
           await getManager().save(credential);
 
@@ -1040,11 +1033,7 @@ describe('apps controller', () => {
             });
 
           expect(response.statusCode).toBe(400);
-          expect(response.body.message).toBe('More than one version found. Version to create from not specified.');
-
-          const initialVersion = await getManager().findOneOrFail(AppVersion, {
-            where: { appId: application.id, name: 'v0' },
-          });
+          expect(response.body.message).toBe('Version from should not be empty');
 
           response = await request(app.getHttpServer())
             .post(`/api/apps/${application.id}/versions`)
@@ -1063,13 +1052,13 @@ describe('apps controller', () => {
               versionName: 'v2',
               versionFromId: response.body.id,
             });
-          dataSources = await getManager().find(DataSource);
-          dataQueries = await getManager().find(DataQuery);
+          const dataSources = await getManager().find(DataSource);
+          const dataQueries = await getManager().find(DataQuery);
 
           expect(dataSources).toHaveLength(3);
-          expect(dataQueries).toHaveLength(6);
+          expect(dataQueries).toHaveLength(3);
 
-          const credentials = await getManager().find(Credential);
+          credentials = await getManager().find(Credential);
           expect([...new Set(credentials.map((c) => c.valueCiphertext))]).toEqual(['strongPassword']);
         });
       });
