@@ -711,3 +711,27 @@ export const generateAppDefaults = async (
 
   return { application, appVersion, dataSource, dataQuery };
 };
+
+export const getAppWithAllDetails = async (id: string) => {
+  const app = await getManager()
+    .createQueryBuilder(App, 'app')
+    .where('app.id = :id', { id })
+    .innerJoinAndSelect('app.appVersions', 'versions')
+    .leftJoinAndSelect('versions.dataSources', 'dataSources')
+    .leftJoinAndSelect('versions.dataQueries', 'dataQueries')
+    .getOneOrFail();
+
+  const dataQueries = [];
+  const dataSources = [];
+  app.appVersions.map((version) => {
+    dataSources.push(...version.dataSources);
+    dataQueries.push(...version.dataQueries);
+    version.dataSources = undefined;
+    version.dataQueries = undefined;
+  });
+
+  app['dataQueries'] = dataQueries;
+  app['dataSources'] = dataSources;
+
+  return app;
+};
