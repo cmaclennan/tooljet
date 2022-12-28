@@ -13,7 +13,7 @@ function Layout({ children, switchDarkMode, darkMode }) {
     <div className="row m-auto">
       <div className="col-auto p-0">
         <aside className="left-sidebar p-2 h-100" style={{ borderRight: !darkMode ? '1px solid #eee' : 'inherit' }}>
-          <div className="application-brand">
+          <div className="application-brand" data-cy={`home-page-logo`}>
             <Link to="/">
               <svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
