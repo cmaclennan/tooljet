@@ -114,7 +114,7 @@ const LeftSidebarPageSelector = ({
                 />
               </div>
             </HeaderSection.PanelHeader>
-            <HeaderSection.SearchBoxComponent onChange={filterPages} placeholder={'Search'} placeholderIcon={'⌘S'} />
+            <HeaderSection.SearchBoxComponent onChange={filterPages} placeholder={'Search'} placeholderIcon={''} />
           </HeaderSection>
 
           <div className={`${darkMode && 'dark'} page-selector-panel-body`}>
