@@ -69,6 +69,6 @@ If you want to seed the database with a sample user, please SSH into a pod and r
 
 This seeds the database with a default user with the following credentials:
 
-**email**: `dev@tooljet.io`
+**emai**: `dev@tooljet.io`
 
 **password**: `password`
