@@ -223,7 +223,9 @@ export const UpdateRows = ({ currentState, optionchanged, options, darkMode }) =
                   placeholder="Select column"
                   value={filter.column}
                   options={displayColumns}
-                  onChange={() => handleColumnChange(filter.id)}
+                  onChange={(value) => {
+                    handleColumnChange(filter.id, value);
+                  }}
                 />
               </div>
               <div className="field col mx-1">
@@ -232,7 +234,7 @@ export const UpdateRows = ({ currentState, optionchanged, options, darkMode }) =
                   placeholder="Select operation"
                   value={filter.operator}
                   options={operators}
-                  onChange={() => handleOperatorChange(filter.id)}
+                  onChange={(value) => handleOperatorChange(filter.id, value)}
                 />
               </div>
               <div className="field col-4">
